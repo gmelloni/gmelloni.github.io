@@ -12,17 +12,18 @@ sitemap: false
 */
 
 // Partials
-@import "_sass/variables";
-@import "_sass/mixins";
-@import "_sass/reset";
-@import "_sass/vendor/font-awesome/font-awesome";
-@import "_sass/vendor/magnific-popup/magnific-popup";
-@import "_sass/site";
-@import "_sass/typography";
-@import "_sass/rouge";
-@import "_sass/coderay";
-@import "_sass/grid";
-@import "_sass/elements";
-@import "_sass/animations";
-@import "_sass/dl-menu";
-@import "_sass/page";
+@import "variables";
+@import "mixins";
+@import "reset";
+@import "vendor/font-awesome/font-awesome";
+@import "vendor/magnific-popup/magnific-popup";
+@import "site";
+@import "typography";
+@import "rouge";
+@import "coderay";
+@import "grid";
+@import "elements";
+@import "animations";
+@import "dl-menu";
+@import "page";
+
