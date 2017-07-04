@@ -1,0 +1,17 @@
+name: "PTD"
+navbar:
+  title: "PTD"
+  type: inverse
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "About"
+      icon: fa-info
+      href: about.html
+    - text: "Vignette"
+      icon: fa-gear
+      href: PrecisionTrialDesigner.html
+  right:
+    - icon: fa-question fa-lg
+      href: https://gmelloni.github.io

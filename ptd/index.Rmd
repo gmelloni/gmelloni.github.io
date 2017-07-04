@@ -1,0 +1,42 @@
+---
+title: "Precision Trial Designer"
+---
+------------------
+
+### Why PTD?
+
+In the era of personalized medicine and personalized health there is a tremendous effort to bring NGS based technology in the clinical routine. Nevertheless, the information coming from research studies is in most cases useless for the clinical practice and in addition too expensive. To bridge the gap between cancer research and clinical genomics, we propose PrecisionTrialDesigner, a suite of simple tools to explore the ability of less expensive cancer gene panels to be used in clinical trials.
+
+-------------------
+
+### What can you do with PTD?
+
+#### Data
+
+* Create a **Cancer Panel** linking drug to specific genes or alterations
+* Integrate genomic data like mutations, expression, copynumber and fusions
+* Use data from over **40 tumor types**
+
+#### Simulation
+
+Calculate various measure of **study feasibility**
+
+* How many patients are covered by a specific mutations? 
+* How many patients would be covered by a drug that acts on one or multiple targets?
+* Are the drugs covering overlapping pathways?
+
+#### Power Analysis
+
+Thanks to an innovative sample size calculator, assure **high power** minimizing the number of 
+patients to screen.
+
+* Calculate sample size for a basket or umbrella trial with multiple drugs or tumor types
+* Calculate minimum or maximum power under various simulation scenarios
+
+#### Panel Design
+
+Happy with the **panel design**?
+
+* Adjust gene size choosing what sequences to include
+* Compare covered patients VS sequencing size
+* Create a ready-to-sequence panel in bed format

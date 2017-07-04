@@ -15,7 +15,7 @@ Designs of such trials can be extremely difficult,
 starting from the creation of a valid screening panel, 
 to the optimization of sequencing space and to the calculation 
 of a correct sample size for the trial. 
-PTD provides a serie of tools that can help bioinformaticians, 
+PTD provides a series of tools that can help bioinformaticians, 
 clinicians and biostatisticians to design, 
 analyze and finalize a custom gene panel for cancer genomics.
 ```
