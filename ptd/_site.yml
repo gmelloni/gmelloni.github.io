@@ -6,13 +6,26 @@ navbar:
     - text: "Home"
       icon: fa-home
       href: index.html
+    - text: "Examples"
+      icon: fa-gear
+      menu:
+        - text: "Vignette"
+          href: PrecisionTrialDesigner.html
+        - text: "SHIVA Retrospective Analysis"
+          href: "version_6.0/Analysis/SHIVA_analysis.html"
+        - text: "Panel Showcase"
+          href: "version_6.0/Analysis/PTD_panel_showcase.html"
+    - text: "Install"
+      icon: fa-arrow-circle-down
+      href: https://gmelloni.github.io
     - text: "About"
       icon: fa-info
       href: about.html
-    - text: "Vignette"
-      icon: fa-gear
-      href: PrecisionTrialDesigner.html
   right:
-    - icon: fa-question fa-lg
+    - icon: fa-github-alt fa-lg
       href: https://gmelloni.github.io
 output_dir: "."
+output:
+  html_document:
+    include:
+      after_body: footer.html

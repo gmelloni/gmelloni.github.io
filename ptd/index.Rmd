@@ -4,17 +4,43 @@ title: "Precision Trial Designer"
 
 ------------------
 
+<div class="row">
+<div class="col-sm-6">
+
 ### Why PTD?
 
-In the era of personalized medicine and personalized health there is a tremendous effort to bring NGS based technology in the clinical routine. Nevertheless, the information coming from research studies is in most cases useless for the clinical practice and in addition too expensive. To bridge the gap between cancer research and clinical genomics, we propose PrecisionTrialDesigner, a suite of simple tools to explore the ability of less expensive cancer gene panels to be used in clinical trials.
+In the era of personalized medicine and personalized 
+health there is a tremendous effort to bring NGS based 
+technology in the clinical routine. Nevertheless, 
+genome-wide information from research studies is in most 
+cases useless in the clinical practice and in addition 
+too expensive. 
 
--------------------
+To bridge the gap between cancer research 
+and clinical genomics, we propose **PrecisionTrialDesigner**, 
+a suite of tools to explore the ability of cancer gene panels 
+to be used in clinical trials.
+
+</div>
+<div class="col-sm-6">
+
+```{r, out.width = "250px" , echo=FALSE , fig.align='center'}
+knitr::include_graphics("images/helix_stethoscope.jpg")
+```
+
+</div>
 
 ### What can you do with PTD?
 
+```{r, out.width = "400px" , echo=FALSE , fig.align='center'}
+knitr::include_graphics("images/conclusionSlide2.jpg")
+```
+
 #### Data
 
-* Create a **Cancer Panel** linking drug to specific genes or alterations
+Design your panel and link it to specific tumor types
+
+* Create a **Cancer Panel** linking drugs to specific genes or alterations
 * Integrate genomic data like mutations, expression, copynumber and fusions
 * Use data from over **40 tumor types**
 
@@ -41,3 +67,4 @@ Happy with the **panel design**?
 * Adjust gene size choosing what sequences to include
 * Compare covered patients VS sequencing size
 * Create a ready-to-sequence panel in bed format
+

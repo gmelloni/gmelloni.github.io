@@ -4,3 +4,5 @@ Gemfile.lock
 .DS_Store
 .sass-cache
 .Rproj.user
+.Rhistory
+.RData
