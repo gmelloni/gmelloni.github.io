@@ -17,7 +17,7 @@ navbar:
           href: "version_6.0/Analysis/PTD_panel_showcase.html"
     - text: "Install"
       icon: fa-arrow-circle-down
-      href: https://gmelloni.github.io
+      href: https://gitlab.com/IEO_Research/R_package_panel_and_projection
     - text: "About"
       icon: fa-info
       href: about.html
