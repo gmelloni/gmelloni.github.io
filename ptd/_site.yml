@@ -11,7 +11,7 @@ navbar:
       menu:
         - text: "Vignette"
           href: PrecisionTrialDesigner.html
-        - text: "SHIVA Retrospective Analysis"
+        - text: "Shiva Retrospective Analysis"
           href: "version_6.0/Analysis/SHIVA_analysis.html"
         - text: "Panel Showcase"
           href: "version_6.0/Analysis/PTD_panel_showcase.html"
@@ -27,5 +27,6 @@ navbar:
 output_dir: "."
 output:
   html_document:
+    theme: spacelab
     include:
       after_body: footer.html

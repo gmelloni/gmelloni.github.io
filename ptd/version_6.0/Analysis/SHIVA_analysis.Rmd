@@ -1,7 +1,8 @@
 ---
+Title: "Shiva Retrospective Analysis"
 output:
   html_document:
-    code_folding: hide
+    code_folding: show
     fig_height: 8
     fig_width: 10
     highlight: haddock
@@ -9,10 +10,6 @@ output:
     toc_depth: 5
     toc_float: yes
 ---
-
-SHIVA analysis
-================================================================================
- 
 
 ```{r load libraries, message=FALSE, warning=FALSE}
 library(readxl)
