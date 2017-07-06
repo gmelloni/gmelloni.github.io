@@ -5,7 +5,7 @@ title: "Precision Trial Designer"
 ------------------
 
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-9">
 
 ### Why PTD?
 
@@ -22,12 +22,13 @@ a suite of tools to explore the ability of cancer gene panels
 to be used in clinical trials.
 
 </div>
-<div class="col-sm-6">
+<div class="col-sm-3">
 
 ```{r, out.width = "250px" , echo=FALSE , fig.align='center'}
 knitr::include_graphics("images/helix_stethoscope.jpg")
 ```
 
+</div>
 </div>
 
 ### What can you do with PTD?
@@ -35,6 +36,9 @@ knitr::include_graphics("images/helix_stethoscope.jpg")
 ```{r, out.width = "400px" , echo=FALSE , fig.align='center'}
 knitr::include_graphics("images/conclusionSlide2.jpg")
 ```
+
+<div class="row">
+<div class="col-sm-6">
 
 #### Data
 
@@ -44,6 +48,9 @@ Design your panel and link it to specific tumor types
 * Integrate genomic data like mutations, expression, copynumber and fusions
 * Use data from over **40 tumor types**
 
+</div>
+<div class="col-sm-6">
+
 #### Simulation
 
 Calculate various measure of **study feasibility**
@@ -52,13 +59,25 @@ Calculate various measure of **study feasibility**
 * How many patients would be covered by a drug that acts on one or multiple targets?
 * Are the drugs covering overlapping pathways?
 
+</div>
+</div>
+
+-----------------------
+
+<div class="row">
+<div class="col-sm-6">
+
 #### Power Analysis
 
-Thanks to an innovative sample size calculator, assure **high power** minimizing the number of 
+Assure **high power** minimizing the number of 
 patients to screen.
 
+* Innovative sample size calculation designed for genomic-driven clinical trials
 * Calculate sample size for a basket or umbrella trial with multiple drugs or tumor types
-* Calculate minimum or maximum power under various simulation scenarios
+* Given a power level to reach, analyze various simulation scenarios
+
+</div>
+<div class="col-sm-6">
 
 #### Panel Design
 
@@ -68,3 +87,5 @@ Happy with the **panel design**?
 * Compare covered patients VS sequencing size
 * Create a ready-to-sequence panel in bed format
 
+</div>
+</div>

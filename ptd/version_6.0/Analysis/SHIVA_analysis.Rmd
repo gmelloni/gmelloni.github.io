@@ -1,7 +1,9 @@
 ---
-Title: "Shiva Retrospective Analysis"
+title: "Shiva Retrospective Analysis"
+author: "Alessandro Guida and Giorgio Melloni"
 output:
   html_document:
+    theme: spacelab
     code_folding: show
     fig_height: 8
     fig_width: 10
@@ -162,8 +164,7 @@ AR (Androgen receptor), ER (Estrogen receptor) and PR (Progesterone receptor) we
 ```{r design panel}
 #import SHIVA Design
 # --------------------------------------------------------------------------------
-#SHIVA_design <- xlsx::read.xlsx("../Supplementary_file/SHIVA_design_v6.1.xlsx", sheetName = "Sheet1")
-SHIVA_design <- readxl::read_excel("../Supplementary_file/SHIVA_design_v6.1.xlsx"
+SHIVA_design <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_design_v6.1.xlsx"
                                     , sheet = 1
                                     , col_types = c("text", "text", "text", "text", "text", "text"))
 
@@ -204,11 +205,7 @@ Import in the analysis the raw data. Add a column with the TCGA tumor ID confers
 
 ```{r import SHIVA data}
 # Read in SHIVA raw data
-# merged_df <- xlsx::read.xlsx2("../Supplementary_file/SHIVA_authorTable.xlsx", sheetIndex = 1)
-# cna_data <- xlsx::read.xlsx2("../Supplementary_file/SHIVA_cna_data.xls", sheetIndex = 1)
-
- 
-merged_df <- readxl::read_excel("../Supplementary_file/SHIVA_authorTable.xlsx"
+merged_df <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_authorTable.xlsx"
                                   , sheet = 1
                                   , col_names = TRUE
  #                                , col_types = rep("text", times=24)
@@ -216,7 +213,7 @@ merged_df <- readxl::read_excel("../Supplementary_file/SHIVA_authorTable.xlsx"
 
 # Import CNA data for the 496 profiled patients
 
-cna_data <- readxl::read_excel("../Supplementary_file/SHIVA_cna_data.xls"
+cna_data <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_cna_data.xls"
                                 , sheet = 1
                                 , col_names = TRUE)
 ```
@@ -702,7 +699,7 @@ mutations$data %>%
 
 This can be achieved using the build in argument "repo" from the PTD package.
 
-```{r SHIVA repo, warning=FALSE, message=FALSE}
+```{r SHIVA repo, warning=FALSE, message=FALSE , eval = FALSE}
 # DESIGN
 SHIVA_population <- newCancerPanel(SHIVA_design)
 #DOWNLOAD alternative
@@ -714,7 +711,12 @@ SHIVA_population <- getAlterations(SHIVA_population
 SHIVA_population <- subsetAlterations(SHIVA_population)
 
 #save a backup copy to speed up future analysis
-saveRDS(SHIVA_population, file = "../Temp/SHIVA_population.rds")
+saveRDS(SHIVA_population, file = "version_6.0/Temp/SHIVA_population.rds")
+```
+
+
+```{r , eval=TRUE , echo = FALSE}
+SHIVA_population <- readRDS("version_6.0/Temp/SHIVA_population.rds")
 ```
 
 Since we are interested in balancing the TCGA population to make it match with the recruited SHIVA population, we need to estimate how many patients per tumor types will be used. 
@@ -786,11 +788,11 @@ TCGA_population <- getAlterations(TCGA_population
 TCGA_population <- subsetAlterations(TCGA_population)
 
 #save a backup copy to speed up future analysis
-saveRDS(TCGA_population, file = "../Temp/TCGA_population.rds")
+saveRDS(TCGA_population, file = "version_6.0/Temp/TCGA_population.rds")
 ```
 
 ```{r, echo=FALSE}
-TCGA_population <- readRDS("../Temp/TCGA_population.rds")
+TCGA_population <- readRDS("version_6.0/Temp/TCGA_population.rds")
 ```
 
 
@@ -803,7 +805,7 @@ In this section we will apply a filter to remove all the NON pathogenic mutation
 TCGA_original_number <- nrow(unique(TCGA_population@dataFull$mutations$data))
 
 # Clean TCGA popualation running a cosmic filter
-cosmic <- readr::read_csv("../external_resources/cosmic_pathogenic_SHIVApanel")
+cosmic <- readr::read_csv("version_6.0/external_resources/cosmic_pathogenic_SHIVApanel")
 
 cosmic_df <- data.frame(gene_symbol = cosmic$gene
                         , amino_acid_change = sub("^p." , "" , cosmic$AA.Mutation)
@@ -881,7 +883,7 @@ CNA_genes <- TCGA_population@arguments$panel %>%
 # PATH: set global variable with the path to.rds files with CNA raw data
 # PATH_2CNA_FILES <- "/Users/ale/IEO/projects/IEO_research/R_package_panel_and_projection/functionfactory/cna_firehose_rds/"
 # Set a relative path for reproducibility
-PATH_2CNA_FILES <- "../Temp/cna_firehose_rds/"
+PATH_2CNA_FILES <- "version_6.0/Temp/cna_firehose_rds/"
 
 # helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured
 # ==============================================================================
@@ -1074,7 +1076,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=detectCores())
+		} , mc.cores=4)
 
 ## Prepare function for plotting Detection power with Confidenti intervals
 # ------------------------------------------------------------------------------
@@ -1148,7 +1150,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=detectCores())
+		} , mc.cores=4)
 
 TCGA_detection_muts <- simulate_detectionPower_img(simul)
 
@@ -1175,7 +1177,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=detectCores())
+		} , mc.cores=4)
 
 TCGA_detection_cna <- simulate_detectionPower_img(simul)
 
@@ -1243,8 +1245,8 @@ SHIVA_detection_image <- dtpow_shiva %>%
     coord_flip()
   
 #Export as a svg
-img_file = "../Figures/fig4B.svg"
-ggsave(filename=img_file, plot=SHIVA_detection_image, device = "svg")
+#img_file = "../Figures/fig4B.svg"
+#ggsave(filename=img_file, plot=SHIVA_detection_image, device = "svg")
   
 # Show image
 SHIVA_detection_image
@@ -1304,8 +1306,8 @@ datatable_withbuttons(cov, caption="Datatable with detection power from CNA for 
 fig4a <- gridExtra::grid.arrange(TCGA_detection_image, SHIVA_detection_image)
 
 #Export as a svg
-img_file = "../Figures/fig4A.svg"
-ggsave(filename=img_file, plot=fig4a, device = "svg", width=10, height = 8)
+#img_file = "../Figures/fig4A.svg"
+#ggsave(filename=img_file, plot=fig4a, device = "svg", width=10, height = 8)
 
 
 # Preview image
@@ -1384,8 +1386,8 @@ fig4b <- merged_snv %>%
  coord_flip()
 
 
-img_file = "../Figures/fig4B.svg"
-ggsave(filename=img_file, plot=fig4b, device = "svg", width=10, height = 8)
+#img_file = "../Figures/fig4B.svg"
+#ggsave(filename=img_file, plot=fig4b, device = "svg", width=10, height = 8)
 
 # Preview
 fig4b
@@ -1520,8 +1522,8 @@ CNA_plot_deletion <- merged_cna_deletion %>%
 fig4c <- gridExtra::grid.arrange(CNA_plot_amplification, CNA_plot_deletion, ncol=1, heights = c(20,5))
 
 #Export as a svg
-img_file = "../Figures/fig4C.svg"
-ggsave(filename=img_file, plot=fig4c, device = "svg", width=10, height = 8)
+#img_file = "../Figures/fig4C.svg"
+#ggsave(filename=img_file, plot=fig4c, device = "svg", width=10, height = 8)
 
 # preview plot
 fig4c
@@ -1596,7 +1598,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
       tidyr::spread(group, allocation) %>%
       return()
      
-		} , mc.cores=detectCores()) %>% bind_rows
+		} , mc.cores=4) %>% bind_rows
 
 # GET STATS
 # ------------------------------------------------------------------------------
@@ -1680,8 +1682,8 @@ fig4D <- merged_allocation %>%
 
 
 #Export as a svg
-img_file = "../Figures/fig4D.svg"
-ggsave(filename=img_file, plot=fig4D, device = "svg")
+#img_file = "../Figures/fig4D.svg"
+#ggsave(filename=img_file, plot=fig4D, device = "svg")
 
 # Preview image
 fig4D
@@ -1833,8 +1835,8 @@ fig4E <- fig4E + geom_text(aes(x=(row_counter)
 )
 
 #Export as a svg
-img_file = "../Figures/fig4E.svg"
-ggsave(filename=img_file, plot=fig4E, device = "svg", width=10, height = 8)
+#img_file = "../Figures/fig4E.svg"
+#ggsave(filename=img_file, plot=fig4E, device = "svg", width=10, height = 8)
 
 # preview image
 fig4E
@@ -1964,8 +1966,8 @@ fig4F <- merge_df %>%
 
 
 #Export as a svg
-img_file = "../Figures/fig4F.svg"
-ggsave(filename=img_file, plot=fig4F, device = "svg")
+#img_file = "../Figures/fig4F.svg"
+#ggsave(filename=img_file, plot=fig4F, device = "svg")
 
 # Preview
 fig4F
@@ -2126,7 +2128,7 @@ tcgaSimul <- mclapply(1:100 , function(x) {
         , noPlot=TRUE
         , priority.trial=c("PIK3/AKT/mTOR", "RAF/MEK")
         , priority.trial.order="optimal")$'HR:0.625 | HR0:1 | Power:0.8'$Summary
-    } , mc.cores=detectCores())
+    } , mc.cores=4)
 
 
 summaryMat <- tcgaSimul[[1]]

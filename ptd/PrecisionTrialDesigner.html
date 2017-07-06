@@ -9,14 +9,14 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Giorgio Melloni, Alessandro Guida" />
+<meta name="author" content="Giorgio Melloni" />
 
 
 <title>PrecisionTrialDesigner - A tool to analyze and design NGS based custom gene panels</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -139,34 +139,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 52px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 57px;
+  margin-top: -57px;
 }
 </style>
 
@@ -329,8 +329,6 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-gear"></span>
-     
     Examples
      
     <span class="caret"></span>
@@ -340,18 +338,25 @@ div.tocify {
       <a href="PrecisionTrialDesigner.html">Vignette</a>
     </li>
     <li>
-      <a href="version_6.0/Analysis/SHIVA_analysis.html">SHIVA Retrospective Analysis</a>
+      <a href="SHIVA_analysis.html">Shiva Retrospective Analysis</a>
     </li>
     <li>
-      <a href="version_6.0/Analysis/PTD_panel_showcase.html">Panel Showcase</a>
+      <a href="PTD_panel_showcase.html">Panel Showcase</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="https://gmelloni.github.io">
+  <a href="https://gitlab.com/IEO_Research/R_package_panel_and_projection">
     <span class="fa fa-arrow-circle-down"></span>
      
     Install
+  </a>
+</li>
+<li>
+  <a href="shinyapp.html">
+    <span class="fa fa-gear"></span>
+     
+    Shiny App
   </a>
 </li>
 <li>
@@ -387,7 +392,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">PrecisionTrialDesigner - A tool to analyze and design NGS based custom gene panels</h1>
-<h4 class="author"><em>Giorgio Melloni, Alessandro Guida</em></h4>
+<h4 class="author"><em>Giorgio Melloni</em></h4>
 <div class="abstract">
 <p class="abstract">Abstract</p>
 <p>In recent years, two new forms of clinical trial designs emerged in clinical cancer genomics: umbrella and basket trials. Designs of such trials can be extremely difficult, starting from the creation of a valid screening panel, to the optimization of sequencing space and to the calculation of a correct sample size for the trial. PTD provides a serie of tools that can help bioinformaticians, clinicians and biostatisticians to design, analyze and finalize a custom gene panel for cancer genomics.</p>
@@ -407,8 +412,6 @@ div.tocify {
 <h2>CancerPanel object</h2>
 <p>First of all, let’s see what is the format of a cancer panel:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PrecisionTrialDesigner)
-<span class="co">#library(devtools)</span>
-<span class="co">#load_all(&quot;../../PrecisionTrialDesigner&quot;)</span>
 <span class="kw">library</span>(knitr)
 <span class="kw">data</span>(panelexample)
 <span class="kw">kable</span>(panelexample)</code></pre></div>
@@ -799,8 +802,6 @@ mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(pan
 <div id="getalterations" class="section level2">
 <h2>getAlterations</h2>
 <p>Now that we have our panel, we want to test it against tumor samples. We will choose two different cancer types among the available ones:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check available tumor types</span>
-<span class="kw">head</span>( <span class="kw">showTumorType</span>() )</code></pre></div>
 <pre><code>##   tumor_type
 ## 1       acbc
 ## 2        acc
@@ -815,26 +816,26 @@ mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(pan
 ## 4 Hypodiploid Acute Lymphoid Leukemia|Infant MLL-Rearranged Acute Lymphoblastic Leukemia
 ## 5                                                                    Ampullary Carcinoma
 ## 6       Bladder Cancer|Bladder Cancer, Plasmacytoid Variant|Bladder Urothelial Carcinoma</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fetch data from breast cancer and lung adenocarcinoma samples</span>
-mypanel &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;brca&quot;</span> , <span class="st">&quot;luad&quot;</span>))
-<span class="co"># data(cpObj)</span>
-<span class="co"># mypanel &lt;- cpObj</span>
-<span class="co"># See the updated slot dataFull for mutations</span>
-<span class="kw">str</span>( <span class="kw">cpData</span>(mypanel)$mutations , <span class="dt">vec.len =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 2
 ##  $ data   :&#39;data.frame&#39;: 5668 obs. of  9 variables:
 ##   ..$ entrez_gene_id    : int [1:5668] 673 673 ...
 ##   ..$ gene_symbol       : chr [1:5668] &quot;BRAF&quot; ...
-##   ..$ case_id           : chr [1:5668] &quot;MB-0599&quot; ...
+##   ..$ case_id           : chr [1:5668] &quot;MB-5655&quot; ...
 ##   ..$ mutation_type     : chr [1:5668] &quot;Missense_Mutation&quot; ...
-##   ..$ amino_acid_change : chr [1:5668] &quot;V600E&quot; ...
+##   ..$ amino_acid_change : chr [1:5668] &quot;Q94E&quot; ...
 ##   ..$ genetic_profile_id: chr [1:5668] &quot;brca_metabric&quot; ...
 ##   ..$ tumor_type        : chr [1:5668] &quot;brca&quot; ...
-##   ..$ amino_position    : num [1:5668] 600 469 ...
-##   ..$ genomic_position  : chr [1:5668] &quot;7:140453136:A,T&quot; ...
+##   ..$ amino_position    : num [1:5668] 94 143 ...
+##   ..$ genomic_position  : chr [1:5668] &quot;7:140534633:G,C&quot; ...
 ##  $ Samples:List of 2
 ##   ..$ brca: chr [1:3627] &quot;MB-0002&quot; ...
 ##   ..$ luad: chr [1:610] &quot;LU-A08-43&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check available tumor types</span>
+<span class="kw">head</span>( <span class="kw">showTumorType</span>() )
+<span class="co"># Fetch data from breast cancer and lung adenocarcinoma samples</span>
+mypanel &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;brca&quot;</span> , <span class="st">&quot;luad&quot;</span>))
+<span class="co"># See the updated slot dataFull for mutations</span>
+<span class="kw">str</span>( <span class="kw">cpData</span>(mypanel)$mutations , <span class="dt">vec.len =</span> <span class="dv">1</span>)</code></pre></div>
 <p>This method performs 3 tasks. Download available data from cBioportal and MD Anderson Fusion Portal for every alteration type of the requested genes, retrieve the total number of samples for which data are available within every alteration class and calculate a frequency matrix.</p>
 <p>In case you are interested into downloading the population information for all the tumor types, it is possible to assign “all_tumors” to the parameter tumor_type <code>getAlterations(mypanel , tumor_type=&quot;all_tumors&quot;)</code></p>
 <div id="specify-specific-cancer-studies" class="section level3">
@@ -874,8 +875,7 @@ mypanel &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(myp
 ## 82                            Lung Adenocarcinoma (TSP, Nature 2008)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fetch data from breast cancer and lung adenocarcinoma samples</span>
 mypanel_alternative &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad_tcga&quot;</span>, <span class="st">&quot;brca_tcga_pub&quot;</span>))</code></pre></div>
-<p>At this point, the data are downloaded by gene, without looking for the exact alteration requested.</p>
-<p>If you want, you can always put your own data, as long as you respect the format for each alteration type.</p>
+<p>At this point, the data are downloaded by gene, without looking for the exact alteration requested. If you want, you can always put your own data, as long as you respect the format for each alteration type.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the data from the panel as a toy example.</span>
 repos &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">cpData</span>(mypanel) , <span class="st">&#39;[&#39;</span> , <span class="kw">c</span>(<span class="st">&#39;data&#39;</span> , <span class="st">&#39;Samples&#39;</span>))
 <span class="co"># How custom data should look like</span>
@@ -897,13 +897,13 @@ repos &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="
 ##   ..$ data   :&#39;data.frame&#39;:  5668 obs. of  9 variables:
 ##   .. ..$ entrez_gene_id    : int [1:5668] 673 673 ...
 ##   .. ..$ gene_symbol       : chr [1:5668] &quot;BRAF&quot; ...
-##   .. ..$ case_id           : chr [1:5668] &quot;MB-0599&quot; ...
+##   .. ..$ case_id           : chr [1:5668] &quot;MB-5655&quot; ...
 ##   .. ..$ mutation_type     : chr [1:5668] &quot;Missense_Mutation&quot; ...
-##   .. ..$ amino_acid_change : chr [1:5668] &quot;V600E&quot; ...
+##   .. ..$ amino_acid_change : chr [1:5668] &quot;Q94E&quot; ...
 ##   .. ..$ genetic_profile_id: chr [1:5668] &quot;brca_metabric&quot; ...
 ##   .. ..$ tumor_type        : chr [1:5668] &quot;brca&quot; ...
-##   .. ..$ amino_position    : num [1:5668] 600 469 ...
-##   .. ..$ genomic_position  : chr [1:5668] &quot;7:140453136:A,T&quot; ...
+##   .. ..$ amino_position    : num [1:5668] 94 143 ...
+##   .. ..$ genomic_position  : chr [1:5668] &quot;7:140534633:G,C&quot; ...
 ##   ..$ Samples:List of 2
 ##   .. ..$ brca: chr [1:3627] &quot;MB-0002&quot; ...
 ##   .. ..$ luad: chr [1:610] &quot;LU-A08-43&quot; ...
@@ -984,13 +984,13 @@ mypanel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(
 ##   ..$ tumor_type   : chr [1:6] &quot;brca&quot; ...
 ##   ..$ case_id      : chr [1:6] &quot;TCGA-C8-A1HJ&quot; ...
 ##   ..$ alteration_id: chr [1:6] &quot;fus_1&quot; ...
-##  $ mutations :&#39;data.frame&#39;:  3579 obs. of  6 variables:
-##   ..$ drug         : chr [1:3579] &quot;Selumetinib&quot; ...
-##   ..$ group        : chr [1:3579] &quot;Actionable&quot; ...
-##   ..$ gene_symbol  : chr [1:3579] &quot;MAP2K1&quot; ...
-##   ..$ tumor_type   : chr [1:3579] &quot;luad&quot; ...
-##   ..$ case_id      : chr [1:3579] &quot;LUAD-NYU408&quot; ...
-##   ..$ alteration_id: chr [1:3579] &quot;mut_1&quot; ...
+##  $ mutations :&#39;data.frame&#39;:  3807 obs. of  6 variables:
+##   ..$ drug         : chr [1:3807] &quot;Selumetinib&quot; ...
+##   ..$ group        : chr [1:3807] &quot;Actionable&quot; ...
+##   ..$ gene_symbol  : chr [1:3807] &quot;MAP2K1&quot; ...
+##   ..$ tumor_type   : chr [1:3807] &quot;luad&quot; ...
+##   ..$ case_id      : chr [1:3807] &quot;LUAD-QY22Z&quot; ...
+##   ..$ alteration_id: chr [1:3807] &quot;mut_1&quot; ...
 ##  $ copynumber:&#39;data.frame&#39;:  303 obs. of  6 variables:
 ##   ..$ drug         : chr [1:303] &quot;Olaparib&quot; ...
 ##   ..$ group        : chr [1:303] &quot;Actionable&quot; ...
@@ -1070,12 +1070,12 @@ myHTMLPlot &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</spa
 <span class="co"># Now run plot</span>
 <span class="kw">plot</span>(myHTMLPlot)</code></pre></div>
 <!-- ColumnChart generated in R 3.4.0 by googleVis 0.6.2 package -->
-<!-- Wed Jul  5 16:14:43 2017 -->
+<!-- Wed Jul  5 19:58:45 2017 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataColumnChartID14292e4dcffe () {
+function gvisDataColumnChartID15b77163d6840 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2014,8 +2014,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartColumnChartID14292e4dcffe() {
-var data = gvisDataColumnChartID14292e4dcffe();
+function drawChartColumnChartID15b77163d6840() {
+var data = gvisDataColumnChartID15b77163d6840();
 var options = {};
 options["allowHtml"] = true;
 options["isStacked"] = true;
@@ -2035,7 +2035,7 @@ options["enableScrollWheel"] = true;
 options["colors"] = ['#5E4EA1','#506AAE','#3685BB','#4FA0B3','#62BCA7','#82CCA4','#A2D9A4','#BFE4A0','#DBF09A','#EDF7A3','#F9FCB5','#FFF7B2','#FEE899','#FED682','#FEBE6E','#FCA55C','#F8864E','#F16844','#E2534A','#D23B4E','#B72448','#9E0041','#A9A9A9'];
 
     var chart = new google.visualization.ColumnChart(
-    document.getElementById('ColumnChartID14292e4dcffe')
+    document.getElementById('ColumnChartID15b77163d6840')
     );
     chart.draw(data,options);
     
@@ -2059,9 +2059,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartColumnChartID14292e4dcffe);
+callbacks.push(drawChartColumnChartID15b77163d6840);
 })();
-function displayChartColumnChartID14292e4dcffe() {
+function displayChartColumnChartID15b77163d6840() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2084,9 +2084,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID14292e4dcffe"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID15b77163d6840"></script>
 <!-- divChart -->
-<div id="ColumnChartID14292e4dcffe" style="width: 500; height: 800;">
+<div id="ColumnChartID15b77163d6840" style="width: 500; height: 800;">
 
 </div>
 </div>
@@ -2266,7 +2266,7 @@ myData &lt;-<span class="st"> </span><span class="kw">dataExtractor</span>(mypan
 ##   ..$ group        : chr [1:2273] &quot;Actionable&quot; &quot;Actionable&quot; &quot;Actionable&quot; &quot;Actionable&quot; ...
 ##   ..$ gene_symbol  : chr [1:2273] &quot;MAP2K1&quot; &quot;MAP2K1&quot; &quot;MAP2K1&quot; &quot;MAP2K1&quot; ...
 ##   ..$ tumor_type   : chr [1:2273] &quot;brca&quot; &quot;brca&quot; &quot;brca&quot; &quot;brca&quot; ...
-##   ..$ case_id      : chr [1:2273] &quot;TCGA-D8-A1XK&quot; &quot;TCGA-E2-A159&quot; &quot;TCGA-EW-A3U0&quot; &quot;TCGA-PE-A5DE&quot; ...
+##   ..$ case_id      : chr [1:2273] &quot;TCGA-D8-A1XK&quot; &quot;TCGA-EW-A3U0&quot; &quot;TCGA-PE-A5DE&quot; &quot;TCGA-E2-A159&quot; ...
 ##   ..$ alteration_id: chr [1:2273] &quot;mut&quot; &quot;mut&quot; &quot;mut&quot; &quot;mut&quot; ...
 ##  $ Samples          :List of 2
 ##   ..$ brca      : chr [1:3627] &quot;MB-0002&quot; &quot;MB-0005&quot; &quot;MB-0006&quot; &quot;MB-0010&quot; ...
@@ -2843,11 +2843,6 @@ or any combination of these. Default is to perform design on the whole panel;</l
 <li><strong>utr</strong>: genes that demanded for the full length can be sequenced on their CDS or CDS + utr (full exons). Default FALSE</li>
 <li><strong>canonicalTranscript</strong>: decide weather to take only the canonical transcript or collapse the genomic ranges of any transcript.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Design our panel in full with no padding length and merge window equal to 100 bp</span>
-mydesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</span>(mypanel 
-                        , <span class="dt">padding_length=</span><span class="dv">0</span> 
-                        , <span class="dt">merge_window=</span><span class="dv">100</span>)
-<span class="kw">str</span>(mydesign , <span class="dt">vec.len=</span><span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 4
 ##  $ GeneIntervals  :&#39;data.frame&#39;: 378 obs. of  9 variables:
 ##   ..$ ensembl_transcript_id: chr [1:378] &quot;ENST00000372348&quot; ...
@@ -2871,6 +2866,11 @@ mydesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</span>(myp
 ##   ..$ start     : int [1:257] 115251158 55248985 ...
 ##   ..$ end       : int [1:257] 115251275 55249171 ...
 ##   ..$ annotation: chr [1:257] &quot;NRAS&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Design our panel in full with no padding length and merge window equal to 100 bp</span>
+mydesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</span>(mypanel 
+                        , <span class="dt">padding_length=</span><span class="dv">0</span> 
+                        , <span class="dt">merge_window=</span><span class="dv">100</span>)
+<span class="kw">str</span>(mydesign , <span class="dt">vec.len=</span><span class="dv">1</span>)</code></pre></div>
 <p>The design is a list composed by four elements:</p>
 <ol style="list-style-type: decimal">
 <li><strong>GeneIntervals</strong>: all CDS and CDS + UTR for all the genes in the panel</li>
@@ -2923,54 +2923,53 @@ myMutationDesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</s
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] rtracklayer_1.36.3            GenomicRanges_1.28.3         
-## [3] GenomeInfoDb_1.12.2           IRanges_2.10.2               
-## [5] S4Vectors_0.14.3              BiocGenerics_0.22.0          
-## [7] knitr_1.16                    PrecisionTrialDesigner_0.99.0
+## [1] knitr_1.16                    PrecisionTrialDesigner_0.99.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Biobase_2.36.2                httr_1.2.1                   
-##  [3] bit64_0.9-7                   jsonlite_1.5                 
-##  [5] AnnotationHub_2.8.2           shiny_1.0.3                  
-##  [7] LowMACAAnnotation_0.99.3      interactiveDisplayBase_1.14.0
-##  [9] highr_0.6                     blob_1.1.0                   
-## [11] GenomeInfoDbData_0.99.0       Rsamtools_1.28.0             
-## [13] yaml_2.1.14                   ggrepel_0.6.5                
-## [15] RSQLite_2.0                   backports_1.1.0              
-## [17] lattice_0.20-35               digest_0.6.12                
-## [19] RColorBrewer_1.1-2            XVector_0.16.0               
-## [21] cgdsr_1.2.6                   colorspace_1.3-2             
-## [23] htmltools_0.3.6               httpuv_1.3.5                 
-## [25] Matrix_1.2-10                 R.oo_1.21.0                  
-## [27] plyr_1.8.4                    pkgconfig_2.0.1              
-## [29] XML_3.98-1.9                  biomaRt_2.32.1               
-## [31] zlibbioc_1.22.0               xtable_1.8-2                 
-## [33] scales_0.4.1                  brglm_0.6.1                  
-## [35] BiocParallel_1.10.1           tibble_1.3.3                 
-## [37] ggplot2_2.2.1                 DT_0.2                       
-## [39] SummarizedExperiment_1.6.3    lazyeval_0.2.0               
-## [41] magrittr_1.5                  mime_0.5                     
-## [43] memoise_1.1.0                 evaluate_0.10.1              
-## [45] R.methodsS3_1.7.1             BiocInstaller_1.26.0         
-## [47] tools_3.4.0                   data.table_1.10.4            
-## [49] matrixStats_0.52.2            stringr_1.2.0                
-## [51] googleVis_0.6.2               munsell_0.4.3                
-## [53] DelayedArray_0.2.7            AnnotationDbi_1.38.1         
-## [55] Biostrings_2.44.1             compiler_3.4.0               
-## [57] profileModel_0.5-9            rlang_0.1.1                  
-## [59] grid_3.4.0                    RCurl_1.95-4.8               
-## [61] htmlwidgets_0.8               bitops_1.0-6                 
-## [63] shinyBS_0.61                  labeling_0.3                 
-## [65] rmarkdown_1.6                 gtable_0.2.0                 
-## [67] codetools_0.2-15              DBI_0.7                      
-## [69] curl_2.7                      reshape2_1.4.2               
-## [71] R6_2.2.2                      GenomicAlignments_1.12.1     
-## [73] bit_1.1-12                    rprojroot_1.2                
-## [75] stringi_1.1.5                 Rcpp_0.12.11</code></pre>
+##  [1] ggrepel_0.6.5                 Rcpp_0.12.11                 
+##  [3] lattice_0.20-35               LowMACAAnnotation_0.99.3     
+##  [5] Rsamtools_1.28.0              Biostrings_2.44.1            
+##  [7] rprojroot_1.2                 digest_0.6.12                
+##  [9] mime_0.5                      R6_2.2.2                     
+## [11] GenomeInfoDb_1.12.2           plyr_1.8.4                   
+## [13] backports_1.1.0               stats4_3.4.0                 
+## [15] RSQLite_2.0                   evaluate_0.10.1              
+## [17] highr_0.6                     httr_1.2.1                   
+## [19] ggplot2_2.2.1                 cgdsr_1.2.6                  
+## [21] BiocInstaller_1.26.0          zlibbioc_1.22.0              
+## [23] rlang_0.1.1                   lazyeval_0.2.0.9000          
+## [25] data.table_1.10.4             blob_1.1.0                   
+## [27] googleVis_0.6.2               S4Vectors_0.14.3             
+## [29] R.oo_1.21.0                   Matrix_1.2-10                
+## [31] DT_0.2                        rmarkdown_1.6                
+## [33] labeling_0.3                  BiocParallel_1.10.1          
+## [35] AnnotationHub_2.8.2           stringr_1.2.0                
+## [37] htmlwidgets_0.8               RCurl_1.95-4.8               
+## [39] bit_1.1-12                    biomaRt_2.32.1               
+## [41] munsell_0.4.3                 DelayedArray_0.2.7           
+## [43] shiny_1.0.3                   compiler_3.4.0               
+## [45] httpuv_1.3.5                  rtracklayer_1.36.3           
+## [47] BiocGenerics_0.22.0           htmltools_0.3.6              
+## [49] SummarizedExperiment_1.6.3    tibble_1.3.3                 
+## [51] GenomeInfoDbData_0.99.0       interactiveDisplayBase_1.14.0
+## [53] matrixStats_0.52.2            IRanges_2.10.2               
+## [55] codetools_0.2-15              XML_3.98-1.9                 
+## [57] brglm_0.6.1                   GenomicAlignments_1.12.1     
+## [59] shinyBS_0.61                  bitops_1.0-6                 
+## [61] R.methodsS3_1.7.1             grid_3.4.0                   
+## [63] jsonlite_1.5                  xtable_1.8-2                 
+## [65] gtable_0.2.0                  DBI_0.7                      
+## [67] magrittr_1.5                  scales_0.4.1                 
+## [69] stringi_1.1.5                 XVector_0.16.0               
+## [71] reshape2_1.4.2                RColorBrewer_1.1-2           
+## [73] tools_3.4.0                   bit64_0.9-7                  
+## [75] Biobase_2.36.2                profileModel_0.5-9           
+## [77] parallel_3.4.0                yaml_2.1.14                  
+## [79] AnnotationDbi_1.38.1          colorspace_1.3-2             
+## [81] GenomicRanges_1.28.3          memoise_1.1.0</code></pre>
 </div>
 
 <p>Copyright &copy; 2017 Giorgio Melloni. All rights reserved.</p>

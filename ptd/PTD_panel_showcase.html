@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alessandro Guida" />
+
+
+<title>Panel Showcase</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<script src="site_libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="site_libs/datatables-binding-0.2/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PTD</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="PrecisionTrialDesigner.html">Vignette</a>
+    </li>
+    <li>
+      <a href="SHIVA_analysis.html">Shiva Retrospective Analysis</a>
+    </li>
+    <li>
+      <a href="PTD_panel_showcase.html">Panel Showcase</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="https://gitlab.com/IEO_Research/R_package_panel_and_projection">
+    <span class="fa fa-arrow-circle-down"></span>
+     
+    Install
+  </a>
+</li>
+<li>
+  <a href="shinyapp.html">
+    <span class="fa fa-gear"></span>
+     
+    Shiny App
+  </a>
+</li>
+<li>
+  <a href="about.html">
+    <span class="fa fa-info"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://gmelloni.github.io">
+    <span class="fa fa-github-alt fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Panel Showcase</h1>
+<h4 class="author"><em>Alessandro Guida</em></h4>
+
+</div>
+
+
+<p>In this analysis we will simulate a basket clinical trial run on patients affected by 3 diseases: breast, lung and gastric cancer. Samples will be collected and sequencing with Next-generation sequencing technology. Patients will be assigned to treatment groups based on the genomic characterization. The panel design is based on a recent publication that defines the guidelines for precision medicine and the genes that should be included into diagnostic NGS assays for the previously indicated tumor type.</p>
+<blockquote>
+<p>Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.</p>
+</blockquote>
+<div id="basket-trial-panel-showcase" class="section level1">
+<h1>BASKET TRIAL PANEL SHOWCASE</h1>
+<div id="objectives" class="section level2">
+<h2>OBJECTIVES</h2>
+<p>The objective of this analysis is to:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Simulate the panel “detection power”</strong> (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.</li>
+<li><strong>Simulate a genomic driven clinical trial:</strong> As we might risk to have “unbalanced” group treatment, we would like to know in advance the patient allocation frequency to different treatment arms based on the alteration frequency in the cancer population;</li>
+<li><strong>Estimate the number of patients needed to be screened</strong>;</li>
+<li><strong>Optimize the size of the panel and therefore reduce experimental cost</strong>;</li>
+<li>As last, illustrate the usage of PTD in a concrete showcase context.</li>
+</ol>
+<div id="initial-assumption" class="section level3">
+<h3>Initial assumption</h3>
+<p>The panel is designed based on the guidelines indicated in the recent publication:</p>
+<blockquote>
+<p>Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.</p>
+</blockquote>
+<p>We had to make some adjustments and interpretations in order to fit the guidelines into a panel design that would be input by the <code>PTD</code> package.</p>
+<div id="gene-name-adoption" class="section level4">
+<h4>Gene name adoption</h4>
+<p><code>PTD</code> requires gene names to be written in <em>HGNC</em> format. Since the software will download data from different web databases, we need to make sure that gene names follow the international convention. While scanning the paper, we noticed that the following genes were encoded in the paper with names that do not match the HGNC standards. We have therefore apply the following interpretations and corrections:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Paper annotation</th>
+<th>Conversion for the analysis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>NTKR</code> (Possible typo?)</td>
+<td><code>NTRK1</code>, <code>NTRK2</code>, <code>NTRK3</code></td>
+</tr>
+<tr class="even">
+<td><code>NTRK</code></td>
+<td><code>NTRK1</code>, <code>NTRK2</code>, <code>NTRK3</code></td>
+</tr>
+</tbody>
+</table>
+<p>Moreover, the paper states that for gastric tumor, <em>MSI</em> should be tested. We can infer this information testing the following genes: <code>MLH3</code>, <code>MLH1</code>, <code>MSX1</code>, <code>MSX2</code></p>
+</div>
+<div id="gene-alterations" class="section level4">
+<h4>Gene alterations</h4>
+<p>In this analysis we will only consider the following alteration:</p>
+<ul>
+<li>SNV</li>
+<li>CNA</li>
+<li>Fusions (only for lung tumor since they were selected to be lung cancer specific alteration)</li>
+</ul>
+<p>Changes in expression are not included in this analysis.</p>
+</div>
+<div id="drug-treatment" class="section level4">
+<h4>Drug Treatment</h4>
+<p>For demonstrative purposes we are simulating a clinical trial by associating altered genes to “general drug families” as a possible treatment.</p>
+</div>
+<div id="tumor-types" class="section level4">
+<h4>Tumor types</h4>
+<p>The paper we are basing our work on, defines the guidelines for 3 diseases:</p>
+<ul>
+<li>Breast cancer;</li>
+<li>Lung cancer;</li>
+<li>Gastric Cancer;</li>
+</ul>
+<p>We need to convert these diseases into tumor ID compatible with the TCGA standard. The conversion is applied as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Publication definition</th>
+<th>TCGA tumor ID conversion adopted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Breast Cancer</td>
+<td>brca (Breast invasive carcinoma)</td>
+</tr>
+<tr class="even">
+<td>Lung Cancer</td>
+<td>luad (Lung adenocarcinoma)</td>
+</tr>
+<tr class="odd">
+<td>Lung Cancer</td>
+<td>lusc (Lung squamous cell carcinoma)</td>
+</tr>
+<tr class="even">
+<td>Gastric Cancer</td>
+<td>stad (Stomach adenocarcinoma)</td>
+</tr>
+<tr class="odd">
+<td>Gastric Cancer</td>
+<td>coadread (colon)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>We are making the assumption that the cancer population of reference is composed entirely and uniquely by this cancer subtypes</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define tumor types </span>
+tumor_types &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;brca&quot;</span>, <span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>, <span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)</code></pre></div>
+</div>
+<div id="sampling-populations" class="section level4">
+<h4>Sampling Populations</h4>
+<p>In this section, we will attempt to estimate the sample size of each cancer type in a population of reference. For this simulation we will use a population of reference sampled according to the statistics published by <a href="seer.cancer.gov" class="uri">seer.cancer.gov</a></p>
+<ul>
+<li><a href="http://seer.cancer.gov/csr/1975_2013/results_single/sect_a_table.01_2pgs.pdf" class="uri">http://seer.cancer.gov/csr/1975_2013/results_single/sect_a_table.01_2pgs.pdf</a></li>
+<li>local copy of the file <a href="extra_docs/sect_a_table.01_2pgs.pdf" class="uri">extra_docs/sect_a_table.01_2pgs.pdf</a></li>
+</ul>
+<p><em>Seer</em> reports that, between 2009 and 2013 the tumor population amounted to:</p>
+<ul>
+<li>Breast cancer: 306665 people;</li>
+<li>Lung cancer: 256350 people;</li>
+<li>Gastric cancer:
+<ul>
+<li>Stomach cancer: 33174 people;</li>
+<li>Colon and rectum cancer: 185758 people;</li>
+</ul></li>
+</ul>
+<div id="breast-carcinoma" class="section level5">
+<h5>Breast carcinoma</h5>
+<p>Frequency of the population is adjusted by <strong>Breast carcinoma </strong> according to the following table <a href="http://seer.cancer.gov/csr/1975_2013/results_single/sect_04_table.25_2pgs.pdf">sect_04_table.25_2pgs.pdf</a>:</p>
+<ul>
+<li>brca: 99.4%</li>
+</ul>
+</div>
+<div id="lung-subtypes" class="section level5">
+<h5>Lung subtypes</h5>
+<p>Frequency of the population is adjusted by <strong>lung tumor subtypes</strong> according to <a href="http://seer.cancer.gov/csr/1975_2013/results_single/sect_15_table.28.pdf">online link</a>, <a href="extra_docs/sect_15_table.28.pdf">local file</a>:</p>
+<ul>
+<li>Lung Adenocarcinoma: 45% of lung population</li>
+<li>Lung squamous and transitional cells: 23.0% of lung population</li>
+</ul>
+</div>
+<div id="gastric-subtypes" class="section level5">
+<h5>Gastric subtypes</h5>
+<p>Frequency of the population is adjusted by <strong>stomach tumor subtypes</strong> according to <a href="http://seer.cancer.gov/csr/1975_2013/results_single/sect_24_table.22_2pgs.pdf">online link</a>, <a href="extra_docs/sect_24_table.22_2pgs.pdf">local copy</a></p>
+<ul>
+<li>Stad: 82%</li>
+</ul>
+<p>Frequency of the colon cancer are adjusted according to <a href="http://seer.cancer.gov/csr/1975_2013/results_single/sect_06_table.29_2pgs.pdf">online link</a>, <a href="extra_docs/sect_06_table.29_2pgs.pdf">local file</a></p>
+<ul>
+<li>Coadread: 92.8%</li>
+</ul>
+<p>We will therefore use these statistics as our population of reference using the following approximations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">7</span>)
+
+<span class="co"># assign number of patients</span>
+luad_tot =<span class="st"> </span><span class="kw">ceiling</span>(<span class="dv">256350</span>*<span class="fl">0.45</span>) <span class="co">#adjustement coefficient specific to the % of subtype tumor in a lung cancer population</span>
+lusc_tot =<span class="st"> </span><span class="kw">ceiling</span>(<span class="dv">256350</span>*<span class="fl">0.23</span>) <span class="co">#adjustement coefficient </span>
+stad_tot =<span class="st"> </span><span class="kw">ceiling</span>(<span class="dv">33174</span>*<span class="fl">0.82</span>) <span class="co">#adjustement coefficient </span>
+coadread_tot =<span class="st"> </span><span class="kw">ceiling</span>(<span class="dv">185758</span>*<span class="fl">0.928</span>) <span class="co">#adjustement coefficient </span>
+brca_tot =<span class="st"> </span><span class="kw">ceiling</span>(<span class="dv">306665</span> *<span class="st"> </span><span class="fl">0.994</span>)
+
+<span class="co"># total</span>
+all_tot =<span class="st"> </span>brca_tot+luad_tot+lusc_tot+stad_tot+coadread_tot
+
+<span class="co"># calculate frequencies</span>
+brca_freq =<span class="st"> </span>brca_tot/all_tot
+luad_freq =<span class="st"> </span>luad_tot/all_tot
+lusc_freq =<span class="st"> </span>lusc_tot/all_tot
+stad_freq =<span class="st"> </span>stad_tot/all_tot
+coadread_freq =<span class="st"> </span>coadread_tot/all_tot</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>TCGA tumor ID</th>
+<th>population considered</th>
+<th>frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>brca</td>
+<td><code>304826</code></td>
+<td><code>0.449111</code></td>
+</tr>
+<tr class="even">
+<td>luad</td>
+<td><code>115358</code></td>
+<td><code>0.169961</code></td>
+</tr>
+<tr class="odd">
+<td>lusc</td>
+<td><code>58961</code></td>
+<td><code>0.0868693</code></td>
+</tr>
+<tr class="even">
+<td>stad</td>
+<td><code>27203</code></td>
+<td><code>0.0400791</code></td>
+</tr>
+<tr class="odd">
+<td>coadread</td>
+<td><code>172384</code></td>
+<td><code>0.2539795</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="analysis" class="section level2">
+<h2>ANALYSIS</h2>
+<p>In the following phases we will proceed by designing the panel and visualizing its performance through different types of plots.</p>
+<div id="design-phase" class="section level3">
+<h3>Design phase</h3>
+<p>First step is to create the panel design using an excel file according to the standards of the package. The panel design is loaded into R and can be previewed in the table below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DT)
+<span class="kw">library</span>(knitr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(PrecisionTrialDesigner)
+
+<span class="st">`</span><span class="dt">%++%</span><span class="st">`</span> &lt;-<span class="st"> </span>function(a,b) <span class="kw">paste0</span>(<span class="kw">c</span>(a,b), <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)
+
+<span class="co"># Import excel file in R</span>
+panel_design &lt;-<span class="st"> </span>gdata::<span class="kw">read.xls</span>(<span class="st">&quot;version_6.0/Tables/tb1_PTD_panel_showcase.xlsx&quot;</span>)
+<span class="co"># preview the input table</span>
+<span class="kw">datatable</span>(panel_design)</code></pre></div>
+<div id="htmlwidget-fd651d113eca57f82a75" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fd651d113eca57f82a75">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46"],["PARP inhibitor","PARP inhibitor","PARP inhibitor","HER2 inhibitor","PARP inhibitor","PARP inhibitor","AKT inhibitor","AKT inhibitor","","FGFR inhibitor","FGFR inhibitor","EGFR inhibitor","ALK inhibitor","BRAF inhibitor","","ALK inhibitor","ALK inhibitor","ALK inhibitor","MET inhibitor","","","MET inhibitor","MET inhibitor","FGFR inhibitor","FGFR inhibitor","FGFR inhibitor","FGFR inhibitor","FGFR inhibitor","NOTCH inhibitor","NOTCH inhibitor","NOTCH inhibitor","NOTCH inhibitor","ALK inhibitor","ALK inhibitor","ALK inhibitor","ALK inhibitor","ALK inhibitor","AKT inhibitor","AKT inhibitor","","","","Immune Checkpoint Inhibitor","Immune Checkpoint Inhibitor","Immune Checkpoint Inhibitor","Immune Checkpoint Inhibitor"],["ERBB2","BRCA2","BRCA1","ERBB2","BRCA1","BRCA2","AKT1","PIK3CA","ESR1","FGFR1","FGFR1","EGFR","ALK","BRAF","KRAS","NTRK1","NTRK2","NTRK3","MET","HRAS","NRAS","RET","MET","EGFR","FGFR2","FGFR2","FGFR3","FGFR3","NOTCH1","NOTCH1","NOTCH2","NOTCH2","ALK","ROS1","NTRK1","NTRK2","NTRK3","PTEN","PTEN","CDK4","CDKN2A","RNF43","MLH1","MLH3","MSX1","MSX2"],["CNA","CNA","CNA","SNV","SNV","SNV","SNV","SNV","SNV","SNV","CNA","SNV","SNV","SNV","SNV","SNV","SNV","SNV","SNV","SNV","SNV","CNA","CNA","CNA","SNV","CNA","SNV","CNA","SNV","CNA","SNV","CNA","fusion","fusion","fusion","fusion","fusion","CNA","SNV","SNV","SNV","SNV","SNV","SNV","SNV","SNV"],["amplification","deletion","deletion","","","","","","","","amplification","","","","","","","","","","","amplification","amplification","amplification","","amplification","","amplification","","amplification","","amplification","","","","","","deletion","","","","","","","",""],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","driver","actionable","actionable","actionable","actionable","actionable","driver","actionable","actionable","actionable","actionable","driver","driver","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","actionable","driver","driver","driver","actionable","actionable","actionable","actionable"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>drug<\/th>\n      <th>gene_symbol<\/th>\n      <th>alteration<\/th>\n      <th>exact_alteration<\/th>\n      <th>mutation_specification<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":[],"jsHooks":[]}</script>
+<p>We can now run the main function of the R package and:</p>
+<ol style="list-style-type: decimal">
+<li>Import the panel design into a CancerPanel object;</li>
+<li>download Alteration information for the drug types of interest;</li>
+<li>Adapt the alteration information to the CancerPanel design;</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. Create the panel Object using PTD package - DESIGN PHASE</span>
+PTD_panel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panel_design)
+<span class="co"># 2. DOWNLOAD PHASE</span>
+PTD_panel &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(PTD_panel, <span class="dt">tumor_type=</span>tumor_types)
+<span class="co"># 3. SIMULATION PHASE</span>
+PTD_panel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(PTD_panel)
+
+<span class="co">#save a backup copy to speed up future analysis</span>
+<span class="kw">saveRDS</span>(PTD_panel, <span class="dt">file=</span><span class="st">&quot;version_6.0/Temp/PTD_panel.rds&quot;</span>)</code></pre></div>
+<p>At this point <code>PTD_panel</code> contains all the information we need to visualize the panel performance.</p>
+</div>
+<div id="filter-non-pathogenic-mutations" class="section level3">
+<h3>Filter non pathogenic mutations</h3>
+<p>Remove NON pathogenic mutation fetched from cosmic dataset (01-05-2017).</p>
+<p>Cosmic mutations where downloaded from the cosmic dataset on the 18-05-2017.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># save the number of entries in the TCGA beofere any filtering</span>
+TCGA_original_number &lt;-<span class="st"> </span><span class="kw">nrow</span>(<span class="kw">unique</span>(PTD_panel@dataFull$mutations$data))
+
+<span class="co"># Clean TCGA popualation running a cosmic filter</span>
+cosmic &lt;-<span class="st"> </span>readr::<span class="kw">read_csv</span>(<span class="st">&quot;version_6.0/external_resources/cosmic_df_PTD.csv&quot;</span>)</code></pre></div>
+<pre><code>## Warning: Missing column names filled in: &#39;X1&#39; [1]</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   X1 = col_integer(),
+##   Position = col_integer(),
+##   CDS.Mutation = col_character(),
+##   AA.Mutation = col_character(),
+##   `Mutation ID (COSM)` = col_integer(),
+##   Count = col_integer(),
+##   Type = col_character(),
+##   gene = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cosmic_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gene_symbol =</span> cosmic$gene
+                        , <span class="dt">amino_acid_change =</span> <span class="kw">sub</span>(<span class="st">&quot;^p.&quot;</span> , <span class="st">&quot;&quot;</span> , cosmic$AA.Mutation)
+                        , <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+PTD_panel &lt;-<span class="st"> </span><span class="kw">filterMutations</span>(PTD_panel , <span class="dt">filtered =</span> cosmic_df , <span class="dt">mode =</span> <span class="st">&quot;keep&quot;</span>)</code></pre></div>
+<pre><code>## Subsetting fusions...</code></pre>
+<pre><code>## Subsetting mutations...</code></pre>
+<pre><code>## Subsetting copynumber...</code></pre>
+<ul>
+<li>Filtering out ** <code>33.5</code> % ** of the TCGA original SNVs.</li>
+</ul>
+</div>
+<div id="adjust-cna-threshold-to-be-clinically-relevant" class="section level3">
+<h3>Adjust CNA threshold to be clinically relevant</h3>
+<p>CNA data provided by cBioPortal reports the final step in CNV calls from GISTIC pipeline (CIT). CNVs are reported as either</p>
+<ul>
+<li>-2: deletion</li>
+<li>-1: shallow deletion</li>
+<li>0: normal</li>
+<li>1: shallow amplification</li>
+<li>2: amplification</li>
+</ul>
+<p>Values of -2 or 2 are considered alterations, while the rest is considered as normal copies. For research purposes, these criteria are very useful to discover new potential gene copies alterations but a clinical setting requires stronger evidence for a call, especially in case of amplification.</p>
+<p>The SHIVA trial protocol, for instance, in order to consider clinically relevant a <em>AKT</em> amplification, it requires at least the presence of 5-6 copies.</p>
+<p>A similar granularity is not possible with the final GISTIC results but it can be obtained up to a certain degree using the original data provided by the GDAC Firehose (the same used by cBioPortal).</p>
+<p>We downloaded GISTIC run 2016_01_28 <em>all_thresholded.by_genes.txt</em> files for 32 tumor types and normalized the segmented value for each patient by their respective thresholds. Each sample of the TCGA cohort has a deletion and amplification call threshold calculated according to estimated ploidy and purity of the original sample. For example, a low purity sample will have lower threshold for calling a CNV compared to a 100% purity sample because of the normal diploid cells contamination. These thresholds represents the points were an amplification (2) or deletion (-2) are called.</p>
+<p>This normalization reformats the data as absolute number of copies in the following way:</p>
+<ul>
+<li>0-1: deletion</li>
+<li>1.1: shallow deletion</li>
+<li>2: normal</li>
+<li>2.9: shallow amplification</li>
+<li>3-Inf: amplification</li>
+</ul>
+<p>While data from 1.1 to 2.9 are the same as before (considered normal on default), now 1 is the point of -2 deletion and 3 the point of +2 amplifiaction. We have now the full spectrum of amplification from &gt; 3 that can be used to fine-tune the clinically relevant threshold (4, 5 ,6 copies for example).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># SETTINGS</span>
+<span class="co"># ==============================================================================</span>
+<span class="co"># DEFINE GENES: define genes we are interested for the CNA analysis</span>
+CNA_genes &lt;-<span class="st"> </span>PTD_panel@arguments$panel %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">filter</span>(alteration ==<span class="st"> &quot;CNA&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(gene_symbol) %&gt;%
+<span class="st">  </span>.[[<span class="dv">1</span>]]
+
+<span class="co"># PATH: set global variable with the path to.rds files with CNA raw data</span>
+PATH_2CNA_FILES &lt;-<span class="st"> &quot;version_6.0/Temp/cna_firehose_rds/&quot;</span>
+
+
+<span class="co"># helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured</span>
+<span class="co"># ==============================================================================</span>
+get_cna_long &lt;-<span class="st"> </span>function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
+  
+  
+  <span class="co"># CHECKS</span>
+  <span class="co"># --------------------------------------------------------------------------------</span>
+  <span class="co"># check that PATH actually leads to a dir</span>
+  if(!<span class="kw">dir.exists</span>(PATH_2rds)){ <span class="kw">stop</span>(<span class="st">&quot;path to a dir that cannot be found&quot;</span>)}
+
+  <span class="co"># Check that all the files are found for each tumor type required in the analysis</span>
+  input_lgl &lt;-<span class="st"> </span>purrr::<span class="kw">map_lgl</span>(tumor_types
+                              , ~<span class="st"> </span><span class="kw">file.exists</span>(<span class="kw">paste0</span>(PATH_2rds
+                                                     , <span class="kw">toupper</span>(.)
+                                                     , <span class="st">&quot;_PTD.rds&quot;</span>)
+                                              )
+                              )
+  
+  if(!<span class="kw">all</span>(input_lgl)){
+    <span class="kw">stop</span>(<span class="kw">paste</span>(<span class="st">&quot;Files for some of the tumor types where not found:&quot;</span>
+               , tumor_types[-<span class="kw">which</span>(input_lgl)])
+         )
+  }
+ 
+  <span class="co"># Checks</span>
+  if(!<span class="kw">is.character</span>(tumor_types) |<span class="st"> </span><span class="kw">is.null</span>(tumor_types) |<span class="st"> </span><span class="kw">length</span>(tumor_types) ==<span class="dv">0</span>){
+    <span class="kw">stop</span>(<span class="kw">paste</span>(<span class="st">&quot;Tumor type is not confirm&quot;</span>, tumor_types))
+  }
+
+
+  <span class="co"># Define an internal function to do the job</span>
+  <span class="co"># -------------------------------------------------------------------------------</span>
+  get_CNA_long_onetumor &lt;-<span class="st"> </span>function(one_tumor, PATH_2rds, genes_chr, del_thr, amp_thr){
+    
+    <span class="co"># read in CNA file</span>
+    <span class="co"># myfile &lt;- readRDS(paste0(PATH_2rds, toupper(one_tumor) , &quot;_PTD.rds&quot;))</span>
+    <span class="co"># if(!file.exists(myfile)){</span>
+    <span class="co">#   message(myfile)</span>
+    <span class="co">#   return(NULL)</span>
+    <span class="co"># }</span>
+    <span class="co"># mat &lt;- tryCatch(readRDS(myfile) , error = function(e) stop(myfile))</span>
+    
+    mat &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(PATH_2rds, <span class="kw">toupper</span>(one_tumor) , <span class="st">&quot;_PTD.rds&quot;</span>))
+    
+    <span class="co"># extract Patients</span>
+    pats &lt;-<span class="st"> </span><span class="kw">colnames</span>(mat)
+
+    <span class="co"># Filter for gene of interest</span>
+    mat &lt;-<span class="st"> </span>mat[ genes_chr , ]
+
+    <span class="co"># Melt and adjust</span>
+    output &lt;-<span class="st"> </span>reshape2::<span class="kw">melt</span>(mat , <span class="dt">value.name =</span> <span class="st">&quot;CNAvalue&quot;</span>)
+    <span class="kw">colnames</span>(output) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;gene_symbol&quot;</span> , <span class="st">&quot;case_id&quot;</span> , <span class="st">&quot;CNAvalue&quot;</span>)
+      output$tumor_type &lt;-<span class="st"> </span>one_tumor
+    <span class="co"># Choose cutoff values</span>
+    <span class="co"># -----------------------------------------------------------------------------</span>
+    <span class="co"># With default threshold data are now like this: </span>
+        <span class="co"># [0 , 1.1) &quot;deletion&quot;</span>
+        <span class="co"># 1.1 &quot;shallow deletion&quot;</span>
+        <span class="co"># 2 &quot;normal&quot;</span>
+        <span class="co"># 2.9 &quot;shallow amplification&quot;</span>
+        <span class="co"># (2.9 , Inf] &quot;amplification&quot;</span>
+    output$CNA &lt;-<span class="st"> </span><span class="kw">ifelse</span>( output$CNAvalue &lt;del_thr 
+                    , <span class="st">&quot;deletion&quot;</span> 
+                    , <span class="kw">ifelse</span>(output$CNAvalue &gt;<span class="st"> </span>amp_thr , <span class="st">&quot;amplification&quot;</span> , <span class="st">&quot;normal&quot;</span>))
+    <span class="co"># select</span>
+    output &lt;-<span class="st"> </span>output %&gt;%
+<span class="st">      </span>dplyr::<span class="kw">select</span>(gene_symbol , CNA , case_id , tumor_type, CNAvalue) %&gt;%
+<span class="st">      </span>dplyr::<span class="kw">mutate</span>(<span class="dt">gene_symbol =</span> <span class="kw">as.character</span>(gene_symbol)) %&gt;%
+<span class="st">      </span>dplyr::<span class="kw">mutate</span>(<span class="dt">case_id =</span> <span class="kw">as.character</span>(case_id)) 
+    
+    <span class="kw">return</span>(output)
+  }
+
+  <span class="co"># Main body of the function</span>
+  <span class="co"># -----------------------------------------------------------------------------</span>
+  cna_long_df &lt;-<span class="st"> </span>purrr::<span class="kw">map</span>(tumor_types
+                             , ~<span class="st"> </span><span class="kw">get_CNA_long_onetumor</span>(.
+                                                       , PATH_2rds
+                                                       , genes_chr
+                                                       , del_thr
+                                                       , amp_thr
+                                                       )
+                             ) %&gt;%
+<span class="st">    </span>dplyr::<span class="kw">bind_rows</span>()
+    
+  <span class="kw">return</span>(cna_long_df)  
+
+}
+  
+
+<span class="co"># RUN MAIN FUNCTION</span>
+<span class="co"># ==============================================================================</span>
+cna_long_df &lt;-<span class="st"> </span><span class="kw">get_cna_long</span>(tumor_types
+                            , PATH_2CNA_FILES
+                            , CNA_genes
+                            , <span class="dt">del_thr =</span> <span class="fl">1.1</span>
+                            , <span class="dt">amp_thr =</span> <span class="dv">4</span>
+                            )
+
+
+<span class="co"># Create Sample</span>
+<span class="co"># ----------------------</span>
+<span class="co"># get list of tumors</span>
+tumor_chr &lt;-<span class="st">  </span>cna_long_df$tumor_type %&gt;%<span class="st"> </span>
+<span class="st">  </span>unique %&gt;%<span class="st"> </span>
+<span class="st">  </span>as.character
+
+<span class="co"># prepare funtion to extract sample names for each tumor</span>
+sampleXtumor &lt;-<span class="st"> </span>function(x, df){
+  df %&gt;%<span class="st"> </span>
+<span class="st">    </span>dplyr::<span class="kw">select</span>(case_id, tumor_type) %&gt;%
+<span class="st">    </span>dplyr::<span class="kw">filter</span>(tumor_type %in%<span class="st"> </span>x) %&gt;%<span class="st"> </span>.[[<span class="st">&quot;case_id&quot;</span>]] %&gt;%
+<span class="st">    </span><span class="kw">as.character</span>() %&gt;%
+<span class="st">    </span><span class="kw">unique</span>()
+}
+<span class="co"># Extract samples for each tumors</span>
+Samples &lt;-<span class="st"> </span>purrr::<span class="kw">map</span>(tumor_chr, ~<span class="st"> </span><span class="kw">sampleXtumor</span>(., <span class="dt">df=</span>cna_long_df))
+<span class="kw">names</span>(Samples) &lt;-<span class="st"> </span>tumor_chr
+
+<span class="co"># Check if there are problems. </span>
+testthat::<span class="kw">expect_equal</span>(<span class="kw">length</span>(<span class="kw">unlist</span>(Samples)), <span class="kw">length</span>(<span class="kw">unique</span>(cna_long_df$case_id)))
+
+<span class="co"># Create list element for CNA for the DataFull argument of the panel (panel@DataFull)</span>
+<span class="co"># ==============================================================================</span>
+copynumber &lt;-<span class="st"> </span><span class="kw">list</span>(  <span class="dt">data =</span> <span class="kw">data.frame</span>(cna_long_df)
+                   , <span class="dt">Samples =</span> Samples)
+
+
+<span class="co"># Preview changes before committing</span>
+PTD_cna_pop_comparison &lt;-<span class="st"> </span>purrr::<span class="kw">map2</span>( 
+    <span class="dt">.x =</span> <span class="kw">list</span>( PTD_panel@dataFull$copynumber$Samples, copynumber$Samples )
+  , <span class="dt">.y =</span> <span class="kw">list</span>( <span class="st">&quot;TCGA&quot;</span>, <span class="st">&quot;Firehose&quot;</span> )
+  , <span class="dt">.f =</span> ~<span class="st"> </span>purrr::<span class="kw">map_int</span>(.x, length) %&gt;%
+<span class="st">      </span><span class="kw">data.frame</span>(<span class="dt">n_patients =</span> .) %&gt;%
+<span class="st">      </span>tibble::<span class="kw">rownames_to_column</span>(<span class="st">&quot;tumor_type&quot;</span>) %&gt;%
+<span class="st">      </span>dplyr::<span class="kw">mutate</span>(<span class="dt">source =</span> .y)
+  ) %&gt;%<span class="st"> </span>
+<span class="st">  </span>dplyr::<span class="kw">bind_rows</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(tumor_type, n_patients, <span class="dt">fill=</span>source)) +<span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="dt">position=</span> <span class="kw">position_dodge</span>()) +
+<span class="st">    </span><span class="kw">coord_flip</span>() +<span class="st"> </span>
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;number of patients in the CNA datasets&quot;</span>)
+
+<span class="co"># Preview</span>
+PTD_cna_pop_comparison</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/adjust%20CNA%20with%20firehose%20data-1.png" width="960" /></p>
+<p>apply changes to the TCGA population object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Apply changes</span>
+PTD_panel@dataFull$copynumber &lt;-<span class="st"> </span>copynumber
+PTD_panel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(PTD_panel)</code></pre></div>
+<pre><code>## Subsetting fusions...</code></pre>
+<pre><code>## Subsetting mutations...</code></pre>
+<pre><code>## Subsetting copynumber...</code></pre>
+</div>
+<div id="visualisation-and-simulations-of-the-panel-performance" class="section level3">
+<h3>Visualisation and Simulations of the panel performance</h3>
+<p>In this section we will start running some of the visualization functions to investigate how well the panel would perform in different conditions. Before starting out investigation we want to visualize the sample number by tumor type to keep in consideration any sampling bias due to the population of origin. This bias can be corrected using the option <code>tumor.wieights</code> or <code>tumor.freqs</code>.</p>
+<p>The following table shows the number of samples (<em>y-axis</em>) collected for this analysis for each tumor type considered.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coverageStackPlot</span>(PTD_panel
+                  , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>) 
+                  , <span class="dt">var=</span><span class="st">&quot;tumor_type&quot;</span>, <span class="dt">noPlot=</span><span class="ot">TRUE</span>)$Samples %&gt;%
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">Samples=</span>.) %&gt;%
+<span class="st">  </span>tibble::<span class="kw">rownames_to_column</span>(<span class="st">&quot;tumor_type&quot;</span>) %&gt;%
+<span class="st">  </span>knitr::<span class="kw">kable</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">tumor_type</th>
+<th align="right">Samples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">brca</td>
+<td align="right">976</td>
+</tr>
+<tr class="even">
+<td align="left">coadread</td>
+<td align="right">220</td>
+</tr>
+<tr class="odd">
+<td align="left">luad</td>
+<td align="right">230</td>
+</tr>
+<tr class="even">
+<td align="left">lusc</td>
+<td align="right">178</td>
+</tr>
+<tr class="odd">
+<td align="left">stad</td>
+<td align="right">393</td>
+</tr>
+<tr class="even">
+<td align="left">all_tumors</td>
+<td align="right">1997</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s export the data and make a summary table to resume differences in populations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get data for table</span>
+tcga_pop &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</span>(PTD_panel
+                  , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>) 
+                  , <span class="dt">var=</span><span class="st">&quot;tumor_type&quot;</span>
+                  , <span class="dt">noPlot=</span><span class="ot">TRUE</span>)
+
+<span class="co"># calculate frequencies</span>
+tcga_freqs &lt;-<span class="st"> </span>tcga_pop$Samples[-<span class="kw">length</span>(tcga_pop$Samples)]  /<span class="st"> </span>tcga_pop$Samples[<span class="st">&quot;all_tumors&quot;</span>]
+
+<span class="co"># make it into a df</span>
+population_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">tumor=</span><span class="kw">c</span>(<span class="st">&quot;brca&quot;</span>, <span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>, <span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)
+          , <span class="dt">seer=</span><span class="kw">c</span>(brca_freq, luad_freq, lusc_freq, stad_freq, coadread_freq)
+          , <span class="dt">tcga =</span> <span class="kw">c</span>(tcga_freqs[<span class="st">&quot;brca&quot;</span>], tcga_freqs[<span class="st">&quot;luad&quot;</span>], tcga_freqs[<span class="st">&quot;lusc&quot;</span>], tcga_freqs[<span class="st">&quot;stad&quot;</span>], tcga_freqs[<span class="st">&quot;coadread&quot;</span>])
+)
+
+<span class="co"># barplot, with only the genes in the panel</span>
+population_df %&gt;%
+<span class="st">  </span>tidyr::<span class="kw">gather</span>(Population, Frequency, seer:tcga) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Population, <span class="dt">y=</span>Frequency, <span class="dt">fill=</span>tumor)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>tumor, <span class="dt">space=</span><span class="st">&quot;free&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Comparison of the initial population composition&quot;</span>)</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(svglite)</span>
+<span class="co">#ggsave(filename=&quot;../Figures/fig1D.svg&quot;, plot=last_plot(), device = &quot;svg&quot;)</span></code></pre></div>
+<p>Comparison table between SEER initial population and TCGA initial population</p>
+<table style="width:28%;">
+<colgroup>
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>TCGA tumor ID</th>
+<th>Seer population considered</th>
+<th>Seer frequency <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></th>
+<th>TCGA initial population</th>
+<th>TCGA sample frequency <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>brca</td>
+<td><code>3049</code></td>
+<td><code>0.449111</code></td>
+<td><code>976</code></td>
+<td><code>0.4887331</code></td>
+</tr>
+<tr class="even">
+<td>luad</td>
+<td><code>1154</code></td>
+<td><code>0.169961</code></td>
+<td><code>230</code></td>
+<td><code>0.1151728</code></td>
+</tr>
+<tr class="odd">
+<td>lusc</td>
+<td><code>590</code></td>
+<td><code>0.0868693</code></td>
+<td><code>178</code></td>
+<td><code>0.0891337</code></td>
+</tr>
+<tr class="even">
+<td>stad</td>
+<td><code>273</code></td>
+<td><code>0.0400791</code></td>
+<td><code>393</code></td>
+<td><code>0.1967952</code></td>
+</tr>
+<tr class="odd">
+<td>coadread</td>
+<td><code>1724</code></td>
+<td><code>0.2539795</code></td>
+<td><code>220</code></td>
+<td><code>0.1101652</code></td>
+</tr>
+</tbody>
+</table>
+<div id="fusion-detection-in-lung-cancer" class="section level4">
+<h4>Fusion detection in Lung cancer</h4>
+<p>The previous plot does not include fusions, as the fusion in the panel are specific to the lung tumor. If we want to visualize the number of samples with available information for <code>mutations</code>, <code>copynumber</code> and <code>fusions</code> (each patients will have information for each category).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coverageStackPlot</span>(PTD_panel
+                  , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>, <span class="st">&quot;fusions&quot;</span>) 
+                  , <span class="dt">var=</span><span class="st">&quot;tumor_type&quot;</span>
+                  , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+                  )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+</div>
+<div id="panel-detection-power-in-the-overall-population" class="section level4">
+<h4>Panel detection power in the overall population</h4>
+<p>One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (<em>x-axis</em>) found in the sample (patient) population (<em>y-axis</em>). The panel <em>detection power</em> can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detection power in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             <span class="co"># adjust population distribution by applying a weighted sampling bootstrap</span>
+             , <span class="dt">tumor.freqs =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_freq
+                               , <span class="dt">luad=</span>luad_freq
+                               , <span class="dt">lusc=</span>lusc_freq
+                               , <span class="dt">stad =</span> stad_freq
+                               , <span class="dt">coadread =</span> coadread_freq
+                               )
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/coverageplot%20all%20the%20population-1.png" width="960" /></p>
+<p>The previous plot shows the percentage of patients (<em>y-axis</em>) found to have at least one, two, three, etc, alterations (<em>x-axis</em>). The current design is capable of detecting <code>0.65</code>% of the population of reference.</p>
+<div id="panel-detection-power-in-a-tumor-type-specific-population-background" class="section level5">
+<h5>Panel detection-power in a tumor type specific population background</h5>
+<p>In the following plot we want to identify the performance of our panel for each single tumor types starting from out population of reference composed by the 3 cancers groups.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">grouping =</span> <span class="st">&quot;tumor_type&quot;</span>
+             , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                               , <span class="dt">luad=</span>luad_tot
+                               , <span class="dt">lusc=</span>lusc_tot
+                               , <span class="dt">stad =</span> stad_tot
+                               , <span class="dt">coadread =</span> coadread_tot
+                               )
+             )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/coverage%20plot%20tumor%20specific-1.png" width="960" /></p>
+<p>To allow and easy comparison of the detection power in different tumor types we have redesign the plots into one unique barplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get data from the panel simulation</span>
+dt_power_lt &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</span>(PTD_panel
+                  , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>) 
+                  , <span class="dt">var=</span><span class="st">&quot;tumor_type&quot;</span>
+                  , <span class="dt">noPlot =</span> <span class="ot">TRUE</span>
+              )
+
+<span class="co"># convert to dataframe</span>
+dt_power_lt$plottedTable &lt;-<span class="st"> </span><span class="kw">data.frame</span>(dt_power_lt$plottedTable)
+
+<span class="co"># calculate frequency</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>()
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(dt_power_lt$plottedTable)){
+  
+  <span class="co"># find tot. number of samples in matching tumor</span>
+  index &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="kw">names</span>(dt_power_lt$Samples) %in%<span class="st"> </span><span class="kw">names</span>(dt_power_lt$plottedTable[i]))
+  
+  if(<span class="kw">length</span>(index) !=<span class="st"> </span><span class="dv">0</span> ){
+    <span class="co"># calculate frequency</span>
+    <span class="co"># freq &lt;- dt_power_lt$plottedTable[i] / dt_power_lt$Samples[index]</span>
+    freq &lt;-<span class="st"> </span>dt_power_lt$plottedTable[i] /<span class="st"> </span>dt_power_lt$Samples[<span class="st">&quot;all_tumors&quot;</span>]
+  }
+  <span class="co"># export</span>
+  df &lt;-<span class="st"> </span><span class="kw">rbind</span>(df
+              , <span class="kw">data.frame</span>(<span class="dt">tumor_id=</span><span class="kw">names</span>(dt_power_lt$Samples[index])
+                             , <span class="dt">freq=</span><span class="kw">as.numeric</span>(freq))
+              )
+}
+
+<span class="co"># generate plot </span>
+df %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">arrange</span>(freq) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(tumor_id, freq), <span class="dt">y=</span>freq*<span class="dv">100</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">coord_flip</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Genomic panel detection-power in different tumor types.&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detection power indicated as the overall population percentage&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;tumor type (TCGA ID)&quot;</span>)</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+</div>
+</div>
+</div>
+<div id="patient-treatment-allocation" class="section level3">
+<h3>Patient treatment allocation</h3>
+<p>We can also easily address the issue of the allocation frequency in the different treatment groups. The following plot shows the number of patients with at least one, two or more alterations that can be targeted by each drug in the trial. This is particularly important in clinical trails when you want to predict the maximum number of patients that could be allocated into a drug treatment and identify potential cohorts with few patients allocated.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;drug&quot;</span>
+             <span class="co"># adjust population distribution by applying a weighted sampling bootstrap</span>
+             , <span class="dt">tumor.freqs =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_freq
+                               , <span class="dt">luad=</span>luad_freq
+                               , <span class="dt">lusc=</span>lusc_freq
+                               , <span class="dt">stad =</span> stad_freq
+                               , <span class="dt">coadread =</span> coadread_freq
+                               )
+             , <span class="dt">colNum =</span> <span class="dv">2</span> <span class="co"># number of columns in the plot</span>
+             , <span class="dt">cex.main =</span> <span class="dv">1</span> <span class="co"># size of the plot title</span>
+)</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/patient%20treatment%20allocation%20plot-1.png" width="768" /></p>
+<p>To make it simpler to compare, we will plot the detection power for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get data from the panel simulation</span>
+drug_df &lt;-<span class="st"> </span><span class="kw">coveragePlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;drug&quot;</span>
+             <span class="co"># adjust population distribution by applying a weighted sampling bootstrap</span>
+             , <span class="dt">tumor.freqs =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_freq
+                               , <span class="dt">luad=</span>luad_freq
+                               , <span class="dt">lusc=</span>lusc_freq
+                               , <span class="dt">stad =</span> stad_freq
+                               , <span class="dt">coadread =</span> coadread_freq
+                               )
+             , <span class="dt">colNum =</span> <span class="dv">2</span> <span class="co"># number of columns in the plot</span>
+             , <span class="dt">cex.main =</span> <span class="dv">1</span> <span class="co"># size of the plot title</span>
+             , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
+ )$plottedTable %&gt;%<span class="st"> </span><span class="kw">data.frame</span>()
+
+<span class="co"># name first column with frequency of patients with at least one alteration that makes the patients elibigle for treatment with a specific drug</span>
+<span class="kw">names</span>(drug_df)[<span class="dv">1</span>] &lt;-<span class="st"> &quot;freq&quot;</span>
+
+<span class="co"># generate plot </span>
+drug_df %&gt;%
+<span class="st">  </span>tibble::<span class="kw">rownames_to_column</span>(<span class="st">&quot;drug_name&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">filter</span>(!<span class="kw">grepl</span>(<span class="st">&quot;no_drug&quot;</span>, drug_name)) %&gt;%
+<span class="st">  </span><span class="co">#dplyr::add_rownames(&quot;drug_name&quot;) %&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">reorder</span>(drug_name, freq), <span class="dt">y=</span>freq*<span class="dv">100</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">coord_flip</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Max frequencies of patients elibigle for each drug treatment&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detection power indicated as the overall population percentage&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;Drug name&quot;</span>)</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/max%20freq%20of%20patients%20eligible%20for%20each%20drug%20treatment-1.png" width="960" /></p>
+</div>
+<div id="panel-performance-evaluation" class="section level3">
+<h3>Panel performance evaluation</h3>
+<p>The design phase of a panel requires the user to make the important decision about what genes to include. <code>PTD</code> provides a suite of tools envisioned to aid the user during the decision process and evaluate the performance of the panel.</p>
+<div id="rank-genes-in-the-design-in-terms-of-genomic-spacedetection-power" class="section level4 tabset">
+<h4>Rank genes in the design in terms of genomic space/detection power</h4>
+<p>The following plot was studied to investigate the relationship between the “cost” of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detection power in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types.</p>
+<p>In order to optimize a panel design, we might be interested to know:</p>
+<ul>
+<li>What genes are most altered in the tumor types of interest;</li>
+<li>What genes are “cheaper” to be sequenced (in terms of genomic spaces, or also size of the targeted region);</li>
+<li>What genes have the highest number of (alteration frequency) / (genomic space).</li>
+</ul>
+<div id="all-tumors-together" class="section level5">
+<h5>All tumors together</h5>
+<p>The following saturation plot shows the overall performance of the panel in a population that includes all tumor types of interest (balanced by tumor frequency in the population of reference). Genes can be ranked based on the ratio <code>(alteration frequency) / (genomic space)</code>. Genes with highest mean number of alteration per sample and smallest size are listed first. The following genes in the plot are added one by one incrementally. This means that on the <em>y-axis</em>, every time we add a new gene, we are adding only the incremental contribution of alteration for that specific gene. This was done to prevent from counting twice (or more than once), patients with genes that were already found altered.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            <span class="co"># adjust population distribution by applying a weighted sampling bootstrap</span>
+            , <span class="dt">tumor.weights=</span><span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                             , <span class="dt">luad =</span> luad_tot
+                             , <span class="dt">lusc =</span> lusc_tot
+                             , <span class="dt">stad =</span> stad_tot
+                             , <span class="dt">coadread =</span> coadread_tot
+                             )
+            , <span class="dt">adding.order =</span> <span class="st">&quot;rate&quot;</span>
+            , <span class="dt">legend =</span> <span class="st">&quot;out&quot;</span>
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/saturation%20plot%20ratios-1.png" width="768" /></p>
+<p>Each single cancer type will have different gene alteration frequencies, and therefore the order of the genes can change accordingly. In the following set of plots we will change the gene adding order, using <code>asbolute</code> ranking. This parameters, will not add genes based on their optimal ratio, but will priorities genes with the absolute highest number of alterations found in each single tumor group of interest</p>
+</div>
+<div id="breast-cancer" class="section level5">
+<h5>Breast Cancer</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="st">&quot;brca&quot;</span>
+            , <span class="dt">adding.order =</span> <span class="st">&quot;absolute&quot;</span>
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/saturation%20plot%20abs%20breast-1.png" width="768" /></p>
+</div>
+<div id="lung-cancer-mutations-and-copy-number-alterations" class="section level5">
+<h5>Lung Cancer, mutations and copy number alterations</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+            , <span class="dt">adding.order =</span> <span class="st">&quot;absolute&quot;</span>
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/saturation%20plot%20abs%20lung-1.png" width="768" /></p>
+<div id="lung-cancer-only-fusion-alterations" class="section level6">
+<h6>Lung Cancer, only fusion alterations</h6>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+            , <span class="dt">adding.order =</span> <span class="st">&quot;absolute&quot;</span>
+            )</code></pre></div>
+<pre><code>## Warning in dataExtractor(object = object, alterationType =
+## alterationType, : The following tumor types have no alteration to display:
+## lusc</code></pre>
+<p><img src="PTD_panel_showcase_files/figure-html/saturation%20plot%20abs%20lung%20with%20fusions-1.png" width="768" /></p>
+</div>
+</div>
+<div id="gastric-cancer" class="section level5">
+<h5>Gastric Cancer</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)
+            , <span class="dt">adding.order =</span> <span class="st">&quot;absolute&quot;</span>
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/saturation%20plot%20abs%20gastric-1.png" width="768" /></p>
+</div>
+</div>
+<div id="rank-drugs-in-the-design-in-terms-of-genomic-spacepatient-allocation" class="section level4">
+<h4>Rank drugs in the design in terms of genomic space/patient allocation</h4>
+<p>Similarly to the previous set of plots, we can investigate the cost of adding a new drug in the study in terms of extra genomic space to be targeted by the panel with respect to the alteration frequency of population that can be captured.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                               , <span class="dt">luad=</span>luad_tot
+                               , <span class="dt">lusc=</span>lusc_tot
+                               , <span class="dt">stad =</span> stad_tot
+                               , <span class="dt">coadread =</span> coadread_tot
+                               )
+             
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p>Similarly, we can separate the saturation line by <code>tumor_types</code>. (Note: In the following plot we do not need to apply the tumor.wight option, as we are grouping by tumor_types, Note2: <code>no_drug</code> indicates frequency associated with driver genes which are therefore not associated to any drug treatment in this specific design).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            , <span class="dt">legend =</span> <span class="st">&quot;out&quot;</span>
+            )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>To improve the readability of the plot, we can look at each single tumor type individually.</p>
+<div id="breast-cancer-1" class="section level5">
+<h5>Breast Cancer</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate plots for each tumor types</span>
+<span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="st">&quot;brca&quot;</span>
+) </code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-16-1.png" width="960" /></p>
+</div>
+<div id="lung-cancer" class="section level5">
+<h5>Lung Cancer</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+)</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-17-1.png" width="960" /></p>
+</div>
+<div id="gastric-cancer-1" class="section level5">
+<h5>Gastric Cancer</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;coadread&quot;</span>, <span class="st">&quot;stad&quot;</span>)
+) </code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-18-1.png" width="960" /></p>
+</div>
+</div>
+<div id="panel-detection-power-of-each-alteration-type-in-the-overall-population" class="section level4">
+<h4>Panel detection power of each alteration type in the overall population</h4>
+<p>SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detection power of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detection power.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>, <span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            , <span class="dt">tumor.weights=</span><span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                             , <span class="dt">luad =</span> luad_tot
+                             , <span class="dt">lusc =</span> lusc_tot
+                             , <span class="dt">stad =</span> stad_tot
+                             , <span class="dt">coadread =</span> coadread_tot
+                             )
+            ,<span class="dt">grouping=</span><span class="st">&quot;alteration_id&quot;</span>
+            )</code></pre></div>
+<pre><code>## Warning in dataExtractor(object = object, alterationType =
+## alterationType, : The following tumor types have no alteration to display:
+## stad, coadread</code></pre>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+</div>
+<div id="drug-targeting-frequency-plot" class="section level4">
+<h4>Drug targeting frequency plot</h4>
+<p>In case some of the drugs are multitarget (in this panel design, we are using drug families), it might be interesting to investigate what are the most targeted genes in our population of reference. We can visualize this information as an independent stack plot for each tumor type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))
+<span class="kw">coverageStackPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">tumor_type=</span><span class="st">&quot;brca&quot;</span>
+             )
+
+<span class="kw">coverageStackPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+             )
+
+<span class="kw">coverageStackPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)
+             )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/gene%20drug%20stack%20plot-1.png" width="768" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># reset plot settings</span>
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</code></pre></div>
+<p>We can also visualize co-occurrence and mutual exclusivity of the drugs in different tumor types.</p>
+<div id="overall-co-occurance" class="section level5">
+<h5>Overall Co-occurance</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coocMutexPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             <span class="co"># , grouping=&quot;group&quot;</span>
+             , <span class="dt">tumor.freqs =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_freq
+                               , <span class="dt">luad=</span>luad_freq
+                               , <span class="dt">lusc=</span>lusc_freq
+                               , <span class="dt">stad =</span> stad_freq
+                               , <span class="dt">coadread =</span> coadread_freq
+                               )
+             )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
+<div id="breast-cancer-co-occurence-plot" class="section level6">
+<h6>Breast cancer co-occurence plot</h6>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coocMutexPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             <span class="co">#, grouping=&quot;alteration_id&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">tumor_types=</span> <span class="st">&quot;brca&quot;</span>
+             )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
+</div>
+<div id="lung-cancer-co-occurence-plot" class="section level6">
+<h6>Lung cancer co-occurence plot</h6>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coocMutexPlot</span>(PTD_panel   
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>, <span class="st">&quot;fusions&quot;</span> )
+             <span class="co">#, grouping=&quot;alteration_id&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">tumor_types=</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
+             )</code></pre></div>
+<pre><code>## Warning in dataExtractor(object = object, alterationType =
+## alterationType, : The following tumor types have no alteration to display:
+## stad, coadread</code></pre>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+</div>
+<div id="gastric-cancer-co-occurence-plot" class="section level6">
+<h6>Gastric cancer co-occurence plot</h6>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coocMutexPlot</span>(PTD_panel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
+             <span class="co">#, grouping=&quot;alteration_id&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">tumor_types=</span> <span class="kw">c</span>(<span class="st">&quot;egc&quot;</span>, <span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)
+             )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-24-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="how-many-patients-are-eligible-to-more-than-one-treatment" class="section level3">
+<h3>How many patients are eligible to more than one treatment?</h3>
+<p>Some patients are eligible to more than one terapy group. We will take advantage of this information in a later stage of the analysis as it will allows us to to optimize the patients allocation and improve the changes of the clinical trial of reaching statistical power.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Prepare dataframe on which to run the analysis</span>
+<span class="co"># ------------------------------------------------------------------------------</span>
+<span class="co"># Extract data</span>
+data &lt;-<span class="st"> </span><span class="kw">dataExtractor</span>(PTD_panel , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>))</code></pre></div>
+<pre><code>## Warning in dataExtractor(PTD_panel, alterationType = c(&quot;mutations&quot;,
+## &quot;copynumber&quot;, : The following tumor types have no alteration to display:
+## stad, coadread</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract case_id and drug columns</span>
+dataDrug &lt;-<span class="st"> </span><span class="kw">unique</span>(data$data[ , <span class="kw">c</span>(<span class="st">&quot;case_id&quot;</span> , <span class="st">&quot;drug&quot;</span>)])
+<span class="co"># calculate number of drug per patient, taking into account ALL samples</span>
+drugsPerPatient &lt;-<span class="st"> </span><span class="kw">table</span>( <span class="kw">factor</span>(dataDrug$case_id , <span class="dt">levels =</span> data$Samples$all_tumors) )
+
+<span class="co"># Calculate the frequenecy of patients eligible to at least X number od drugs</span>
+alPatDrug &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span>:<span class="kw">max</span>(drugsPerPatient), function(x){
+          <span class="kw">sum</span>(drugsPerPatient &gt;=<span class="st"> </span>x) /<span class="st"> </span><span class="kw">length</span>(drugsPerPatient)
+         }
+       ) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>(<span class="dt">drugs=</span>.) 
+
+<span class="co"># Plot</span>
+alPatDrug %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>:<span class="kw">length</span>(drugs), <span class="dt">y=</span>drugs)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Patients eligible to AT LEAST 1, 2, 3 or 4 ... drugs&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Eligibility frequency&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;Number of drugs the patient is eligible for&quot;</span>) +
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>stringr::<span class="kw">str_c</span>(<span class="kw">round</span>(drugs, <span class="dt">digits=</span><span class="dv">4</span>)*<span class="dv">100</span>, <span class="st">&quot; %&quot;</span>), <span class="dt">y=</span>drugs<span class="fl">+0.05</span>),  <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.9</span>))</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-25-1.png" width="960" /></p>
+</div>
+<div id="power-analysis" class="section level3">
+<h3>Power analysis</h3>
+<p>We can now simulated a clinical trail based on the drug-gene targeting design, and estimate the number of patients that would need to be recruited.</p>
+<ul>
+<li>We will look at 4 <strong>power levels</strong>: 0.6, 0.7, 0.8, 0.9</li>
+<li>and we will consider different Hazard ratios</li>
+</ul>
+<div id="overall-power-analysis-for-the-full-study" class="section level4">
+<h4>Overall power analysis for the full study</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate plot</span>
+<span class="kw">survPowerSampleSize</span>(PTD_panel
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                    , <span class="dt">luad =</span> luad_tot
+                    , <span class="dt">lusc =</span> lusc_tot
+                    , <span class="dt">stad =</span> stad_tot
+                    , <span class="dt">coadread =</span> coadread_tot
+                    )
+  )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-26-1.png" width="768" /></p>
+<p>Preview the table with the data from the previous plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate Table</span>
+<span class="kw">survPowerSampleSize</span>(PTD_panel
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                    , <span class="dt">luad =</span> luad_tot
+                    , <span class="dt">lusc =</span> lusc_tot
+                    , <span class="dt">stad =</span> stad_tot
+                    , <span class="dt">coadread =</span> coadread_tot
+                    )
+  , <span class="dt">noPlot =</span><span class="ot">TRUE</span>
+  ) %&gt;%<span class="st"> </span><span class="kw">kable</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var</th>
+<th align="right">ScreeningSampleSize</th>
+<th align="right">EligibleSampleSize</th>
+<th align="right">Beta</th>
+<th align="right">Power</th>
+<th align="left">HazardRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">92</td>
+<td align="right">59</td>
+<td align="right">0.4</td>
+<td align="right">0.6</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">115</td>
+<td align="right">74</td>
+<td align="right">0.3</td>
+<td align="right">0.7</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">148</td>
+<td align="right">95</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">196</td>
+<td align="right">126</td>
+<td align="right">0.1</td>
+<td align="right">0.9</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">162</td>
+<td align="right">104</td>
+<td align="right">0.4</td>
+<td align="right">0.6</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">202</td>
+<td align="right">130</td>
+<td align="right">0.3</td>
+<td align="right">0.7</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">258</td>
+<td align="right">166</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">345</td>
+<td align="right">222</td>
+<td align="right">0.1</td>
+<td align="right">0.9</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">317</td>
+<td align="right">204</td>
+<td align="right">0.4</td>
+<td align="right">0.6</td>
+<td align="left">0.7</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">399</td>
+<td align="right">257</td>
+<td align="right">0.3</td>
+<td align="right">0.7</td>
+<td align="left">0.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">507</td>
+<td align="right">327</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.7</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">678</td>
+<td align="right">437</td>
+<td align="right">0.1</td>
+<td align="right">0.9</td>
+<td align="left">0.7</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">783</td>
+<td align="right">505</td>
+<td align="right">0.4</td>
+<td align="right">0.6</td>
+<td align="left">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">986</td>
+<td align="right">636</td>
+<td align="right">0.3</td>
+<td align="right">0.7</td>
+<td align="left">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">Full Design</td>
+<td align="right">1254</td>
+<td align="right">809</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.8</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">1677</td>
+<td align="right">1082</td>
+<td align="right">0.1</td>
+<td align="right">0.9</td>
+<td align="left">0.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="power-analysis-per-group-treatment" class="section level4">
+<h4>Power analysis per group treatment</h4>
+<p>The power analysis can also be perform grouping by tumor types.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">survPowerSampleSize</span>(PTD_panel
+  ,<span class="dt">var =</span> <span class="st">&quot;tumor_type&quot;</span>
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                    , <span class="dt">luad =</span> luad_tot
+                    , <span class="dt">lusc =</span> lusc_tot
+                    , <span class="dt">stad =</span> stad_tot
+                    , <span class="dt">coadread =</span> coadread_tot
+                    )
+  )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-29-1.png" width="768" /></p>
+</div>
+</div>
+<div id="patient-allocation-optimization" class="section level3">
+<h3>PATIENT ALLOCATION OPTIMIZATION</h3>
+<p>In this section we will investigate how the patients could be allocated to the treatment groups. It is particuarly interesting to notice that some patients are eligible to more than one terapy group, allowing to run optimization algorithms in order to better balance the patients allocation distribution in the different treatment arms and therefore reducing the risk of not reach statistical in the clincial trial.</p>
+<div id="number-of-patients-required-for-the-overall-study-to-reach-the-required-power-using-pfs" class="section level4">
+<h4>Number of patients required for the overall study to reach the required power (using PFS)</h4>
+<p>In this simulation we are using <strong>Progression Free Survival</strong> as the primary endpoint.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">drugs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;HER2 inhibitor&quot;</span>
+  , <span class="st">&quot;PARP inhibitor&quot;</span>
+  , <span class="st">&quot;AKT inhibitor&quot;</span>
+  , <span class="st">&quot;EGFR inhibitor&quot;</span>
+  , <span class="st">&quot;FGFR inhibitor&quot;</span>
+  , <span class="st">&quot;ALK inhibitor&quot;</span>
+  , <span class="st">&quot;BRAF inhibitor&quot;</span>
+  , <span class="st">&quot;MET inhibitor&quot;</span>
+  , <span class="st">&quot;NOTCH inhibitor&quot;</span>
+  , <span class="st">&quot;ALK inhibitor&quot;</span>
+  , <span class="st">&quot;Immune Checkpoint Inhibitor&quot;</span>)
+
+<span class="co"># Show plot</span>
+<span class="kw">survPowerSampleSize</span>(PTD_panel
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">priority.trial =</span> drugs 
+  , <span class="dt">priority.trial.order=</span><span class="st">&quot;optimal&quot;</span>
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                    , <span class="dt">luad =</span> luad_tot
+                    , <span class="dt">lusc =</span> lusc_tot
+                    , <span class="dt">stad =</span> stad_tot
+                    , <span class="dt">coadread =</span> coadread_tot
+                    )
+  )</code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-30-1.png" width="768" /></p>
+<p>Show it in a table</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show it in a table</span>
+<span class="kw">survPowerSampleSize</span>(PTD_panel
+  , <span class="dt">HR =</span> <span class="fl">0.6</span>
+  , <span class="dt">power =</span> <span class="fl">0.8</span>
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">priority.trial =</span> drugs 
+  , <span class="dt">priority.trial.order =</span> <span class="st">&quot;optimal&quot;</span>
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">noPlot =</span> <span class="ot">TRUE</span>
+  , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca =</span> brca_tot
+                    , <span class="dt">luad =</span> luad_tot
+                    , <span class="dt">lusc =</span> lusc_tot
+                    , <span class="dt">stad =</span> stad_tot
+                    , <span class="dt">coadread =</span> coadread_tot
+                    )
+  )$<span class="st">`</span><span class="dt">HR:0.6 | HR0:1 | Power:0.8</span><span class="st">`</span>$Summary %&gt;%
+<span class="st">  </span><span class="kw">data.frame</span>() %&gt;%
+<span class="st">  </span>tibble::<span class="kw">rownames_to_column</span>(<span class="st">&quot;criteria&quot;</span>) %&gt;%
+<span class="st">  </span>tidyr::<span class="kw">gather</span>(drug, patients, <span class="dv">2</span>:<span class="kw">ncol</span>(.)) %&gt;%
+<span class="st">  </span>tidyr::<span class="kw">spread</span>(criteria, patients) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(drug, Screened, Eligible, Not.Eligible) %&gt;%
+<span class="st">  </span>knitr::<span class="kw">kable</span>()</code></pre></div>
+<pre><code>## Warning in dataExtractor(object = object, alterationType =
+## alterationType, : No data for expression. They will be removed from
+## alterationType</code></pre>
+<pre><code>## Warning in dataExtractor(object = object, alterationType =
+## alterationType, : The following tumor types have no alteration to display:
+## stad, coadread</code></pre>
+<pre><code>## 
+## Minimum Eligible Sample Size to reach 80% of power with an HR equal to 0.6 and a HR0 equal to 1 for each drug is equal to: 166</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">drug</th>
+<th align="right">Screened</th>
+<th align="right">Eligible</th>
+<th align="right">Not.Eligible</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AKT.inhibitor</td>
+<td align="right">0</td>
+<td align="right">5273</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">ALK.inhibitor</td>
+<td align="right">0</td>
+<td align="right">528</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">ALK.inhibitor.1</td>
+<td align="right">4942</td>
+<td align="right">166</td>
+<td align="right">2110</td>
+</tr>
+<tr class="even">
+<td align="left">BRAF.inhibitor</td>
+<td align="right">0</td>
+<td align="right">518</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">EGFR.inhibitor</td>
+<td align="right">0</td>
+<td align="right">438</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">FGFR.inhibitor</td>
+<td align="right">0</td>
+<td align="right">1963</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">HER2.inhibitor</td>
+<td align="right">15913</td>
+<td align="right">229</td>
+<td align="right">6793</td>
+</tr>
+<tr class="even">
+<td align="left">Immune.Checkpoint.Inhibitor</td>
+<td align="right">1273</td>
+<td align="right">211</td>
+<td align="right">544</td>
+</tr>
+<tr class="odd">
+<td align="left">MET.inhibitor</td>
+<td align="right">0</td>
+<td align="right">310</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">NOTCH.inhibitor</td>
+<td align="right">0</td>
+<td align="right">1242</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">PARP.inhibitor</td>
+<td align="right">0</td>
+<td align="right">1810</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">22128</td>
+<td align="right">12682</td>
+<td align="right">9446</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="extra" class="section level2">
+<h2>extra</h2>
+<div id="number-of-patients-to-be-recruited-to-reach-power" class="section level5">
+<h5>Number of patients to be recruited to reach power</h5>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">propPowerSampleSize</span>(PTD_panel
+  , <span class="dt">noPlot=</span><span class="ot">FALSE</span>
+  , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>, <span class="st">&quot;expression&quot;</span>)
+  , <span class="dt">pCase =</span> <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span> , <span class="fl">0.4</span>)
+  , <span class="dt">pControl =</span> <span class="kw">rep</span>(<span class="fl">0.1</span>, <span class="dv">3</span>)
+  <span class="co">#, power =c(0.7, 0.75, 0.8, 0.85, 0.9)</span>
+  , <span class="dt">power =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span>)
+  , <span class="dt">alpha=</span> <span class="fl">0.1</span>
+  , <span class="dt">side =</span> <span class="dv">1</span>
+  ) </code></pre></div>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-32-1.png" width="960" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">propPowerSampleSize</span>(PTD_panel
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+  , <span class="dt">priority.trial =</span> <span class="kw">as.character</span>(<span class="kw">unique</span>(panel_design$drug))[-<span class="dv">4</span>] 
+  , <span class="dt">priority.trial.order=</span><span class="st">&quot;optimal&quot;</span>
+  <span class="co">#, HR = 0.66</span>
+  <span class="co">#, p.event=1</span>
+  , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
+  , <span class="dt">pCase =</span> <span class="fl">0.3</span>
+  , <span class="dt">pControl =</span> <span class="fl">0.1</span>
+  , <span class="dt">side =</span><span class="dv">1</span>
+  , <span class="dt">alpha=</span> <span class="fl">0.1</span>
+  , <span class="dt">power =</span><span class="fl">0.8</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.6</span>
+  )</code></pre></div>
+<pre><code>## $`pCase:0.3 | pControl:0.1 | Power:0.8`
+## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Summary
+##              Immune Checkpoint Inhibitor MET inhibitor HER2 inhibitor
+## Screened                            1284             0              0
+## Eligible                              18            20             24
+## Not.Eligible                         580             0              0
+##              EGFR inhibitor BRAF inhibitor ALK inhibitor NOTCH inhibitor
+## Screened                  0              0             0               0
+## Eligible                 24             33            29              71
+## Not.Eligible              0              0             0               0
+##              PARP inhibitor FGFR inhibitor AKT inhibitor Total
+## Screened                  0              0             0  1284
+## Eligible                114             98           279   705
+## Not.Eligible              0              0             0   580
+## 
+## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Screening.scheme
+##                             Immune Checkpoint Inhibitor MET inhibitor
+## Immune Checkpoint Inhibitor                        1284          1266
+## MET inhibitor                                         0             0
+## HER2 inhibitor                                        0             0
+## EGFR inhibitor                                        0             0
+## BRAF inhibitor                                        0             0
+## ALK inhibitor                                         0             0
+## NOTCH inhibitor                                       0             0
+## PARP inhibitor                                        0             0
+## FGFR inhibitor                                        0             0
+## AKT inhibitor                                         0             0
+##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
+## Immune Checkpoint Inhibitor           1247           1224           1200
+## MET inhibitor                            0              0              0
+## HER2 inhibitor                           0              0              0
+## EGFR inhibitor                           0              0              0
+## BRAF inhibitor                           0              0              0
+## ALK inhibitor                            0              0              0
+## NOTCH inhibitor                          0              0              0
+## PARP inhibitor                           0              0              0
+## FGFR inhibitor                           0              0              0
+## AKT inhibitor                            0              0              0
+##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor          1167            1139           1068
+## MET inhibitor                           0               0              0
+## HER2 inhibitor                          0               0              0
+## EGFR inhibitor                          0               0              0
+## BRAF inhibitor                          0               0              0
+## ALK inhibitor                           0               0              0
+## NOTCH inhibitor                         0               0              0
+## PARP inhibitor                          0               0              0
+## FGFR inhibitor                          0               0              0
+## AKT inhibitor                           0               0              0
+##                             FGFR inhibitor AKT inhibitor
+## Immune Checkpoint Inhibitor            955           858
+## MET inhibitor                            0             0
+## HER2 inhibitor                           0             0
+## EGFR inhibitor                           0             0
+## BRAF inhibitor                           0             0
+## ALK inhibitor                            0             0
+## NOTCH inhibitor                          0             0
+## PARP inhibitor                           0             0
+## FGFR inhibitor                           0             0
+## AKT inhibitor                            0             0
+## 
+## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Allocation.scheme
+##                             Immune Checkpoint Inhibitor MET inhibitor
+## Immune Checkpoint Inhibitor                          18            20
+## MET inhibitor                                         0             0
+## HER2 inhibitor                                        0             0
+## EGFR inhibitor                                        0             0
+## BRAF inhibitor                                        0             0
+## ALK inhibitor                                         0             0
+## NOTCH inhibitor                                       0             0
+## PARP inhibitor                                        0             0
+## FGFR inhibitor                                        0             0
+## AKT inhibitor                                         0             0
+## Total                                                18            20
+##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
+## Immune Checkpoint Inhibitor             24             24             33
+## MET inhibitor                            0              0              0
+## HER2 inhibitor                           0              0              0
+## EGFR inhibitor                           0              0              0
+## BRAF inhibitor                           0              0              0
+## ALK inhibitor                            0              0              0
+## NOTCH inhibitor                          0              0              0
+## PARP inhibitor                           0              0              0
+## FGFR inhibitor                           0              0              0
+## AKT inhibitor                            0              0              0
+## Total                                   24             24             33
+##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor            29              71            114
+## MET inhibitor                           0               0              0
+## HER2 inhibitor                          0               0              0
+## EGFR inhibitor                          0               0              0
+## BRAF inhibitor                          0               0              0
+## ALK inhibitor                           0               0              0
+## NOTCH inhibitor                         0               0              0
+## PARP inhibitor                          0               0              0
+## FGFR inhibitor                          0               0              0
+## AKT inhibitor                           0               0              0
+## Total                                  29              71            114
+##                             FGFR inhibitor AKT inhibitor
+## Immune Checkpoint Inhibitor             98           279
+## MET inhibitor                            0             0
+## HER2 inhibitor                           0             0
+## EGFR inhibitor                           0             0
+## BRAF inhibitor                           0             0
+## ALK inhibitor                            0             0
+## NOTCH inhibitor                          0             0
+## PARP inhibitor                           0             0
+## FGFR inhibitor                           0             0
+## AKT inhibitor                            0             0
+## Total                                   98           279
+## 
+## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Probability.scheme
+##                             Immune Checkpoint Inhibitor MET inhibitor
+## Immune Checkpoint Inhibitor                  0.01402103    0.01523616
+## MET inhibitor                                0.00000000    0.00000000
+## HER2 inhibitor                               0.00000000    0.00000000
+## EGFR inhibitor                               0.00000000    0.00000000
+## BRAF inhibitor                               0.00000000    0.00000000
+## ALK inhibitor                                0.00000000    0.00000000
+## NOTCH inhibitor                              0.00000000    0.00000000
+## PARP inhibitor                               0.00000000    0.00000000
+## FGFR inhibitor                               0.00000000    0.00000000
+## AKT inhibitor                                0.00000000    0.00000000
+##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
+## Immune Checkpoint Inhibitor     0.01856627     0.01944298     0.02733119
+## MET inhibitor                   0.00000000     0.00000000     0.00000000
+## HER2 inhibitor                  0.00000000     0.00000000     0.00000000
+## EGFR inhibitor                  0.00000000     0.00000000     0.00000000
+## BRAF inhibitor                  0.00000000     0.00000000     0.00000000
+## ALK inhibitor                   0.00000000     0.00000000     0.00000000
+## NOTCH inhibitor                 0.00000000     0.00000000     0.00000000
+## PARP inhibitor                  0.00000000     0.00000000     0.00000000
+## FGFR inhibitor                  0.00000000     0.00000000     0.00000000
+## AKT inhibitor                   0.00000000     0.00000000     0.00000000
+##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor    0.02479339      0.06158192      0.1059603
+## MET inhibitor                  0.00000000      0.00000000      0.0000000
+## HER2 inhibitor                 0.00000000      0.00000000      0.0000000
+## EGFR inhibitor                 0.00000000      0.00000000      0.0000000
+## BRAF inhibitor                 0.00000000      0.00000000      0.0000000
+## ALK inhibitor                  0.00000000      0.00000000      0.0000000
+## NOTCH inhibitor                0.00000000      0.00000000      0.0000000
+## PARP inhibitor                 0.00000000      0.00000000      0.0000000
+## FGFR inhibitor                 0.00000000      0.00000000      0.0000000
+## AKT inhibitor                  0.00000000      0.00000000      0.0000000
+##                             FGFR inhibitor AKT inhibitor
+## Immune Checkpoint Inhibitor      0.1016835     0.3245877
+## MET inhibitor                    0.0000000     0.0000000
+## HER2 inhibitor                   0.0000000     0.0000000
+## EGFR inhibitor                   0.0000000     0.0000000
+## BRAF inhibitor                   0.0000000     0.0000000
+## ALK inhibitor                    0.0000000     0.0000000
+## NOTCH inhibitor                  0.0000000     0.0000000
+## PARP inhibitor                   0.0000000     0.0000000
+## FGFR inhibitor                   0.0000000     0.0000000
+## AKT inhibitor                    0.0000000     0.0000000
+## 
+## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Base.probabilities
+## Immune Checkpoint Inhibitor               MET inhibitor 
+##                  0.01402103                  0.01602404 
+##              HER2 inhibitor              EGFR inhibitor 
+##                  0.02003005                  0.02153230 
+##              BRAF inhibitor               ALK inhibitor 
+##                  0.03054582                  0.03254882 
+##             NOTCH inhibitor              PARP inhibitor 
+##                  0.06659990                  0.10916375 
+##              FGFR inhibitor               AKT inhibitor 
+##                  0.11417126                  0.31447171</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv2 &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(PTD_panel
+   , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+   , <span class="dt">HR =</span> <span class="fl">0.66</span>
+   , <span class="dt">power =</span> <span class="fl">0.8</span>
+   , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+   , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+   , <span class="dt">ber=</span><span class="fl">0.85</span>
+   , <span class="dt">fu=</span><span class="fl">1.883</span>
+   <span class="co">#, priority.trial.order=&quot;as.is&quot;</span>
+   , <span class="dt">priority.trial.order=</span><span class="st">&quot;optimal&quot;</span>
+   , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span> 
+   , <span class="dt">noPlot=</span><span class="ot">TRUE</span>)
+<span class="kw">kable</span>(surv2 , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var</th>
+<th align="right">ScreeningSampleSize</th>
+<th align="right">EligibleSampleSize</th>
+<th align="right">Beta</th>
+<th align="right">Power</th>
+<th align="left">HazardRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AKT inhibitor</td>
+<td align="right">799</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">ALK inhibitor</td>
+<td align="right">7712</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">BRAF inhibitor</td>
+<td align="right">8218</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">EGFR inhibitor</td>
+<td align="right">11657</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">FGFR inhibitor</td>
+<td align="right">2199</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">HER2 inhibitor</td>
+<td align="right">12532</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">Immune Checkpoint Inhibitor</td>
+<td align="right">17902</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">MET inhibitor</td>
+<td align="right">15664</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">no_drug</td>
+<td align="right">1700</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">NOTCH inhibitor</td>
+<td align="right">3769</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">PARP inhibitor</td>
+<td align="right">2300</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">397</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="per-abstract" class="section level2">
+<h2>Per abstract</h2>
+<p>NOT OPTIMAL</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">111</span>)
+<span class="co"># NOT optimal</span>
+surv2 &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(PTD_panel
+   , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+   , <span class="dt">HR =</span> <span class="fl">0.66</span>
+   , <span class="dt">power =</span> <span class="fl">0.8</span>
+   , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+   , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+   , <span class="dt">ber=</span><span class="fl">0.85</span>
+   , <span class="dt">fu=</span><span class="fl">1.883</span>
+   , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+   , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                               , <span class="dt">luad=</span>luad_tot
+                               , <span class="dt">lusc=</span>lusc_tot
+                               , <span class="dt">stad =</span> stad_tot
+                               , <span class="dt">coadread =</span> coadread_tot
+                               )
+   , <span class="dt">noPlot=</span><span class="ot">TRUE</span>)
+
+<span class="co">#export</span>
+<span class="co">#write.table(surv2, file = &quot;~/Desktop/notoptimal_ptd-showcase.txt&quot;, quote=FALSE, sep=&quot;,&quot;)</span>
+
+<span class="co"># count n patients necessary to be recruited</span>
+n_patients_notoptimal &lt;-<span class="st"> </span>surv2  %&gt;%<span class="st"> </span>
+<span class="st">  </span>dplyr::<span class="kw">filter</span>(!Var ==<span class="st"> &quot;no_drug&quot;</span>, !Var ==<span class="st"> &quot;Full Design&quot;</span>) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">select</span>(ScreeningSampleSize) %&gt;%
+<span class="st">  </span>dplyr::<span class="kw">summarise_all</span>(sum)
+
+<span class="co">#preview</span>
+<span class="kw">kable</span>(surv2 , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var</th>
+<th align="right">ScreeningSampleSize</th>
+<th align="right">EligibleSampleSize</th>
+<th align="right">Beta</th>
+<th align="right">Power</th>
+<th align="left">HazardRatio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AKT inhibitor</td>
+<td align="right">818</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">ALK inhibitor</td>
+<td align="right">7161</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">BRAF inhibitor</td>
+<td align="right">5700</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">EGFR inhibitor</td>
+<td align="right">10330</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">FGFR inhibitor</td>
+<td align="right">2489</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">HER2 inhibitor</td>
+<td align="right">14203</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">Immune Checkpoint Inhibitor</td>
+<td align="right">14950</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">MET inhibitor</td>
+<td align="right">13970</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">no_drug</td>
+<td align="right">1144</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">NOTCH inhibitor</td>
+<td align="right">4058</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">PARP inhibitor</td>
+<td align="right">2727</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="even">
+<td align="left">Full Design</td>
+<td align="right">379</td>
+<td align="right">251</td>
+<td align="right">0.2</td>
+<td align="right">0.8</td>
+<td align="left">0.66</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Number of patients necessary: 7.640610^{4}</li>
+</ul>
+<p>Optimal</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(parallel)
+<span class="kw">set.seed</span>(<span class="dv">111</span>)
+simulSurv2 &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="dv">1</span>:<span class="dv">100</span> , function(x) {
+    <span class="kw">survPowerSampleSize</span>(PTD_panel
+        , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
+        , <span class="dt">HR =</span> <span class="fl">0.625</span>
+        , <span class="dt">power =</span> <span class="fl">0.8</span>
+        , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+        , <span class="dt">ber=</span><span class="fl">0.85</span>
+        , <span class="dt">fu=</span><span class="fl">1.883</span>
+        , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+        , <span class="dt">collapseByGene=</span><span class="ot">TRUE</span>
+        <span class="co">#, tumor.weights = shivapop$Samples_n %&gt;% </span>
+        <span class="co">#                setNames(shivapop$tcga_id) </span>
+        , <span class="dt">tumor.weights =</span> <span class="kw">c</span>(<span class="dt">brca=</span>brca_tot
+                               , <span class="dt">luad=</span>luad_tot
+                               , <span class="dt">lusc=</span>lusc_tot
+                               , <span class="dt">stad =</span> stad_tot
+                               , <span class="dt">coadread =</span> coadread_tot
+                               )
+        , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span> 
+        , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
+        , <span class="dt">priority.trial=</span>drugs
+        , <span class="dt">priority.trial.order=</span><span class="st">&quot;optimal&quot;</span>)$<span class="st">`</span><span class="dt">HR:0.625 | HR0:1 | Power:0.8</span><span class="st">`</span>$Summary
+} , <span class="dt">mc.cores=</span><span class="kw">detectCores</span>())
+summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]]
+for(i in <span class="kw">rownames</span>(summaryMat2)){
+    for(j in <span class="kw">colnames</span>(summaryMat2)){
+        vec &lt;-<span class="st"> </span><span class="kw">sapply</span>(simulSurv2 , function(x) x[i , j])
+        summaryMat2[i , j] &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">mean</span>(vec) , 
+                <span class="kw">paste0</span>( <span class="st">&quot;(&quot;</span> , <span class="kw">quantile</span>(vec , <span class="fl">0.025</span>) 
+                        , <span class="st">&quot;-&quot;</span> 
+                        , <span class="kw">quantile</span>(vec , <span class="fl">0.975</span>) , <span class="st">&quot;)&quot;</span>))
+    }
+}
+
+<span class="co">#save</span>
+<span class="co">#write.table(summaryMat2, file = &quot;~/Desktop/optimal_ptd-showcase.txt&quot;, quote=FALSE, sep=&quot;,&quot;)</span>
+<span class="co">#preview</span>
+<span class="kw">kable</span>(summaryMat2)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">Immune Checkpoint Inhibitor</th>
+<th align="left">HER2 inhibitor</th>
+<th align="left">MET inhibitor</th>
+<th align="left">EGFR inhibitor</th>
+<th align="left">ALK inhibitor</th>
+<th align="left">ALK inhibitor</th>
+<th align="left">BRAF inhibitor</th>
+<th align="left">NOTCH inhibitor</th>
+<th align="left">PARP inhibitor</th>
+<th align="left">FGFR inhibitor</th>
+<th align="left">AKT inhibitor</th>
+<th align="left">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Screened</td>
+<td align="left">14273.77 (510.525-18906.125)</td>
+<td align="left">458.11 (0-7628.7499999999)</td>
+<td align="left">714.82 (0-13584.4)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">5901</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">21257.07 (18839.6-24896.7)</td>
+</tr>
+<tr class="even">
+<td>Eligible</td>
+<td align="left">260.93 (242.95-284)</td>
+<td align="left">326.45 (275.475-403.625)</td>
+<td align="left">293.21 (253.475-363.725)</td>
+<td align="left">475.03 (383-569.1)</td>
+<td align="left">401.52 (332.95-493.525)</td>
+<td align="left">199</td>
+<td align="left">725.7 (608.95-869.775)</td>
+<td align="left">972.48 (802.475-1204.225)</td>
+<td align="left">1502.07 (1294.7-1746.5)</td>
+<td align="left">1441.87 (1215.9-1769.15)</td>
+<td align="left">4476.48 (3989.8-5255.9)</td>
+<td align="left">11070.24 (9815.85-12830.925)</td>
+</tr>
+<tr class="odd">
+<td>Not.Eligible</td>
+<td align="left">6841.53 (242.15-9071.825)</td>
+<td align="left">219.6 (0-3649.97499999995)</td>
+<td align="left">342 (0-6517.025)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">2853</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">10187.22 (8945.95-11907.975)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="session-info" class="section level2">
+<h2>Session info</h2>
+<p>For reproducibility purpose:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
+<pre><code>## R version 3.4.0 (2017-04-21)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS Sierra 10.12.5
+## 
+## Matrix products: default
+## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] parallel  stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+## [1] bindrcpp_0.2                  ggplot2_2.2.1                
+## [3] DT_0.2                        knitr_1.16                   
+## [5] PrecisionTrialDesigner_0.99.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Biobase_2.36.2                httr_1.2.1                   
+##  [3] tidyr_0.6.3                   bit64_0.9-7                  
+##  [5] jsonlite_1.5                  AnnotationHub_2.8.2          
+##  [7] gtools_3.5.0                  assertthat_0.2.0             
+##  [9] shiny_1.0.3                   LowMACAAnnotation_0.99.3     
+## [11] interactiveDisplayBase_1.14.0 highr_0.6                    
+## [13] stats4_3.4.0                  blob_1.1.0                   
+## [15] GenomeInfoDbData_0.99.0       Rsamtools_1.28.0             
+## [17] yaml_2.1.14                   ggrepel_0.6.5                
+## [19] RSQLite_2.0                   backports_1.1.0              
+## [21] lattice_0.20-35               glue_1.1.1                   
+## [23] digest_0.6.12                 GenomicRanges_1.28.3         
+## [25] RColorBrewer_1.1-2            XVector_0.16.0               
+## [27] cgdsr_1.2.6                   colorspace_1.3-2             
+## [29] htmltools_0.3.6               httpuv_1.3.5                 
+## [31] Matrix_1.2-10                 R.oo_1.21.0                  
+## [33] plyr_1.8.4                    pkgconfig_2.0.1              
+## [35] XML_3.98-1.9                  biomaRt_2.32.1               
+## [37] zlibbioc_1.22.0               purrr_0.2.2.2                
+## [39] xtable_1.8-2                  scales_0.4.1                 
+## [41] gdata_2.18.0                  brglm_0.6.1                  
+## [43] BiocParallel_1.10.1           tibble_1.3.3                 
+## [45] IRanges_2.10.2                SummarizedExperiment_1.6.3   
+## [47] BiocGenerics_0.22.0           lazyeval_0.2.0.9000          
+## [49] crayon_1.3.2                  magrittr_1.5                 
+## [51] mime_0.5                      memoise_1.1.0                
+## [53] evaluate_0.10.1               R.methodsS3_1.7.1            
+## [55] BiocInstaller_1.26.0          tools_3.4.0                  
+## [57] data.table_1.10.4             hms_0.3                      
+## [59] matrixStats_0.52.2            stringr_1.2.0                
+## [61] googleVis_0.6.2               S4Vectors_0.14.3             
+## [63] munsell_0.4.3                 DelayedArray_0.2.7           
+## [65] AnnotationDbi_1.38.1          Biostrings_2.44.1            
+## [67] compiler_3.4.0                GenomeInfoDb_1.12.2          
+## [69] profileModel_0.5-9            rlang_0.1.1                  
+## [71] grid_3.4.0                    RCurl_1.95-4.8               
+## [73] htmlwidgets_0.8               bitops_1.0-6                 
+## [75] shinyBS_0.61                  labeling_0.3                 
+## [77] rmarkdown_1.6                 testthat_1.0.2               
+## [79] gtable_0.2.0                  codetools_0.2-15             
+## [81] DBI_0.7                       reshape2_1.4.2               
+## [83] R6_2.2.2                      GenomicAlignments_1.12.1     
+## [85] dplyr_0.7.1                   rtracklayer_1.36.3           
+## [87] bit_1.1-12                    bindr_0.1                    
+## [89] rprojroot_1.2                 readr_1.1.1                  
+## [91] stringi_1.1.5                 Rcpp_0.12.11</code></pre>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Frequency is calculated on the the selected population for the study (<em>i.e.</em> frequency sum = 1) and not on the overall cancer population that includes all tumor types.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Frequency is calculated on the the selected population for the study (<em>i.e.</em> frequency sum = 1) and not on the overall cancer population that includes all tumor types.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+<p>Copyright &copy; 2017 Giorgio Melloni. All rights reserved.</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

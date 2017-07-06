@@ -1,6 +1,6 @@
 ---
 title: "PrecisionTrialDesigner - A tool to analyze and design NGS based custom gene panels"
-author: "Giorgio Melloni, Alessandro Guida"
+author: "Giorgio Melloni"
 abstract: >
   In recent years, two new forms of clinical trial designs emerged in clinical cancer genomics: umbrella and basket trials. 
   Designs of such trials can be extremely difficult, starting from the creation of a valid screening panel, to the optimization 
@@ -8,6 +8,7 @@ abstract: >
   can help bioinformaticians, clinicians and biostatisticians to design, analyze and finalize a custom gene panel for cancer genomics.
 output:
   html_document:
+    theme: spacelab
     code_folding: show
     fig_height: 8
     fig_width: 10
@@ -52,8 +53,6 @@ First of all, let's see what is the format of a cancer panel:
 
 ```{r chunk1, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
 library(PrecisionTrialDesigner)
-#library(devtools)
-#load_all("../../PrecisionTrialDesigner")
 library(knitr)
 data(panelexample)
 kable(panelexample)
@@ -149,13 +148,20 @@ The same option is also available for *panelDesign* method.
 Now that we have our panel, we want to test it against tumor samples. 
 We will choose two different cancer types among the available ones: 
 
-```{r chunk3, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
+```{r , echo=FALSE}
+# Check available tumor types
+head( showTumorType() )
+data(cpObj)
+mypanel <- cpObj
+str( cpData(mypanel)$mutations , vec.len = 1)
+```
+
+
+```{r chunk3, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
 # Check available tumor types
 head( showTumorType() )
 # Fetch data from breast cancer and lung adenocarcinoma samples
 mypanel <- getAlterations(mypanel , tumor_type=c("brca" , "luad"))
-# data(cpObj)
-# mypanel <- cpObj
 # See the updated slot dataFull for mutations
 str( cpData(mypanel)$mutations , vec.len = 1)
 ```
@@ -183,7 +189,6 @@ mypanel_alternative <- getAlterations(mypanel , tumor_type=c("luad_tcga", "brca_
 
 
 At this point, the data are downloaded by gene, without looking for the exact alteration requested.
-
 If you want, you can always put your own data, as long as you respect the format for each alteration type. 
 
 ```{r chunk4, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
@@ -1145,8 +1150,12 @@ position and that is what **panelDesigner** is designed for.
 4. **utr**: genes that demanded for the full length can be sequenced on their CDS or CDS + utr (full exons). Default FALSE
 5. **canonicalTranscript**: decide weather to take only the canonical transcript or collapse the genomic ranges of any transcript.
 
+```{r , echo=FALSE}
+mydesign <- readRDS("vignette/mydesign.rds")
+str(mydesign , vec.len=1)
+```
 
-```{r chunk11 , echo=TRUE , eval=TRUE , message=FALSE}
+```{r chunk11 , echo=TRUE , eval=FALSE , message=FALSE}
 # Design our panel in full with no padding length and merge window equal to 100 bp
 mydesign <- panelDesigner(mypanel 
                         , padding_length=0 

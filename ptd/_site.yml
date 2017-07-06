@@ -5,22 +5,24 @@ navbar:
   left:
     - text: "Home"
       icon: fa-home
-      href: index.html
+      href: "index.html"
     - text: "Examples"
-      icon: fa-gear
       menu:
         - text: "Vignette"
-          href: PrecisionTrialDesigner.html
+          href: "PrecisionTrialDesigner.html"
         - text: "Shiva Retrospective Analysis"
-          href: "version_6.0/Analysis/SHIVA_analysis.html"
+          href: "SHIVA_analysis.html"
         - text: "Panel Showcase"
-          href: "version_6.0/Analysis/PTD_panel_showcase.html"
+          href: "PTD_panel_showcase.html"
     - text: "Install"
       icon: fa-arrow-circle-down
       href: https://gitlab.com/IEO_Research/R_package_panel_and_projection
+    - text: "Shiny App"
+      icon: fa-gear
+      href: "shinyapp.html"
     - text: "About"
       icon: fa-info
-      href: about.html
+      href: "about.html"
   right:
     - icon: fa-github-alt fa-lg
       href: https://gmelloni.github.io

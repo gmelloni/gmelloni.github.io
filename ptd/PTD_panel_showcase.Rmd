@@ -1,0 +1,1360 @@
+---
+title: "Panel Showcase"
+author: "Alessandro Guida"
+output:
+  html_document:
+    code_folding: show
+    fig_height: 8
+    fig_width: 10
+    highlight: haddock
+    toc: yes
+    toc_depth: 5
+    toc_float: yes
+---
+
+```{r, eval=FALSE, include=FALSE}
+# THIS SECTION IS NEEDED IF WE WANT TO INCLUDE THE RMD FILE AS A VIGNETTE IN THE R PACKAE
+
+
+# date: "`r doc_date()`"
+# package: "`r pkg_ver('BiocStyle')`"
+# abstract: >
+# 
+#   Design and simulation of a basket clincial trial using the R package PTD (Precision 
+#   Trial Designer). 
+# vignette: >
+#   %\VignetteIndexEntry{Bioconductor style for HTML documents}
+#   %\VignetteEngine{knitr::rmarkdown}
+#   %\VignetteEncoding{UTF-8}
+# output: 
+#   BiocStyle::html_document
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+In this analysis we will simulate a basket clinical trial run on patients affected by 3 diseases: breast, lung and gastric cancer. Samples will be collected and sequencing with Next-generation sequencing technology. Patients will be assigned to treatment groups based on the genomic characterization. The panel design is based on a recent publication that defines the guidelines for precision medicine and the genes that should be included into diagnostic NGS assays for the previously indicated tumor type.  
+
+> Consensus on precision medicine for metastatic cancers: a report from the MAP 
+conference C.
+
+# BASKET TRIAL PANEL SHOWCASE
+
+## OBJECTIVES
+
+The objective of this analysis is to: 
+
+1. **Simulate the panel "detection power"** (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.
+2. **Simulate a genomic driven clinical trial:** As we might risk to have "unbalanced" group treatment, we would like to know in advance the patient allocation frequency to different treatment arms based on the alteration frequency in the cancer population;
+3. **Estimate the number of patients needed to be screened**;
+4. **Optimize the size of the panel and therefore reduce experimental cost**;
+5. As last, illustrate the usage of PTD in a concrete showcase context.
+
+### Initial assumption
+
+The panel is designed based on the guidelines indicated in the recent publication:
+
+> Consensus on precision medicine for metastatic cancers: a report from the MAP 
+conference C.
+
+We had to make some adjustments and interpretations in order to fit the guidelines into a panel design that would be input by the ```PTD``` package. 
+
+#### Gene name adoption
+
+```PTD``` requires gene names to be written in *HGNC* format. Since the software will download data from different web databases, we need to make sure that gene names follow the international convention. While scanning the paper, we noticed that the following genes were encoded in the paper with names that do not match the HGNC standards. We have therefore apply the following interpretations and corrections:
+
+| Paper annotation | Conversion for the analysis |
+|--- |--- |
+| ```NTKR``` (Possible typo?) |  ```NTRK1```, ```NTRK2```, ```NTRK3``` | 
+| ```NTRK``` | ```NTRK1```, ```NTRK2```, ```NTRK3``` |
+
+Moreover, the paper states that for gastric tumor, *MSI* should be tested. We 
+can infer this information testing the following genes: ```MLH3```, ```MLH1```, ```MSX1```, ```MSX2```
+
+#### Gene alterations
+
+In this analysis we will only consider the following alteration:
+
+* SNV
+* CNA
+* Fusions (only for lung tumor since they were selected to be lung cancer specific alteration)
+
+Changes in expression are not included in this analysis.
+
+#### Drug Treatment
+
+For demonstrative purposes we are simulating a clinical trial by associating altered genes to "general drug families" as a possible treatment.
+
+#### Tumor types
+
+The paper we are basing our work on, defines the guidelines for 3 diseases:
+
+* Breast cancer;
+* Lung cancer;
+* Gastric Cancer;
+
+We need to convert these diseases into tumor ID compatible with the TCGA standard. The conversion is applied as follows:
+
+| Publication definition | TCGA tumor ID conversion adopted |
+| --- | --- |
+| Breast Cancer | brca (Breast invasive carcinoma) |
+| Lung Cancer | luad (Lung adenocarcinoma) |
+| Lung Cancer | lusc (Lung squamous cell carcinoma) |
+| Gastric Cancer | stad (Stomach adenocarcinoma) |
+| Gastric Cancer | coadread (colon) |
+
+**We are making the assumption that the cancer population of reference is composed entirely and uniquely by this cancer subtypes**
+
+```{r tumor type definition}
+# Define tumor types 
+tumor_types <- c("brca", "luad", "lusc", "stad", "coadread")
+```
+
+#### Sampling Populations
+
+In this section, we will attempt to estimate the sample size of each cancer type in a population of reference. For this simulation we will use a population of reference sampled according to the statistics published by [seer.cancer.gov](seer.cancer.gov)
+
+* [http://seer.cancer.gov/csr/1975_2013/results_single/sect_a_table.01_2pgs.pdf](http://seer.cancer.gov/csr/1975_2013/results_single/sect_a_table.01_2pgs.pdf)
+* local copy of the file [extra_docs/sect_a_table.01_2pgs.pdf](extra_docs/sect_a_table.01_2pgs.pdf)
+
+*Seer* reports that, between 2009 and 2013 the tumor population amounted to:
+
+* Breast cancer: 306665 people;
+* Lung cancer: 256350 people;
+* Gastric cancer:
+    * Stomach cancer: 33174 people;
+    * Colon and rectum cancer: 185758 people;
+
+
+##### Breast carcinoma 
+
+Frequency of the population is adjusted by **Breast carcinoma ** according to the following table  [sect_04_table.25_2pgs.pdf](http://seer.cancer.gov/csr/1975_2013/results_single/sect_04_table.25_2pgs.pdf):
+
+* brca: 99.4%
+
+
+##### Lung subtypes
+
+Frequency of the population is adjusted by **lung tumor subtypes** according to [online link](http://seer.cancer.gov/csr/1975_2013/results_single/sect_15_table.28.pdf), [local file](extra_docs/sect_15_table.28.pdf):
+
+* Lung Adenocarcinoma: 45% of lung population
+* Lung squamous and transitional cells: 23.0% of lung population
+
+
+##### Gastric subtypes
+
+Frequency of the population is adjusted by **stomach tumor subtypes** according to
+[online link](http://seer.cancer.gov/csr/1975_2013/results_single/sect_24_table.22_2pgs.pdf), [local copy](extra_docs/sect_24_table.22_2pgs.pdf)
+
+* Stad: 82%
+
+Frequency of the colon cancer are adjusted according to [online link](http://seer.cancer.gov/csr/1975_2013/results_single/sect_06_table.29_2pgs.pdf), [local file](extra_docs/sect_06_table.29_2pgs.pdf)
+
+* Coadread: 92.8%
+
+
+We will therefore use these statistics as our population of reference using the following approximations:
+
+```{r define number of patients for stats}
+set.seed(7)
+
+# assign number of patients
+luad_tot = ceiling(256350*0.45) #adjustement coefficient specific to the % of subtype tumor in a lung cancer population
+lusc_tot = ceiling(256350*0.23) #adjustement coefficient 
+stad_tot = ceiling(33174*0.82) #adjustement coefficient 
+coadread_tot = ceiling(185758*0.928) #adjustement coefficient 
+brca_tot = ceiling(306665 * 0.994)
+
+# total
+all_tot = brca_tot+luad_tot+lusc_tot+stad_tot+coadread_tot
+
+# calculate frequencies
+brca_freq = brca_tot/all_tot
+luad_freq = luad_tot/all_tot
+lusc_freq = lusc_tot/all_tot
+stad_freq = stad_tot/all_tot
+coadread_freq = coadread_tot/all_tot
+```
+
+
+| TCGA tumor ID | population considered | frequency | 
+|--- |--- |--- |
+| brca | ```r as.character(brca_tot)``` | ```r brca_freq```|
+| luad | ```r as.character(luad_tot)``` | ```r luad_freq```| 
+| lusc | ```r as.character(lusc_tot)``` |  ```r lusc_freq```|
+| stad | ```r as.character(stad_tot)``` |  ```r stad_freq```|
+| coadread | ```r as.character(coadread_tot)``` |  ```r coadread_freq```|
+
+
+```{r, echo=FALSE}
+# THis is a hidden section, here we will reduce the sample size otherwise when we use tumor.weights, the computation might require a long time. 
+luad_tot = ceiling(luad_tot/100) #adjustement coefficient specific to the % of subtype tumor in a lung cancer population
+lusc_tot = ceiling(lusc_tot/100) #adjustement coefficient 
+stad_tot = ceiling(stad_tot/100) #adjustement coefficient 
+coadread_tot = ceiling(coadread_tot/100) #adjustement coefficient 
+brca_tot = ceiling(brca_tot/100)
+```
+
+
+## ANALYSIS
+
+In the following phases we will proceed by designing the panel and visualizing its performance through different types of plots. 
+
+### Design phase
+
+First step is to create the panel design using an excel file according to the standards of the package. The panel design is loaded into R and can be previewed in the table below.
+
+```{r import, message=FALSE, warning=FALSE}
+library(DT)
+library(knitr)
+library(ggplot2)
+library(PrecisionTrialDesigner)
+
+`%++%` <- function(a,b) paste0(c(a,b), collapse = " ")
+
+# Import excel file in R
+panel_design <- gdata::read.xls("version_6.0/Tables/tb1_PTD_panel_showcase.xlsx")
+# preview the input table
+datatable(panel_design)
+```
+
+We can now run the main function of the R package and:
+
+1. Import the panel design into a CancerPanel object;
+2. download Alteration information for the drug types of interest;
+3. Adapt the alteration information to the CancerPanel design;
+
+```{r simulation, message=FALSE, eval=FALSE}
+# 1. Create the panel Object using PTD package - DESIGN PHASE
+PTD_panel <- newCancerPanel(panel_design)
+# 2. DOWNLOAD PHASE
+PTD_panel <- getAlterations(PTD_panel, tumor_type=tumor_types)
+# 3. SIMULATION PHASE
+PTD_panel <- subsetAlterations(PTD_panel)
+
+#save a backup copy to speed up future analysis
+saveRDS(PTD_panel, file="version_6.0/Temp/PTD_panel.rds")
+```
+
+
+```{r load simulation, echo=FALSE}
+#We use this trick to speed up the analysis and make it faster to compile the Report
+PTD_panel <- readRDS(file = "version_6.0/Temp/PTD_panel.rds")
+```
+
+At this point ```PTD_panel``` contains all the information we need to visualize the panel performance.
+
+### Filter non pathogenic mutations
+
+Remove NON pathogenic mutation fetched from cosmic dataset (01-05-2017).
+
+Cosmic mutations where downloaded from the cosmic dataset on the 18-05-2017.
+
+```{r}
+# save the number of entries in the TCGA beofere any filtering
+TCGA_original_number <- nrow(unique(PTD_panel@dataFull$mutations$data))
+
+# Clean TCGA popualation running a cosmic filter
+cosmic <- readr::read_csv("version_6.0/external_resources/cosmic_df_PTD.csv")
+
+cosmic_df <- data.frame(gene_symbol = cosmic$gene
+                        , amino_acid_change = sub("^p." , "" , cosmic$AA.Mutation)
+                        , stringsAsFactors = FALSE)
+PTD_panel <- filterMutations(PTD_panel , filtered = cosmic_df , mode = "keep")
+```
+
+* Filtering out ** ```r  round((1 - nrow(unique(PTD_panel@dataFull$mutations$data)) / TCGA_original_number) *100, digits=2)``` % ** of the TCGA original SNVs.
+
+
+### Adjust CNA threshold to be clinically relevant
+
+
+CNA data provided by cBioPortal reports the 
+final step in CNV calls from GISTIC pipeline (CIT).
+CNVs are reported as either 
+
+* -2: deletion
+* -1: shallow deletion
+* 0: normal
+* 1: shallow amplification
+* 2: amplification
+
+Values of -2 or 2 are considered alterations, while 
+the rest is considered as normal copies.
+For research purposes, these criteria are very useful 
+to discover new potential gene copies alterations 
+but a clinical setting requires stronger evidence for a call, 
+especially in case of amplification.
+
+The SHIVA trial protocol, for instance, in order to consider clinically
+relevant a *AKT* amplification, it requires at least the presence of 5-6 copies.
+
+A similar granularity is not possible with the final 
+GISTIC results but it can be obtained up to a certain degree 
+using the original data provided by the GDAC Firehose (the same used by cBioPortal).
+
+We downloaded GISTIC run 2016_01_28 *all_thresholded.by_genes.txt* 
+files for 32 tumor types and normalized the segmented 
+value for each patient by their respective thresholds. 
+Each sample of the TCGA cohort has a deletion and amplification 
+call threshold calculated according to estimated ploidy 
+and purity of the original sample. For example, a low purity 
+sample will have lower threshold for calling 
+a CNV compared to a 100% purity sample because 
+of the normal diploid cells contamination. These thresholds 
+represents the points were an amplification (2) or deletion (-2) 
+are called.
+
+This normalization reformats the data as 
+absolute number of copies in the following way:
+
+* 0-1: deletion
+* 1.1: shallow deletion
+* 2: normal
+* 2.9: shallow amplification
+* 3-Inf: amplification
+
+While data from 1.1 to 2.9 are the same as before (considered normal on default), 
+now 1 is the point of -2 deletion and 3 the point of +2 amplifiaction.
+We have now the full spectrum of amplification from > 3 that can be used to fine-tune 
+the clinically relevant threshold (4, 5 ,6 copies for example).
+
+```{r adjust CNA with firehose data}
+
+# SETTINGS
+# ==============================================================================
+# DEFINE GENES: define genes we are interested for the CNA analysis
+CNA_genes <- PTD_panel@arguments$panel %>%
+  dplyr::filter(alteration == "CNA") %>%
+  dplyr::select(gene_symbol) %>%
+  .[[1]]
+
+# PATH: set global variable with the path to.rds files with CNA raw data
+PATH_2CNA_FILES <- "version_6.0/Temp/cna_firehose_rds/"
+
+
+# helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured
+# ==============================================================================
+get_cna_long <- function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
+  
+  
+  # CHECKS
+  # --------------------------------------------------------------------------------
+  # check that PATH actually leads to a dir
+  if(!dir.exists(PATH_2rds)){ stop("path to a dir that cannot be found")}
+
+  # Check that all the files are found for each tumor type required in the analysis
+  input_lgl <- purrr::map_lgl(tumor_types
+                              , ~ file.exists(paste0(PATH_2rds
+                                                     , toupper(.)
+                                                     , "_PTD.rds")
+                                              )
+                              )
+  
+  if(!all(input_lgl)){
+    stop(paste("Files for some of the tumor types where not found:"
+               , tumor_types[-which(input_lgl)])
+         )
+  }
+ 
+  # Checks
+  if(!is.character(tumor_types) | is.null(tumor_types) | length(tumor_types) ==0){
+    stop(paste("Tumor type is not confirm", tumor_types))
+  }
+
+
+  # Define an internal function to do the job
+  # -------------------------------------------------------------------------------
+  get_CNA_long_onetumor <- function(one_tumor, PATH_2rds, genes_chr, del_thr, amp_thr){
+    
+    # read in CNA file
+    # myfile <- readRDS(paste0(PATH_2rds, toupper(one_tumor) , "_PTD.rds"))
+    # if(!file.exists(myfile)){
+    #   message(myfile)
+    #   return(NULL)
+    # }
+    # mat <- tryCatch(readRDS(myfile) , error = function(e) stop(myfile))
+    
+    mat <- readRDS(paste0(PATH_2rds, toupper(one_tumor) , "_PTD.rds"))
+    
+    # extract Patients
+    pats <- colnames(mat)
+
+    # Filter for gene of interest
+    mat <- mat[ genes_chr , ]
+
+    # Melt and adjust
+    output <- reshape2::melt(mat , value.name = "CNAvalue")
+    colnames(output) <- c("gene_symbol" , "case_id" , "CNAvalue")
+      output$tumor_type <- one_tumor
+    # Choose cutoff values
+    # -----------------------------------------------------------------------------
+    # With default threshold data are now like this: 
+        # [0 , 1.1) "deletion"
+        # 1.1 "shallow deletion"
+        # 2 "normal"
+        # 2.9 "shallow amplification"
+        # (2.9 , Inf] "amplification"
+    output$CNA <- ifelse( output$CNAvalue <del_thr 
+                    , "deletion" 
+                    , ifelse(output$CNAvalue > amp_thr , "amplification" , "normal"))
+    # select
+    output <- output %>%
+      dplyr::select(gene_symbol , CNA , case_id , tumor_type, CNAvalue) %>%
+      dplyr::mutate(gene_symbol = as.character(gene_symbol)) %>%
+      dplyr::mutate(case_id = as.character(case_id)) 
+    
+    return(output)
+  }
+
+  # Main body of the function
+  # -----------------------------------------------------------------------------
+  cna_long_df <- purrr::map(tumor_types
+                             , ~ get_CNA_long_onetumor(.
+                                                       , PATH_2rds
+                                                       , genes_chr
+                                                       , del_thr
+                                                       , amp_thr
+                                                       )
+                             ) %>%
+    dplyr::bind_rows()
+    
+  return(cna_long_df)  
+
+}
+  
+
+# RUN MAIN FUNCTION
+# ==============================================================================
+cna_long_df <- get_cna_long(tumor_types
+                            , PATH_2CNA_FILES
+                            , CNA_genes
+                            , del_thr = 1.1
+                            , amp_thr = 4
+                            )
+
+
+# Create Sample
+# ----------------------
+# get list of tumors
+tumor_chr <-  cna_long_df$tumor_type %>% 
+  unique %>% 
+  as.character
+
+# prepare funtion to extract sample names for each tumor
+sampleXtumor <- function(x, df){
+  df %>% 
+    dplyr::select(case_id, tumor_type) %>%
+    dplyr::filter(tumor_type %in% x) %>% .[["case_id"]] %>%
+    as.character() %>%
+    unique()
+}
+# Extract samples for each tumors
+Samples <- purrr::map(tumor_chr, ~ sampleXtumor(., df=cna_long_df))
+names(Samples) <- tumor_chr
+
+# Check if there are problems. 
+testthat::expect_equal(length(unlist(Samples)), length(unique(cna_long_df$case_id)))
+
+# Create list element for CNA for the DataFull argument of the panel (panel@DataFull)
+# ==============================================================================
+copynumber <- list(  data = data.frame(cna_long_df)
+                   , Samples = Samples)
+
+
+# Preview changes before committing
+PTD_cna_pop_comparison <- purrr::map2( 
+    .x = list( PTD_panel@dataFull$copynumber$Samples, copynumber$Samples )
+  , .y = list( "TCGA", "Firehose" )
+  , .f = ~ purrr::map_int(.x, length) %>%
+      data.frame(n_patients = .) %>%
+      tibble::rownames_to_column("tumor_type") %>%
+      dplyr::mutate(source = .y)
+  ) %>% 
+  dplyr::bind_rows() %>%
+  ggplot(aes(tumor_type, n_patients, fill=source)) + 
+    geom_bar(stat="identity", position= position_dodge()) +
+    coord_flip() + 
+    ggtitle("number of patients in the CNA datasets")
+
+# Preview
+PTD_cna_pop_comparison
+```
+
+apply changes to the TCGA population object.
+
+```{r}
+# Apply changes
+PTD_panel@dataFull$copynumber <- copynumber
+PTD_panel <- subsetAlterations(PTD_panel)
+```
+
+
+### Visualisation and Simulations of the panel performance
+
+In this section we will start running some of the visualization functions to investigate how well the panel would perform in different conditions. Before starting out investigation we want to visualize the sample number by tumor type to keep in consideration any sampling bias due to the population of origin. This bias can be corrected using the option ```tumor.wieights``` or ```tumor.freqs```.
+
+The following table shows the number of samples (*y-axis*) collected for this analysis for each tumor type considered. 
+
+```{r, fig.height=8, fig.width=8}
+coverageStackPlot(PTD_panel
+                  , alterationType=c("mutations" , "copynumber") 
+                  , var="tumor_type", noPlot=TRUE)$Samples %>%
+  data.frame(Samples=.) %>%
+  tibble::rownames_to_column("tumor_type") %>%
+  knitr::kable()
+```
+
+
+Let's export the data and make a summary table to resume differences in populations:
+
+```{r}
+# get data for table
+tcga_pop <- coverageStackPlot(PTD_panel
+                  , alterationType=c("mutations" , "copynumber") 
+                  , var="tumor_type"
+                  , noPlot=TRUE)
+
+# calculate frequencies
+tcga_freqs <- tcga_pop$Samples[-length(tcga_pop$Samples)]  / tcga_pop$Samples["all_tumors"]
+
+# make it into a df
+population_df <- data.frame(tumor=c("brca", "luad", "lusc", "stad", "coadread")
+          , seer=c(brca_freq, luad_freq, lusc_freq, stad_freq, coadread_freq)
+          , tcga = c(tcga_freqs["brca"], tcga_freqs["luad"], tcga_freqs["lusc"], tcga_freqs["stad"], tcga_freqs["coadread"])
+)
+
+# barplot, with only the genes in the panel
+population_df %>%
+  tidyr::gather(Population, Frequency, seer:tcga) %>%
+  ggplot(aes(x=Population, y=Frequency, fill=tumor)) + 
+  geom_bar(stat="identity") + 
+  facet_grid(. ~ tumor, space="free", scales="free") +
+  ggtitle("Comparison of the initial population composition")
+
+#library(svglite)
+#ggsave(filename="../Figures/fig1D.svg", plot=last_plot(), device = "svg")
+
+```
+
+
+Comparison table between SEER initial population and TCGA initial population 
+
+| TCGA tumor ID | Seer population considered | Seer frequency [^1] | TCGA initial population | TCGA sample frequency [^1] |
+|--- |--- |--- | --- | --- |
+| brca | ```r as.character(brca_tot)``` | ```r brca_freq```| ```r tcga_pop$Samples["brca"]```| ```r tcga_pop$Samples["brca"]/tcga_pop$Samples["all_tumors"]``` |
+| luad | ```r as.character(luad_tot)``` | ```r luad_freq```| ```r tcga_pop$Samples["luad"]``` | ```r tcga_pop$Samples["luad"]/tcga_pop$Samples["all_tumors"]``` |
+| lusc | ```r as.character(lusc_tot)``` |  ```r lusc_freq```| ```r tcga_pop$Samples["lusc"]``` |```r tcga_pop$Samples["lusc"]/tcga_pop$Samples["all_tumors"]``` |
+| stad | ```r as.character(stad_tot)``` |  ```r stad_freq```| ```r tcga_pop$Samples["stad"]``` | ```r tcga_pop$Samples["stad"]/tcga_pop$Samples["all_tumors"]``` |
+| coadread | ```r as.character(coadread_tot)``` |  ```r coadread_freq```| ```r tcga_pop$Samples["coadread"]``` | ```r tcga_pop$Samples["coadread"]/tcga_pop$Samples["all_tumors"]``` |
+
+[^1]: Frequency is calculated on the the selected population for the study (*i.e.* frequency sum = 1) and not on the overall cancer population that includes all tumor types.
+
+#### Fusion detection in Lung cancer 
+
+The previous plot does not include fusions, as the fusion in the panel are specific to the lung tumor. If we want to visualize the number of samples with available information for ```mutations```,  ```copynumber``` and ```fusions``` (each patients will have information for each category).
+
+```{r, fig.height=8, fig.width=8}
+coverageStackPlot(PTD_panel
+                  , alterationType=c("mutations" , "copynumber", "fusions") 
+                  , var="tumor_type"
+                  , tumor_type = c("luad", "lusc")
+                  )
+```
+
+
+#### Panel detection power in the overall population
+
+One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (*x-axis*) found in the sample (patient) population (*y-axis*). The panel *detection power* can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detection power in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis. 
+
+
+```{r coverageplot all the population}
+coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             # adjust population distribution by applying a weighted sampling bootstrap
+             , tumor.freqs = c(brca=brca_freq
+                               , luad=luad_freq
+                               , lusc=lusc_freq
+                               , stad = stad_freq
+                               , coadread = coadread_freq
+                               )
+            )
+```
+
+
+```{r, include=FALSE , eval=FALSE , echo = FALSE}
+# SAVE THE IMAGE as a SVG
+
+svg(filename="../Figures/fig2A.svg", 
+    #width=7, 
+    #height=4, 
+    pointsize=12)
+
+  coveragePlot(PTD_panel
+               , alterationType=c("mutations" , "copynumber")
+               # adjust population distribution by applying a weighted sampling bootstrap
+               , tumor.freqs = c(brca=brca_freq
+                                 , luad=luad_freq
+                                 , lusc=lusc_freq
+                                 , stad = stad_freq
+                                 , coadread = coadread_freq
+                                 )
+              )
+  
+dev.off()
+```
+
+The previous plot shows the percentage of patients (*y-axis*) found to have at least one, two, three, etc, alterations (*x-axis*). The current design is capable of detecting ```r coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             # adjust population distribution by applying a weighted sampling bootstrap
+             , tumor.freqs = c(brca=brca_freq
+                               , luad=luad_freq
+                               , lusc=lusc_freq
+                               , stad = stad_freq
+                               , coadread = coadread_freq
+                               ), noPlot=TRUE
+            )$plottedTable[1] %>% round(digits=2)```% of the population of reference. 
+
+##### Panel detection-power in a tumor type specific population background
+
+In the following plot we want to identify the performance of our panel for each single tumor types starting from out population of reference composed by the 3 cancers groups.
+
+```{r coverage plot tumor specific}
+coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , grouping = "tumor_type"
+             , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+             )
+```
+
+To allow and easy comparison of the detection power in different tumor types we have redesign the plots into one unique barplot.
+
+```{r}
+# get data from the panel simulation
+dt_power_lt <- coverageStackPlot(PTD_panel
+                  , alterationType=c("mutations" , "copynumber") 
+                  , var="tumor_type"
+                  , noPlot = TRUE
+              )
+
+# convert to dataframe
+dt_power_lt$plottedTable <- data.frame(dt_power_lt$plottedTable)
+
+# calculate frequency
+df <- data.frame()
+for(i in 1:length(dt_power_lt$plottedTable)){
+  
+  # find tot. number of samples in matching tumor
+  index <- which(names(dt_power_lt$Samples) %in% names(dt_power_lt$plottedTable[i]))
+  
+  if(length(index) != 0 ){
+    # calculate frequency
+    # freq <- dt_power_lt$plottedTable[i] / dt_power_lt$Samples[index]
+    freq <- dt_power_lt$plottedTable[i] / dt_power_lt$Samples["all_tumors"]
+  }
+  # export
+  df <- rbind(df
+              , data.frame(tumor_id=names(dt_power_lt$Samples[index])
+                             , freq=as.numeric(freq))
+              )
+}
+
+# generate plot 
+df %>%
+  dplyr::arrange(freq) %>%
+  ggplot(aes(x=reorder(tumor_id, freq), y=freq*100)) + 
+  geom_bar(stat="identity") + 
+  coord_flip() + 
+  labs(title="Genomic panel detection-power in different tumor types.") +
+  ylab(label = "detection power indicated as the overall population percentage") +
+  xlab(label = "tumor type (TCGA ID)")
+```
+
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig2B.svg", plot=last_plot(), device = "svg")
+```
+
+### Patient treatment allocation
+
+We can also easily address the issue of the allocation frequency in the different treatment groups. The following plot shows the number of patients with at least one, two or more alterations that can be targeted by each drug in the trial. This is particularly important in clinical trails when you want to predict the maximum number of patients that could be allocated into a drug treatment and identify potential cohorts with few patients allocated.
+
+
+```{r patient treatment allocation plot, fig.height=14, fig.width=8}
+coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , grouping="drug"
+             # adjust population distribution by applying a weighted sampling bootstrap
+             , tumor.freqs = c(brca=brca_freq
+                               , luad=luad_freq
+                               , lusc=lusc_freq
+                               , stad = stad_freq
+                               , coadread = coadread_freq
+                               )
+             , colNum = 2 # number of columns in the plot
+             , cex.main = 1 # size of the plot title
+)
+```
+
+
+To make it simpler to compare, we will plot the detection power for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.
+
+```{r max freq of patients eligible for each drug treatment}
+# get data from the panel simulation
+drug_df <- coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , grouping="drug"
+             # adjust population distribution by applying a weighted sampling bootstrap
+             , tumor.freqs = c(brca=brca_freq
+                               , luad=luad_freq
+                               , lusc=lusc_freq
+                               , stad = stad_freq
+                               , coadread = coadread_freq
+                               )
+             , colNum = 2 # number of columns in the plot
+             , cex.main = 1 # size of the plot title
+             , noPlot=TRUE
+ )$plottedTable %>% data.frame()
+
+# name first column with frequency of patients with at least one alteration that makes the patients elibigle for treatment with a specific drug
+names(drug_df)[1] <- "freq"
+
+# generate plot 
+drug_df %>%
+  tibble::rownames_to_column("drug_name") %>%
+  dplyr::filter(!grepl("no_drug", drug_name)) %>%
+  #dplyr::add_rownames("drug_name") %>%
+  ggplot(aes(x=reorder(drug_name, freq), y=freq*100)) + 
+  geom_bar(stat="identity") + 
+  coord_flip() + 
+  labs(title="Max frequencies of patients elibigle for each drug treatment") + 
+  ylab(label = "detection power indicated as the overall population percentage") +
+  xlab(label = "Drug name")
+```
+
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval=FALSE}
+ggsave(filename="../Figures/fig2C.svg", plot=last_plot(), device = "svg")
+```
+
+
+### Panel performance evaluation
+
+The design phase of a panel requires the user to make the important decision about what genes to include. ```PTD``` provides a suite of tools envisioned to aid the user during the decision process and evaluate the performance of the panel.
+
+#### Rank genes in the design in terms of genomic space/detection power {.tabset}
+
+The following plot was studied to investigate the relationship between the "cost" of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detection power in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types. 
+
+In order to optimize a panel design, we might be interested to know:
+
+* What genes are most altered in the tumor types of interest;
+* What genes are "cheaper" to be sequenced (in terms of genomic spaces, or also size of the targeted region);
+* What genes have the highest number of (alteration frequency) / (genomic space).
+
+##### All tumors together
+
+The following saturation plot shows the overall performance of the panel in a population that includes all tumor types of interest (balanced by tumor frequency in the population of reference). Genes can be ranked based on the ratio ```(alteration frequency) / (genomic space)```. Genes with highest mean number of alteration per sample and smallest size are listed first. The following genes in the plot are added one by one incrementally. This means that on the *y-axis*, every time we add a new gene, we are adding only the incremental contribution of alteration for that specific gene. This was done to prevent from counting twice (or more than once), patients with genes that were already found  altered.
+
+
+```{r saturation plot ratios,   fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations" , "copynumber")
+            , adding="gene_symbol"
+            # adjust population distribution by applying a weighted sampling bootstrap
+            , tumor.weights=c(brca=brca_tot
+                             , luad = luad_tot
+                             , lusc = lusc_tot
+                             , stad = stad_tot
+                             , coadread = coadread_tot
+                             )
+            , adding.order = "rate"
+            , legend = "out"
+            )
+```
+
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig2D.svg", plot=last_plot(), device = "svg")
+```
+
+Each single cancer type will have different gene alteration frequencies, and therefore the order of the genes can change accordingly. In the following set of plots we will change the gene adding order, using ```asbolute``` ranking. This parameters, will not add genes based on their optimal ratio, but will priorities genes with the absolute highest number of alterations found in each single tumor group of interest
+
+##### Breast Cancer
+
+```{r saturation plot abs breast, fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations" , "copynumber")
+            , adding="gene_symbol"
+            , tumor_type = "brca"
+            , adding.order = "absolute"
+            )
+```
+
+##### Lung Cancer, mutations and copy number alterations
+
+```{r saturation plot abs lung, fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations" , "copynumber")
+            , adding="gene_symbol"
+            , tumor_type = c("luad", "lusc")
+            , adding.order = "absolute"
+            )
+```
+
+###### Lung Cancer, only fusion alterations
+
+```{r saturation plot abs lung with fusions, fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("fusions")
+            , adding="gene_symbol"
+            , tumor_type = c("luad", "lusc")
+            , adding.order = "absolute"
+            )
+```
+
+##### Gastric Cancer
+
+```{r saturation plot abs gastric, fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations" , "copynumber")
+            , adding="gene_symbol"
+            , tumor_type = c("stad", "coadread")
+            , adding.order = "absolute"
+            )
+```
+
+
+#### Rank drugs in the design in terms of genomic space/patient allocation 
+
+Similarly to the previous set of plots, we can investigate the cost of adding a new drug in the study in terms of extra genomic space to be targeted by the panel with respect to the alteration frequency of population that can be captured. 
+
+```{r, fig.height=6, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations", "copynumber")
+            , adding="drug"
+            , y_measure="absolute"
+            , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+             
+            )
+```
+
+
+Similarly, we can separate the saturation line by ```tumor_types```. (Note: In the following plot we do not need to apply the tumor.wight option, as we are grouping by tumor_types, Note2: ```no_drug``` indicates frequency associated with driver genes which are therefore not associated to any drug treatment in this specific design).
+
+```{r, fig.height=10, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations", "copynumber")
+            , grouping="tumor_type"
+            , adding="drug"
+            , y_measure="absolute"
+            , legend = "out"
+            )
+```
+
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig2E.svg"
+       , plot=last_plot()
+       , device = "svg"
+       , width=10
+       , height=8
+       )
+```
+
+
+To improve the readability of the plot, we can look at each single tumor type individually. 
+
+##### Breast Cancer 
+
+```{r}
+# Generate plots for each tumor types
+saturationPlot(PTD_panel
+            , alterationType=c("mutations", "copynumber")
+            , grouping="tumor_type"
+            , adding="drug"
+            , y_measure="absolute"
+            , tumor_type = "brca"
+) 
+```
+
+##### Lung Cancer 
+
+```{r}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations", "copynumber")
+            , grouping="tumor_type"
+            , adding="drug"
+            , y_measure="absolute"
+            , tumor_type = c("luad", "lusc")
+)
+```
+
+##### Gastric Cancer 
+
+```{r}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations", "copynumber")
+            , grouping="tumor_type"
+            , adding="drug"
+            , y_measure="absolute"
+            , tumor_type = c("coadread", "stad")
+) 
+```
+
+
+
+
+#### Panel detection power of each alteration type in the overall population
+
+SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detection power of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detection power.  
+
+
+```{r, fig.height=8, fig.width=8}
+saturationPlot(PTD_panel
+            , alterationType=c("mutations" , "copynumber", "fusions")
+            , adding="gene_symbol"
+            , tumor.weights=c(brca=brca_tot
+                             , luad = luad_tot
+                             , lusc = lusc_tot
+                             , stad = stad_tot
+                             , coadread = coadread_tot
+                             )
+            ,grouping="alteration_id"
+            )
+```
+
+
+
+#### Drug targeting frequency plot
+
+In case some of the drugs are multitarget (in this panel design, we are using drug families), it might be interesting to investigate what are the most targeted genes in our population of reference. We can visualize this information as an independent stack plot for each tumor type.
+
+```{r gene drug stack plot, fig.height=16, fig.width=8 }
+par(mfrow=c(3,1))
+coverageStackPlot(PTD_panel
+             , alterationType=c("mutations", "copynumber")
+             , var="drug"
+             , grouping="gene_symbol"
+             , tumor_type="brca"
+             )
+
+coverageStackPlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber" , "fusions")
+             , var="drug"
+             , grouping="gene_symbol"
+             , tumor_type=c("luad", "lusc")
+             )
+
+coverageStackPlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , var="drug"
+             , grouping="gene_symbol"
+             , tumor_type=c("stad", "coadread")
+             )
+# reset plot settings
+par(mfrow=c(1,1))
+```
+
+
+We can also visualize co-occurrence and mutual exclusivity of the drugs in different tumor types.
+
+##### Overall Co-occurance
+
+```{r, fig.width=12, fig.height=8}
+coocMutexPlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , var="drug"
+             # , grouping="group"
+             , tumor.freqs = c(brca=brca_freq
+                               , luad=luad_freq
+                               , lusc=lusc_freq
+                               , stad = stad_freq
+                               , coadread = coadread_freq
+                               )
+             )
+```
+
+  
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig2F.svg"
+       , plot=last_plot()
+       , device = "svg"
+       , width=12
+       , height=8
+       )
+```
+
+###### Breast cancer co-occurence plot
+
+```{r, fig.width=8, fig.height=8}
+coocMutexPlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             #, grouping="alteration_id"
+             , var="drug"
+             , tumor_types= "brca"
+             )
+```
+
+
+###### Lung cancer co-occurence plot
+
+```{r, fig.width=8, fig.height=8}
+coocMutexPlot(PTD_panel   
+             , alterationType=c("mutations" , "copynumber", "fusions" )
+             #, grouping="alteration_id"
+             , var="drug"
+             , tumor_types= c("luad", "lusc")
+             )
+```
+
+
+###### Gastric cancer co-occurence plot
+
+```{r, fig.width=8, fig.height=8}
+coocMutexPlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             #, grouping="alteration_id"
+             , var="drug"
+             , tumor_types= c("egc", "stad", "coadread")
+             )
+```
+
+
+
+### How many patients are eligible to more than one treatment? 
+
+Some patients are eligible to more than one terapy group. We will take advantage of this information in a later stage of the analysis as it will allows us to to optimize the patients allocation and improve the changes of the clinical trial of reaching statistical power.
+
+```{r}
+# Prepare dataframe on which to run the analysis
+# ------------------------------------------------------------------------------
+# Extract data
+data <- dataExtractor(PTD_panel , alterationType = c("mutations" , "copynumber" , "fusions"))
+# Extract case_id and drug columns
+dataDrug <- unique(data$data[ , c("case_id" , "drug")])
+# calculate number of drug per patient, taking into account ALL samples
+drugsPerPatient <- table( factor(dataDrug$case_id , levels = data$Samples$all_tumors) )
+
+# Calculate the frequenecy of patients eligible to at least X number od drugs
+alPatDrug <- sapply(1:max(drugsPerPatient), function(x){
+          sum(drugsPerPatient >= x) / length(drugsPerPatient)
+         }
+       ) %>% 
+  data.frame(drugs=.) 
+
+# Plot
+alPatDrug %>%
+  ggplot(aes(x=1:length(drugs), y=drugs)) + 
+  geom_bar(stat="identity") +
+  labs(title="Patients eligible to AT LEAST 1, 2, 3 or 4 ... drugs") +
+  ylab(label = "Eligibility frequency") +
+  xlab(label = "Number of drugs the patient is eligible for") +
+   theme(legend.position="none") + 
+  geom_text(aes(label=stringr::str_c(round(drugs, digits=4)*100, " %"), y=drugs+0.05),  position = position_dodge(width=0.9))
+```
+
+
+### Power analysis
+
+We can now simulated a clinical trail based on the drug-gene targeting design, and estimate the number of patients that would need to be recruited. 
+
+* We will look at 4 **power levels**: 0.6, 0.7, 0.8, 0.9 
+* and we will consider different Hazard ratios
+
+#### Overall power analysis for the full study
+
+```{r, warning=FALSE, fig.height=8, fig.width=8}
+# Generate plot
+survPowerSampleSize(PTD_panel
+  , HR = c(0.5, 0.6, 0.7, 0.8)
+  , power = seq(0.6 , 0.9 , 0.1)
+  , alpha = 0.05
+  , case.fraction = 0.5
+  , tumor.weights = c(brca=brca_tot
+                    , luad = luad_tot
+                    , lusc = lusc_tot
+                    , stad = stad_tot
+                    , coadread = coadread_tot
+                    )
+  )
+```
+
+```{r, include=FALSE, message=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig3A.svg", plot=last_plot(), device = "svg")
+```
+
+Preview the table with the data from the previous plot.
+
+```{r, warning=FALSE}
+# Generate Table
+survPowerSampleSize(PTD_panel
+  , HR = c(0.5, 0.6, 0.7, 0.8)
+  , power = seq(0.6 , 0.9 , 0.1)
+  , alpha = 0.05
+  , case.fraction = 0.5
+  , tumor.weights = c(brca=brca_tot
+                    , luad = luad_tot
+                    , lusc = lusc_tot
+                    , stad = stad_tot
+                    , coadread = coadread_tot
+                    )
+  , noPlot =TRUE
+  ) %>% kable()
+```
+
+
+#### Power analysis per group treatment
+
+The power analysis can also be perform grouping by tumor types.
+
+```{r, warning=FALSE, fig.height=8, fig.width=8}
+
+survPowerSampleSize(PTD_panel
+  ,var = "tumor_type"
+  , HR = c(0.5, 0.6, 0.7)
+  , power = seq(0.6 , 0.9 , 0.1)
+  , alpha = 0.05
+  , case.fraction = 0.5
+  , tumor.weights = c(brca=brca_tot
+                    , luad = luad_tot
+                    , lusc = lusc_tot
+                    , stad = stad_tot
+                    , coadread = coadread_tot
+                    )
+  )
+```
+
+
+
+### PATIENT ALLOCATION OPTIMIZATION
+
+In this section we will investigate how the patients could be allocated to the treatment groups. It is particuarly interesting to notice that some patients are eligible to more than one terapy group, allowing to run optimization algorithms in order to better balance the patients allocation distribution in the different treatment arms and therefore reducing the risk of not reach statistical in the clincial trial. 
+
+#### Number of patients required for the overall study to reach the required power (using PFS)
+
+In this simulation we are using **Progression Free Survival** as the primary endpoint.
+
+```{r, warning=FALSE, fig.height=8, fig.width=8}
+drugs <- c("HER2 inhibitor"
+  , "PARP inhibitor"
+  , "AKT inhibitor"
+  , "EGFR inhibitor"
+  , "FGFR inhibitor"
+  , "ALK inhibitor"
+  , "BRAF inhibitor"
+  , "MET inhibitor"
+  , "NOTCH inhibitor"
+  , "ALK inhibitor"
+  , "Immune Checkpoint Inhibitor")
+
+# Show plot
+survPowerSampleSize(PTD_panel
+  , HR = c(0.5, 0.6, 0.7, 0.8)
+  , power = seq(0.6 , 0.9 , 0.1)
+  , alpha = 0.05
+  , case.fraction = 0.5
+  , priority.trial = drugs 
+  , priority.trial.order="optimal"
+  , var = "drug"
+  , tumor.weights = c(brca=brca_tot
+                    , luad = luad_tot
+                    , lusc = lusc_tot
+                    , stad = stad_tot
+                    , coadread = coadread_tot
+                    )
+  )
+
+```
+
+Show it in a table
+
+```{r}
+# Show it in a table
+survPowerSampleSize(PTD_panel
+  , HR = 0.6
+  , power = 0.8
+  , alpha = 0.05
+  , case.fraction = 0.5
+  , priority.trial = drugs 
+  , priority.trial.order = "optimal"
+  , var = "drug"
+  , noPlot = TRUE
+  , tumor.weights = c(brca = brca_tot
+                    , luad = luad_tot
+                    , lusc = lusc_tot
+                    , stad = stad_tot
+                    , coadread = coadread_tot
+                    )
+  )$`HR:0.6 | HR0:1 | Power:0.8`$Summary %>%
+  data.frame() %>%
+  tibble::rownames_to_column("criteria") %>%
+  tidyr::gather(drug, patients, 2:ncol(.)) %>%
+  tidyr::spread(criteria, patients) %>%
+  dplyr::select(drug, Screened, Eligible, Not.Eligible) %>%
+  knitr::kable()
+```
+
+
+
+## extra
+
+
+##### Number of patients to be recruited to reach power
+
+```{r, , warning=FALSE, message=FALSE}
+propPowerSampleSize(PTD_panel
+  , noPlot=FALSE
+  , alterationType = c("mutations", "copynumber", "expression")
+  , pCase = c(0.2, 0.3 , 0.4)
+  , pControl = rep(0.1, 3)
+  #, power =c(0.7, 0.75, 0.8, 0.85, 0.9)
+  , power = c(0.7, 0.8, 0.9)
+  , alpha= 0.1
+  , side = 1
+  ) 
+```
+
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
+ggsave(filename="../Figures/fig3B.svg", plot=last_plot(), device = "svg")
+```
+
+
+
+```{r, warning=FALSE, message=FALSE}
+
+propPowerSampleSize(PTD_panel
+  , var = "drug"
+  , alterationType = c("mutations", "copynumber")
+  , priority.trial = as.character(unique(panel_design$drug))[-4] 
+  , priority.trial.order="optimal"
+  #, HR = 0.66
+  #, p.event=1
+  , noPlot=TRUE
+  , pCase = 0.3
+  , pControl = 0.1
+  , side =1
+  , alpha= 0.1
+  , power =0.8
+  , case.fraction = 0.6
+  )
+```
+
+
+```{r}
+surv2 <- survPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , HR = 0.66
+   , power = 0.8
+   , alpha = 0.05
+   , case.fraction = 0.5
+   , ber=0.85
+   , fu=1.883
+   #, priority.trial.order="as.is"
+   , priority.trial.order="optimal"
+   , var = "drug" 
+   , noPlot=TRUE)
+kable(surv2 , row.names=FALSE)
+```
+
+
+## Per abstract
+ 
+NOT OPTIMAL
+
+```{r}
+set.seed(111)
+# NOT optimal
+surv2 <- survPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , HR = 0.66
+   , power = 0.8
+   , alpha = 0.05
+   , case.fraction = 0.5
+   , ber=0.85
+   , fu=1.883
+   , var = "drug"
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+   , noPlot=TRUE)
+
+#export
+#write.table(surv2, file = "~/Desktop/notoptimal_ptd-showcase.txt", quote=FALSE, sep=",")
+
+# count n patients necessary to be recruited
+n_patients_notoptimal <- surv2  %>% 
+  dplyr::filter(!Var == "no_drug", !Var == "Full Design") %>%
+  dplyr::select(ScreeningSampleSize) %>%
+  dplyr::summarise_all(sum)
+
+#preview
+kable(surv2 , row.names=FALSE)
+```
+
+* Number of patients necessary: `r n_patients_notoptimal`
+
+Optimal
+
+```{r}
+library(parallel)
+set.seed(111)
+simulSurv2 <- mclapply(1:100 , function(x) {
+    survPowerSampleSize(PTD_panel
+        , alterationType = c("mutations", "copynumber")
+        , HR = 0.625
+        , power = 0.8
+        , alpha = 0.05
+        , ber=0.85
+        , fu=1.883
+        , case.fraction = 0.5
+        , collapseByGene=TRUE
+        #, tumor.weights = shivapop$Samples_n %>% 
+        #                setNames(shivapop$tcga_id) 
+        , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+        , var = "drug" 
+        , noPlot=TRUE
+        , priority.trial=drugs
+        , priority.trial.order="optimal")$`HR:0.625 | HR0:1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+summaryMat2 <- simulSurv2[[1]]
+for(i in rownames(summaryMat2)){
+    for(j in colnames(summaryMat2)){
+        vec <- sapply(simulSurv2 , function(x) x[i , j])
+        summaryMat2[i , j] <- paste(mean(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat2, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(summaryMat2)
+```
+
+
+## Session info
+
+For reproducibility purpose:
+
+```{r}
+sessionInfo()
+```

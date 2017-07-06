@@ -1,7 +1,9 @@
 ---
-title: "Precision Trial Designer showcase panel"
+title: "Panel Showcase"
+author: "Alessandro Guida"
 output:
   html_document:
+    theme: spacelab
     code_folding: show
     fig_height: 8
     fig_width: 10
@@ -214,7 +216,7 @@ library(PrecisionTrialDesigner)
 `%++%` <- function(a,b) paste0(c(a,b), collapse = " ")
 
 # Import excel file in R
-panel_design <- gdata::read.xls("../Tables/tb1_PTD_panel_showcase.xlsx")
+panel_design <- gdata::read.xls("version_6.0/Tables/tb1_PTD_panel_showcase.xlsx")
 # preview the input table
 datatable(panel_design)
 ```
@@ -234,13 +236,13 @@ PTD_panel <- getAlterations(PTD_panel, tumor_type=tumor_types)
 PTD_panel <- subsetAlterations(PTD_panel)
 
 #save a backup copy to speed up future analysis
-saveRDS(PTD_panel, file="../Temp/PTD_panel.rds")
+saveRDS(PTD_panel, file="version_6.0/Temp/PTD_panel.rds")
 ```
 
 
 ```{r load simulation, echo=FALSE}
 #We use this trick to speed up the analysis and make it faster to compile the Report
-PTD_panel <- readRDS(file = "../Temp/PTD_panel.rds")
+PTD_panel <- readRDS(file = "version_6.0/Temp/PTD_panel.rds")
 ```
 
 At this point ```PTD_panel``` contains all the information we need to visualize the panel performance.
@@ -256,7 +258,7 @@ Cosmic mutations where downloaded from the cosmic dataset on the 18-05-2017.
 TCGA_original_number <- nrow(unique(PTD_panel@dataFull$mutations$data))
 
 # Clean TCGA popualation running a cosmic filter
-cosmic <- readr::read_csv("../external_resources/cosmic_df_PTD.csv")
+cosmic <- readr::read_csv("version_6.0/external_resources/cosmic_df_PTD.csv")
 
 cosmic_df <- data.frame(gene_symbol = cosmic$gene
                         , amino_acid_change = sub("^p." , "" , cosmic$AA.Mutation)
@@ -331,7 +333,7 @@ CNA_genes <- PTD_panel@arguments$panel %>%
   .[[1]]
 
 # PATH: set global variable with the path to.rds files with CNA raw data
-PATH_2CNA_FILES <- "../Temp/cna_firehose_rds/"
+PATH_2CNA_FILES <- "version_6.0/Temp/cna_firehose_rds/"
 
 
 # helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured
@@ -533,8 +535,8 @@ population_df %>%
   facet_grid(. ~ tumor, space="free", scales="free") +
   ggtitle("Comparison of the initial population composition")
 
-library(svglite)
-ggsave(filename="../Figures/fig1D.svg", plot=last_plot(), device = "svg")
+#library(svglite)
+#ggsave(filename="../Figures/fig1D.svg", plot=last_plot(), device = "svg")
 
 ```
 
@@ -583,7 +585,7 @@ coveragePlot(PTD_panel
 ```
 
 
-```{r, include=FALSE}
+```{r, include=FALSE , eval=FALSE , echo = FALSE}
 # SAVE THE IMAGE as a SVG
 
 svg(filename="../Figures/fig2A.svg", 
@@ -676,7 +678,7 @@ df %>%
   xlab(label = "tumor type (TCGA ID)")
 ```
 
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig2B.svg", plot=last_plot(), device = "svg")
 ```
 
@@ -737,7 +739,7 @@ drug_df %>%
   xlab(label = "Drug name")
 ```
 
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval=FALSE}
 ggsave(filename="../Figures/fig2C.svg", plot=last_plot(), device = "svg")
 ```
 
@@ -777,7 +779,7 @@ saturationPlot(PTD_panel
             )
 ```
 
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig2D.svg", plot=last_plot(), device = "svg")
 ```
 
@@ -860,7 +862,7 @@ saturationPlot(PTD_panel
             )
 ```
 
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig2E.svg"
        , plot=last_plot()
        , device = "svg"
@@ -983,7 +985,7 @@ coocMutexPlot(PTD_panel
 ```
 
   
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig2F.svg"
        , plot=last_plot()
        , device = "svg"
@@ -1087,7 +1089,7 @@ survPowerSampleSize(PTD_panel
   )
 ```
 
-```{r, include=FALSE, message=FALSE}
+```{r, include=FALSE, message=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig3A.svg", plot=last_plot(), device = "svg")
 ```
 
@@ -1222,13 +1224,13 @@ propPowerSampleSize(PTD_panel
   ) 
 ```
 
-```{r, message=FALSE, include=FALSE}
+```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
 ggsave(filename="../Figures/fig3B.svg", plot=last_plot(), device = "svg")
 ```
 
 
 
-```{r, , warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE}
 
 propPowerSampleSize(PTD_panel
   , var = "drug"
@@ -1356,29 +1358,4 @@ For reproducibility purpose:
 
 ```{r}
 sessionInfo()
-```
-
-
-```{r, eval=FALSE, echo=FALSE}
-## DELETE THIS PART!!!!!!!!!!!!
-
-myPATH <- "~/Desktop/cosmic_18_maggio_2017"
-
-# upload all the files
-dfs <- purrr::map(dir(myPATH), function(x){
-  
-  # get file name
-  mygene_name <- gsub(".csv", "", x)
-  # read in file
-  output_df <- readr::read_csv(paste(myPATH, x, sep="/"))
-  # add gene name
-  output_df$gene <- mygene_name
-  
-  return(output_df)
-
-}) %>% bind_rows()
-
-# write
-write.csv(dfs, file="../external_resources/cosmic_df.csv")
- 
 ```

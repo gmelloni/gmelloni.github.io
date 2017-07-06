@@ -226,8 +226,8 @@ simulate_detectionPower_img <- function(df
     coord_flip()
   
   #Export as a svg
-  ggsave(filename=img_file, plot=image, device = "svg")
-  message("file saved in" %++% img_file)
+  #ggsave(filename=img_file, plot=image, device = "svg")
+  #message("file saved in" %++% img_file)
   
   # Show image
   return(image)
