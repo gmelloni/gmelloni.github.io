@@ -1,20 +1,84 @@
-# Welcome to my page
+# Welcome
 
 My name is Giorgio, currently postdoc and data scientist in [Park's Lab](https://compbio.hms.harvard.edu/) 
 at the [Department of Biomedical Informatics](https://dbmi.hms.harvard.edu/careers/postdoctoral-fellows/park-lab) at Harvard Medical School.
 
-I won't write that much here. Just posting all my projects on github, gitlab or elsewhere!
+I won't write that much here. Just posting my projects on github, gitlab or elsewhere!
 
-## Precision Trial Designer
+
+### Precision Trial Designer
+
+[![](images/conclusionSlide2.jpg)](https://gmelloni.github.io/ptd)
 
 ```
-In recent years, two new forms of clinical trial designs emerged in clinical cancer genomics: umbrella and basket trials. 
-Designs of such trials can be extremely difficult, starting from the creation of a valid screening panel, to the optimization 
-of sequencing space and to the calculation of a correct sample size for the trial. PTD provides a serie of tools that 
-can help bioinformaticians, clinicians and biostatisticians to design, analyze and finalize a custom gene panel for cancer genomics.
+In recent years, two new forms of clinical trial designs emerged 
+in clinical cancer genomics: umbrella and basket trials.
+
+Designs of such trials can be extremely difficult, 
+starting from the creation of a valid screening panel, 
+to the optimization of sequencing space and to the calculation 
+of a correct sample size for the trial.
+
+PTD provides a series of tools that can help bioinformaticians, 
+clinicians and biostatisticians to design, 
+analyze and finalize a custom gene panel for cancer genomics.
 ```
 
-Project Page [Here](https://gmelloni.github.io/ptd)
+----------------------
+
+### [LowMACA](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7)
+
+[![](images/lowmaca_logo.png)](http://cgsb.genomics.iit.it/wiki/projects/LowMACA)
+
+```
+LowMACA (Low frequency Mutation Analysis via Consensus Alignment) 
+is a new method able to assess specific characteristics of rarely 
+mutated genes that show patterns of positive selection.
+
+LowMACA aggregates and analyzes the mutational patterns of several genes 
+whose encoded proteins have a high level of sequence similarity 
+or share specific protein domains.
+
+By aligning the protein sequences of selected genes targeted 
+by mutations and piling up these mutations according to the 
+relative position derived from the alignment, LowMACA can 
+dissect the whole protein family and assess the statistical 
+significance of specific clusters of mutations.
+```
+
+Available on [Bioconductor](http://www.bioconductor.org/packages/release/bioc/html/LowMACA.html)! 
+
+----------------------
+
+### TransformPhenotype
+
+<div class="row">
+<div class="col-sm-9">
+
+```
+A shiny app to normalize continuous traits in Genome-wide 
+association studies
+```
+
+</div>
+<div class="col-sm-3">
+
+[![](images/normalization_mod.png)](https://github.com/gmelloni/transformPhenotype)
+
+</div>
+</div>
+
+----------------------
+
+### [DOTS-Finder]((https://genomemedicine.biomedcentral.com/articles/10.1186/gm563))
+
+```
+Driver Oncogenes and Tumor Suppressors finder is a tool 
+to identify driver genes from exome-sequencing data 
+of a cohort of cancer samples
+```
+
+[![](images/dotsfinderlogo.png)](http://cgsb.genomics.iit.it/wiki/projects/DOTS-Finder)
 
 <!-- 
 
