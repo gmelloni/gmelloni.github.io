@@ -6,29 +6,45 @@ at the [Department of Biomedical Informatics](https://dbmi.hms.harvard.edu/caree
 I won't write that much here. Just posting my projects on github, gitlab or elsewhere!
 
 
-### Precision Trial Designer
+### [Precision Trial Designer](https://gmelloni.github.io/ptd)
 
-[![](images/conclusionSlide2.jpg)](https://gmelloni.github.io/ptd)
+<a href="https://gmelloni.github.io/ptd">
+<img src="images/conclusionSlide2.jpg" height="200" style="vertical-align:right" />
+</a>
 
 ```
 In recent years, two new forms of clinical trial designs emerged 
 in clinical cancer genomics: umbrella and basket trials.
-
 Designs of such trials can be extremely difficult, 
 starting from the creation of a valid screening panel, 
 to the optimization of sequencing space and to the calculation 
 of a correct sample size for the trial.
-
 PTD provides a series of tools that can help bioinformaticians, 
 clinicians and biostatisticians to design, 
 analyze and finalize a custom gene panel for cancer genomics.
 ```
 
+<!-- 
+<div class="boxed">
+In recent years, two new forms of clinical trial designs emerged 
+in clinical cancer genomics: umbrella and basket trials.
+Designs of such trials can be extremely difficult, 
+starting from the creation of a valid screening panel, 
+to the optimization of sequencing space and to the calculation 
+of a correct sample size for the trial.
+PTD provides a series of tools that can help bioinformaticians, 
+clinicians and biostatisticians to design, 
+analyze and finalize a custom gene panel for cancer genomics.
+</div>
+
+ -->
+<!-- [![](images/conclusionSlide2.jpg)](https://gmelloni.github.io/ptd) -->
+
+
+
 ----------------------
 
 ### [LowMACA](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7)
-
-[![](images/lowmaca_logo.png)](http://cgsb.genomics.iit.it/wiki/projects/LowMACA)
 
 ```
 LowMACA (Low frequency Mutation Analysis via Consensus Alignment) 
@@ -46,27 +62,22 @@ dissect the whole protein family and assess the statistical
 significance of specific clusters of mutations.
 ```
 
+[![](images/lowmaca_logo.png)](http://cgsb.genomics.iit.it/wiki/projects/LowMACA)
+
 Available on [Bioconductor](http://www.bioconductor.org/packages/release/bioc/html/LowMACA.html)! 
 
 ----------------------
 
-### TransformPhenotype
+### [TransformPhenotype](https://github.com/gmelloni/transformPhenotype)
 
-<div class="row">
-<div class="col-sm-9">
 
 ```
 A shiny app to normalize continuous traits in Genome-wide 
 association studies
 ```
 
-</div>
-<div class="col-sm-3">
-
 [![](images/normalization_mod.png)](https://github.com/gmelloni/transformPhenotype)
 
-</div>
-</div>
 
 ----------------------
 
