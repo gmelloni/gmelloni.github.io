@@ -1,6 +1,7 @@
-theme: jekyll-theme-slate
+theme: minima
 title: Giorgio Melloni
 description: code.projects.bioinfo.blog
 show_downloads: false
 google_analytics: UA-102057877-1
 markdown: kramdown
+exclude: ["ptd"]
