@@ -1,4 +1,5 @@
 title: Giorgio Melloni
+author: Giorgio Melloni
 description: code.projects.bioinfo.blog
 show_downloads: false
 google_analytics: UA-102057877-1
@@ -9,8 +10,9 @@ markdown: kramdown
 theme: minima
 
 header_pages:
-  - README.md
   - projects.md
+  - publications.md
+  - about.md
 
 email: melloni.giorgio@gmail.com
 github_username: gmelloni
