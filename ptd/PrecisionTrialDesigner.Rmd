@@ -8,7 +8,6 @@ abstract: >
   can help bioinformaticians, clinicians and biostatisticians to design, analyze and finalize a custom gene panel for cancer genomics.
 output:
   html_document:
-    theme: spacelab
     code_folding: show
     fig_height: 8
     fig_width: 10
