@@ -392,14 +392,15 @@ div.tocify {
 </div>
 
 
+<p><link rel="icon" type="image/ico" href="images/ptd2.png"/></p>
 <p>In this analysis we will simulate a basket clinical trial run on patients affected by 3 diseases: breast, lung and gastric cancer. Samples will be collected and sequencing with Next-generation sequencing technology. Patients will be assigned to treatment groups based on the genomic characterization. The panel design is based on a recent publication that defines the guidelines for precision medicine and the genes that should be included into diagnostic NGS assays for the previously indicated tumor type.</p>
 <blockquote>
 <p>Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.</p>
 </blockquote>
 <div id="basket-trial-panel-showcase" class="section level1">
-<h1>BASKET TRIAL PANEL SHOWCASE</h1>
+<h1>Basket Trial Panel Showcase</h1>
 <div id="objectives" class="section level2">
-<h2>OBJECTIVES</h2>
+<h2>Objectives</h2>
 <p>The objective of this analysis is to:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Simulate the panel “detection power”</strong> (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.</li>
@@ -921,7 +922,7 @@ population_df %&gt;%
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>tumor, <span class="dt">space=</span><span class="st">&quot;free&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Comparison of the initial population composition&quot;</span>)</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-5-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(svglite)</span>
 <span class="co">#ggsave(filename=&quot;../Figures/fig1D.svg&quot;, plot=last_plot(), device = &quot;svg&quot;)</span></code></pre></div>
 <p>Comparison table between SEER initial population and TCGA initial population</p>
@@ -988,7 +989,7 @@ population_df %&gt;%
                   , <span class="dt">var=</span><span class="st">&quot;tumor_type&quot;</span>
                   , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
                   )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-6-1.png" width="768" /></p>
 </div>
 <div id="panel-detection-power-in-the-overall-population" class="section level4">
 <h4>Panel detection power in the overall population</h4>
@@ -1058,7 +1059,7 @@ df %&gt;%
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Genomic panel detection-power in different tumor types.&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detection power indicated as the overall population percentage&quot;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;tumor type (TCGA ID)&quot;</span>)</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
 </div>
 </div>
 </div>
@@ -1202,7 +1203,7 @@ drug_df %&gt;%
                                )
              
             )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
 <p>Similarly, we can separate the saturation line by <code>tumor_types</code>. (Note: In the following plot we do not need to apply the tumor.wight option, as we are grouping by tumor_types, Note2: <code>no_drug</code> indicates frequency associated with driver genes which are therefore not associated to any drug treatment in this specific design).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
@@ -1211,7 +1212,7 @@ drug_df %&gt;%
             , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
             , <span class="dt">legend =</span> <span class="st">&quot;out&quot;</span>
             )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
 <p>To improve the readability of the plot, we can look at each single tumor type individually.</p>
 <div id="breast-cancer-1" class="section level5">
 <h5>Breast Cancer</h5>
@@ -1223,7 +1224,7 @@ drug_df %&gt;%
             , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
             , <span class="dt">tumor_type =</span> <span class="st">&quot;brca&quot;</span>
 ) </code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-16-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-15-1.png" width="960" /></p>
 </div>
 <div id="lung-cancer" class="section level5">
 <h5>Lung Cancer</h5>
@@ -1234,7 +1235,7 @@ drug_df %&gt;%
             , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
             , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;luad&quot;</span>, <span class="st">&quot;lusc&quot;</span>)
 )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-17-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-16-1.png" width="960" /></p>
 </div>
 <div id="gastric-cancer-1" class="section level5">
 <h5>Gastric Cancer</h5>
@@ -1245,7 +1246,7 @@ drug_df %&gt;%
             , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
             , <span class="dt">tumor_type =</span> <span class="kw">c</span>(<span class="st">&quot;coadread&quot;</span>, <span class="st">&quot;stad&quot;</span>)
 ) </code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-18-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-17-1.png" width="960" /></p>
 </div>
 </div>
 <div id="panel-detection-power-of-each-alteration-type-in-the-overall-population" class="section level4">
@@ -1265,7 +1266,7 @@ drug_df %&gt;%
 <pre><code>## Warning in dataExtractor(object = object, alterationType =
 ## alterationType, : The following tumor types have no alteration to display:
 ## stad, coadread</code></pre>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-18-1.png" width="768" /></p>
 </div>
 <div id="drug-targeting-frequency-plot" class="section level4">
 <h4>Drug targeting frequency plot</h4>
@@ -1308,7 +1309,7 @@ drug_df %&gt;%
                                , <span class="dt">coadread =</span> coadread_freq
                                )
              )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-20-1.png" width="1152" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-19-1.png" width="1152" /></p>
 <div id="breast-cancer-co-occurence-plot" class="section level6">
 <h6>Breast cancer co-occurence plot</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coocMutexPlot</span>(PTD_panel
@@ -1317,7 +1318,7 @@ drug_df %&gt;%
              , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
              , <span class="dt">tumor_types=</span> <span class="st">&quot;brca&quot;</span>
              )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-21-1.png" width="768" /></p>
 </div>
 <div id="lung-cancer-co-occurence-plot" class="section level6">
 <h6>Lung cancer co-occurence plot</h6>
@@ -1330,7 +1331,7 @@ drug_df %&gt;%
 <pre><code>## Warning in dataExtractor(object = object, alterationType =
 ## alterationType, : The following tumor types have no alteration to display:
 ## stad, coadread</code></pre>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-22-1.png" width="768" /></p>
 </div>
 <div id="gastric-cancer-co-occurence-plot" class="section level6">
 <h6>Gastric cancer co-occurence plot</h6>
@@ -1340,7 +1341,7 @@ drug_df %&gt;%
              , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
              , <span class="dt">tumor_types=</span> <span class="kw">c</span>(<span class="st">&quot;egc&quot;</span>, <span class="st">&quot;stad&quot;</span>, <span class="st">&quot;coadread&quot;</span>)
              )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-24-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
 </div>
 </div>
 </div>
@@ -1376,7 +1377,7 @@ alPatDrug %&gt;%
 <span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;Number of drugs the patient is eligible for&quot;</span>) +
 <span class="st">   </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label=</span>stringr::<span class="kw">str_c</span>(<span class="kw">round</span>(drugs, <span class="dt">digits=</span><span class="dv">4</span>)*<span class="dv">100</span>, <span class="st">&quot; %&quot;</span>), <span class="dt">y=</span>drugs<span class="fl">+0.05</span>),  <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="fl">0.9</span>))</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-25-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-24-1.png" width="960" /></p>
 </div>
 <div id="power-analysis" class="section level3">
 <h3>Power analysis</h3>
@@ -1400,7 +1401,7 @@ alPatDrug %&gt;%
                     , <span class="dt">coadread =</span> coadread_tot
                     )
   )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-26-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-25-1.png" width="768" /></p>
 <p>Preview the table with the data from the previous plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Generate Table</span>
 <span class="kw">survPowerSampleSize</span>(PTD_panel
@@ -1575,7 +1576,7 @@ alPatDrug %&gt;%
                     , <span class="dt">coadread =</span> coadread_tot
                     )
   )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-29-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-28-1.png" width="768" /></p>
 </div>
 </div>
 <div id="patient-allocation-optimization" class="section level3">
@@ -1612,7 +1613,7 @@ alPatDrug %&gt;%
                     , <span class="dt">coadread =</span> coadread_tot
                     )
   )</code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-30-1.png" width="768" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-29-1.png" width="768" /></p>
 <p>Show it in a table</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Show it in a table</span>
 <span class="kw">survPowerSampleSize</span>(PTD_panel
@@ -1746,7 +1747,7 @@ alPatDrug %&gt;%
   , <span class="dt">alpha=</span> <span class="fl">0.1</span>
   , <span class="dt">side =</span> <span class="dv">1</span>
   ) </code></pre></div>
-<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-32-1.png" width="960" /></p>
+<p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-31-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">propPowerSampleSize</span>(PTD_panel
   , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
   , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
@@ -2247,8 +2248,8 @@ for(i in <span class="kw">rownames</span>(summaryMat2)){
 <tr class="header">
 <th></th>
 <th align="left">Immune Checkpoint Inhibitor</th>
-<th align="left">HER2 inhibitor</th>
 <th align="left">MET inhibitor</th>
+<th align="left">HER2 inhibitor</th>
 <th align="left">EGFR inhibitor</th>
 <th align="left">ALK inhibitor</th>
 <th align="left">ALK inhibitor</th>
@@ -2263,48 +2264,48 @@ for(i in <span class="kw">rownames</span>(summaryMat2)){
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">14273.77 (510.525-18906.125)</td>
-<td align="left">458.11 (0-7628.7499999999)</td>
-<td align="left">714.82 (0-13584.4)</td>
+<td align="left">14682.46 (6876.575-18144.575)</td>
+<td align="left">459.1 (0-1397.95)</td>
+<td align="left">161.88 (0-205.424999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">5901</td>
+<td align="left">6690</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">21257.07 (18839.6-24896.7)</td>
+<td align="left">21152.2 (18914.15-24038.875)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">260.93 (242.95-284)</td>
-<td align="left">326.45 (275.475-403.625)</td>
-<td align="left">293.21 (253.475-363.725)</td>
-<td align="left">475.03 (383-569.1)</td>
-<td align="left">401.52 (332.95-493.525)</td>
+<td align="left">261.6 (244-282.675)</td>
+<td align="left">297.18 (259-392.05)</td>
+<td align="left">328.52 (270.475-419.575)</td>
+<td align="left">472.05 (393.425-568.575)</td>
+<td align="left">393.6 (318.6-492.775)</td>
 <td align="left">199</td>
-<td align="left">725.7 (608.95-869.775)</td>
-<td align="left">972.48 (802.475-1204.225)</td>
-<td align="left">1502.07 (1294.7-1746.5)</td>
-<td align="left">1441.87 (1215.9-1769.15)</td>
-<td align="left">4476.48 (3989.8-5255.9)</td>
-<td align="left">11070.24 (9815.85-12830.925)</td>
+<td align="left">734.26 (620.95-891.925)</td>
+<td align="left">976.71 (844.95-1117.5)</td>
+<td align="left">1509.13 (1280-1758.2)</td>
+<td align="left">1426.48 (1245.325-1629.575)</td>
+<td align="left">4459.17 (3878.675-5142.525)</td>
+<td align="left">11053.21 (9779.875-12509.775)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">6841.53 (242.15-9071.825)</td>
-<td align="left">219.6 (0-3649.97499999995)</td>
-<td align="left">342 (0-6517.025)</td>
+<td align="left">7010.26 (3281.675-8712.05)</td>
+<td align="left">219.66 (0-669.249999999999)</td>
+<td align="left">77.17 (0-98.9249999999995)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">2853</td>
+<td align="left">3205</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">10187.22 (8945.95-11907.975)</td>
+<td align="left">10099.51 (8989.95-11530.1)</td>
 </tr>
 </tbody>
 </table>

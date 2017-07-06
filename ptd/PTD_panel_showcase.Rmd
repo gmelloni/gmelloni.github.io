@@ -12,37 +12,19 @@ output:
     toc_float: yes
 ---
 
-```{r, eval=FALSE, include=FALSE}
-# THIS SECTION IS NEEDED IF WE WANT TO INCLUDE THE RMD FILE AS A VIGNETTE IN THE R PACKAE
-
-
-# date: "`r doc_date()`"
-# package: "`r pkg_ver('BiocStyle')`"
-# abstract: >
-# 
-#   Design and simulation of a basket clincial trial using the R package PTD (Precision 
-#   Trial Designer). 
-# vignette: >
-#   %\VignetteIndexEntry{Bioconductor style for HTML documents}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
-# output: 
-#   BiocStyle::html_document
-```
+<link rel="icon" type="image/ico" href="images/ptd2.png"/>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 In this analysis we will simulate a basket clinical trial run on patients affected by 3 diseases: breast, lung and gastric cancer. Samples will be collected and sequencing with Next-generation sequencing technology. Patients will be assigned to treatment groups based on the genomic characterization. The panel design is based on a recent publication that defines the guidelines for precision medicine and the genes that should be included into diagnostic NGS assays for the previously indicated tumor type.  
 
-> Consensus on precision medicine for metastatic cancers: a report from the MAP 
-conference C.
+> Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.
 
-# BASKET TRIAL PANEL SHOWCASE
+# Basket Trial Panel Showcase
 
-## OBJECTIVES
+## Objectives
 
 The objective of this analysis is to: 
 
@@ -56,8 +38,7 @@ The objective of this analysis is to:
 
 The panel is designed based on the guidelines indicated in the recent publication:
 
-> Consensus on precision medicine for metastatic cancers: a report from the MAP 
-conference C.
+> Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.
 
 We had to make some adjustments and interpretations in order to fit the guidelines into a panel design that would be input by the ```PTD``` package. 
 

@@ -12,6 +12,8 @@ output:
     toc_float: yes
 ---
 
+<link rel="icon" type="image/ico" href="images/ptd2.png"/>
+
 ```{r load libraries, message=FALSE, warning=FALSE}
 library(readxl)
 library(tibble)
