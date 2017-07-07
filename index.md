@@ -2,11 +2,14 @@
 title: gmelloni - Home
 layout: home
 ---
+<br>
 
 <div style="text-align:center">
-<img src ="images/round_photo_me.png" height="200"/>
+<img src ="images/round_photo_me3.png" height="200"/>
 </div>
 
+<br>
+
 <div style="text-align:center">
-<i>#DataAnalysis #Cancer #Coding</i>
+<i>#DataScience #Bioinformatics #Stuff</i>
 </div>

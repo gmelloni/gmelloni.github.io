@@ -50,7 +50,7 @@ BMC Bioinformatics. 2016 Feb 9;17(1):80. doi: 10.1186/s12859-016-0935-7.
 <img src="images/normalization_mod.png" height="200" style="vertical-align:right" />
 </a>
 </div>
-
+<br>
 ```
 A shiny app to normalize continuous traits in Genome-wide 
 association studies
@@ -68,11 +68,11 @@ association studies
 <img src="images/dotsfinderlogo.png" height="200" style="vertical-align:right" />
 </a>
 </div>
-
+<br>
 ```
 Driver Oncogenes and Tumor Suppressors finder is a tool 
 to identify driver genes from exome-sequencing data 
-of a cohort of cancer samples.
+from a cohort of cancer samples.
 ```
 
 **Melloni GEM**, Ogier AGE, de Pretis S, Mazzarella L, Pelizzola M, Pelicci PG and Riva L. 
