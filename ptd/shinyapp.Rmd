@@ -2,8 +2,8 @@
 <link rel="icon" type="image/ico" href="images/ptd2.png"/>
 
 
-```{r, out.width = "250px" , echo=FALSE , fig.align='center',fig.cap="If you don't visualize the app, unlock the page in the upper left corner of your browser"}
-knitr::include_graphics("images/lock2.png")
+```{r, out.width = "400px" , echo=FALSE , fig.align='center',fig.cap="If you don't visualize the app, unlock the page in your browser"}
+knitr::include_graphics("images/unlock.png")
 ```
 
 <iframe src="http://52.59.231.80/PTD_studio/" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:50px;left:0px;right:0px;bottom:0px;" height="100%" width="100%">
