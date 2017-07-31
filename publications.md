@@ -23,7 +23,9 @@ Riva L, Ronchini C, Bodini M, Lo-Coco F, Lavorgna S, Ottone T, Martinelli G, Iac
 
 # On the run
 
-**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Designer (PTD): a bioinformatic tool to aid in the design of genetic biomarker-driven clinical trials (in preparation) 
+**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Designer (PTD): a bioinformatic tool to aid in the design of genetic biomarker-driven clinical trials (in preparation)
+
+Arthur Gilly, Karoline Kuchenbaecker, Lorraine Southam, Daniel Suveges, Rachel Moore, **Giorgio E.M. Melloni**, Konstantinos Hatzikotoulas, Aliki-Eleni Farmaki, Graham Ritchie, Jeremy Schwartzentruber, Petr Danecek, Britt Kilian, Martin Pollard, Xiangyu Ge, Heather Elding, William Astle, Tao Jiang, Adam Butterworth, Nicole Soranzo, Emmanouil Tsafantakis, Maria Karaleftheri, George Dedoussis, Eleftheria Zeggini. Very low depth whole genome sequencing in complex trait association studies (submitted and available here http://www.biorxiv.org/content/early/2017/07/28/169789)
 
 Dellino G, Palluzzi F, Piccioni R, Furia L, **Melloni GEM**, Guido D, Giacò L, Luzi L, Cittaro D, Faretta M, Crosetto N and Pelicci PG. Unresolved Double Strand Breaks in normal mammary cells are enriched at specific promoter regions and overlap with breakpoints of breast-cancer associated translocations (submitted)
 
