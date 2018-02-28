@@ -19,38 +19,56 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
+
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
 <style type="text/css">
   pre:not([class]) {
     background-color: white;
   }
 </style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
 
-
-<style type="text/css">
-  p.abstract{
-    text-align: center;
-    font-weight: bold;
-  }
-  div.abstract{
-    margin: auto;
-    width: 90%;
-  }
-</style>
 
 <style type="text/css">
 h1 {
@@ -170,8 +188,111 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
 
 
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -214,6 +335,13 @@ $(document).ready(function () {
   </ul>
 </li>
 <li>
+  <a href="download.html">
+    <span class="fa fa-arrow-circle-down"></span>
+     
+    Download
+  </a>
+</li>
+<li>
   <a href="https://gitlab.com/IEO_Research/R_package_panel_and_projection">
     <span class="fa fa-arrow-circle-down"></span>
      
@@ -249,16 +377,20 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">PrecisionTrialDesigner - A tool to analyze and design NGS based custom gene panels</h1>
 <h4 class="author"><em>Giorgio Melloni</em></h4>
-<h4 class="author"><em>Alessandro Guida</em></h4>
-<div class="abstract">
-<p class="abstract">Abstract</p>
-<p>In recent years, two new forms of clinical trial designs emerged in clinical cancer genomics: umbrella and basket trials. Designs of such trials can be extremely difficult, starting from the creation of a valid screening panel, to the optimization of sequencing space and to the calculation of a correct sample size for the trial. PTD provides a series of tools that can help bioinformaticians, clinicians and biostatisticians to design, analyze and finalize a custom gene panel for cancer genomics.</p>
-</div>
-
+<address class="author_afil">
+Harvard Medical School, Boston<br>
 </div>
 
 
@@ -272,10 +404,10 @@ $(document).ready(function () {
 <div id="cancerpanel-object" class="section level2">
 <h2>CancerPanel object</h2>
 <p>First of all, let’s see what is the format of a cancer panel:</p>
-<pre class="r"><code>library(PrecisionTrialDesigner)
-library(knitr)
-data(panelexample)
-knitr::kable(panelexample)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(PrecisionTrialDesigner)
+<span class="kw">library</span>(knitr)
+<span class="kw">data</span>(panelexample)
+knitr<span class="op">::</span><span class="kw">kable</span>(panelexample)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -652,26 +784,26 @@ knitr::kable(panelexample)</code></pre>
 </table>
 <p>Copynumber and expression are basically self explained. Mutations can be expressed in a plethora of ways but remember to keep the 1-base convention and in case of single position (amino acid or genomic) to replicate start and end (e.g. 300-300). If you don’t want to specify a particular mutation, you can either leave <em>exact_alteration</em> and <em>mutation_specification</em> empty or specify a subtype of alteration, like only missense or only truncating variants. In the example panel, <em>BRCA1</em> is sensitive to a PARP inhibitor only if it is either deleted or truncated, because generally missense mutations are not considered pathogenic. Fusions have no particular format, but are expressed in the genesymbol column. If you put a single gene, <em>PrecisionTrialDesigner</em> will interpret it as ‘every fusion involving that gene’ (see <em>RET</em>), while if you put a specific fusion (see <em>EML4__ALK</em>), it will look only for that specific fusion. The format for specific fusions must be always <em>gene1__gene2</em>.</p>
 <p>Now that we have our panel, we need to build an object of class CancerPanel:</p>
-<pre class="r"><code>mypanel &lt;- newCancerPanel(panelexample)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample)</code></pre></div>
 <p>The class constructor performs two main tasks. The first one is to check for inconsistency in panel data.frame. The second is to calculate a genomic length for every row of the panel. CNA and expression alteration will have a length equal to the CDS or CDS plus UTR of the requested gene. Fusions follow the same rule, but when a specific fusion is requested, the length is equal to the mean of two genes involved. Finally, mutations will take a length equal to the exact alteration requested plus a <em>padding_length</em> that can be decided by the user. Note that this calculation does not take in to account overlapping regions as this is just a rough estimation for simulations in which every row counts for itself. For a precise calculation, refer to the last section <strong>PanelDesigner</strong>.</p>
 <p>Gene length calculations are based on biomaRt and ensembl database which is located in the UK. For your convenience, we add the possibility of changing the host and go to a faster mirror located closer to your location.</p>
-<pre class="r"><code># Connect to US east coast server
-# The default is www.ensembl.org
-mypanel &lt;- newCancerPanel(panelexample , myhost=&quot;uswest.ensembl.org&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Connect to US east coast server</span>
+<span class="co"># The default is www.ensembl.org</span>
+mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span>)</code></pre></div>
 <p>A convenient list of mirror servers can be found here: <a href="http://www.ensembl.org/info/about/mirrors.html">ensembl mirrors</a>. The same option is also available for <em>panelDesign</em> method.</p>
 <div id="negation-rules-exclude-parameter" class="section level3">
 <h3>Negation rules: exclude parameter</h3>
 <p>There are cases in which a specified mutations or alteration is an indication for NOT giving a certain drug. A classic example is when a mutation can cause resistance to a drug, even in the presence of other actionable alterations. For example we can create a data.frame like the following:</p>
-<pre class="r"><code>exclude &lt;- data.frame(
-    drug=c(&quot;Erlotinib&quot; , &quot;Erlotinib&quot;)
-    , gene_symbol=c(&quot;EGFR&quot; , &quot;KRAS&quot;)
-    , alteration=c(&quot;SNV&quot; , &quot;SNV&quot;)
-    , exact_alteration=c(&quot;amino_acid_variant&quot; , &quot;&quot;)
-    , mutation_specification=c(&quot;T790M&quot; , &quot;&quot;)
-    , group=c(&quot;Driver&quot; , &quot;Driver&quot;)
-    , stringsAsFactors = FALSE
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exclude &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">drug=</span><span class="kw">c</span>(<span class="st">&quot;Erlotinib&quot;</span> , <span class="st">&quot;Erlotinib&quot;</span>)
+    , <span class="dt">gene_symbol=</span><span class="kw">c</span>(<span class="st">&quot;EGFR&quot;</span> , <span class="st">&quot;KRAS&quot;</span>)
+    , <span class="dt">alteration=</span><span class="kw">c</span>(<span class="st">&quot;SNV&quot;</span> , <span class="st">&quot;SNV&quot;</span>)
+    , <span class="dt">exact_alteration=</span><span class="kw">c</span>(<span class="st">&quot;amino_acid_variant&quot;</span> , <span class="st">&quot;&quot;</span>)
+    , <span class="dt">mutation_specification=</span><span class="kw">c</span>(<span class="st">&quot;T790M&quot;</span> , <span class="st">&quot;&quot;</span>)
+    , <span class="dt">group=</span><span class="kw">c</span>(<span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span>)
+    , <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>
 )
-knitr::kable(exclude)</code></pre>
+knitr<span class="op">::</span><span class="kw">kable</span>(exclude)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -704,14 +836,14 @@ knitr::kable(exclude)</code></pre>
 </table>
 <p>Both alterations (<em>EGFR</em> T790M and <em>KRAS</em> mutations) can cause resistance to <em>EGFR</em> inhibitors and all the patients harboring these alterations cannot be associated with that treatment.</p>
 <p>The data.frame columns are exactly the same as the panel but in this case the <em>drug</em> is a drug that cannot be assigned to all the patients with the specified alteration. The <em>group</em> column is instead what the new couple sample-drug should be considered. In our case, <em>Actionable</em> becomes <em>Driver</em>.</p>
-<pre class="r"><code>mypanel &lt;- newCancerPanel(panelexample , myhost=&quot;uswest.ensembl.org&quot; , exclude = exclude)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span> , <span class="dt">exclude =</span> exclude)</code></pre></div>
 </div>
 </div>
 <div id="getalterations" class="section level2">
 <h2>getAlterations</h2>
 <p>Now that we have our panel, we want to test it against tumor samples. We will choose two different cancer types among the available ones:</p>
-<pre class="r"><code># Check available tumor types
-knitr::kable( head(showTumorType()) , row.names=FALSE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check available tumor types</span>
+knitr<span class="op">::</span><span class="kw">kable</span>( <span class="kw">head</span>(<span class="kw">showTumorType</span>()) , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -746,10 +878,10 @@ knitr::kable( head(showTumorType()) , row.names=FALSE)</code></pre>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># Fetch data from breast cancer and lung adenocarcinoma samples
-mypanel &lt;- getAlterations(mypanel , tumor_type=c(&quot;brca&quot; , &quot;luad&quot;))
-# See the updated slot dataFull for mutations
-str( cpData(mypanel)$mutations , vec.len = 1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fetch data from breast cancer and lung adenocarcinoma samples</span>
+mypanel &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;brca&quot;</span> , <span class="st">&quot;luad&quot;</span>))
+<span class="co"># See the updated slot dataFull for mutations</span>
+<span class="kw">str</span>( <span class="kw">cpData</span>(mypanel)<span class="op">$</span>mutations , <span class="dt">vec.len =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 2
 ##  $ data   :&#39;data.frame&#39;: 5616 obs. of  9 variables:
 ##   ..$ entrez_gene_id    : int [1:5616] 673 673 ...
@@ -769,8 +901,8 @@ str( cpData(mypanel)$mutations , vec.len = 1)</code></pre>
 <div id="specify-specific-cancer-studies" class="section level3">
 <h3>Specify specific cancer studies</h3>
 <p>Additionally, instead of specifying the tumor type, it is also possible to display the individual study associated with each tumor type and select them one by one. This for example allows the user more control over what dataset will be used to run the simulation.</p>
-<pre class="r"><code># Check available tumor types
-knitr::kable( showCancerStudy(c(&quot;brca&quot;,&quot;luad&quot;)) , row.names = FALSE )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check available tumor types</span>
+knitr<span class="op">::</span><span class="kw">kable</span>( <span class="kw">showCancerStudy</span>(<span class="kw">c</span>(<span class="st">&quot;brca&quot;</span>,<span class="st">&quot;luad&quot;</span>)) , <span class="dt">row.names =</span> <span class="ot">FALSE</span> )</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -841,14 +973,14 @@ knitr::kable( showCancerStudy(c(&quot;brca&quot;,&quot;luad&quot;)) , row.names 
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># Fetch data from breast cancer and lung adenocarcinoma samples
-mypanel_alternative &lt;- getAlterations(mypanel , tumor_type=c(&quot;luad_tcga&quot;, &quot;brca_tcga_pub&quot;))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fetch data from breast cancer and lung adenocarcinoma samples</span>
+mypanel_alternative &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad_tcga&quot;</span>, <span class="st">&quot;brca_tcga_pub&quot;</span>))</code></pre></div>
 <p>At this point, the data are downloaded by gene, without looking for the exact alteration requested.</p>
 <p>If you want, you can always put your own data, as long as you respect the format for each alteration type.</p>
-<pre class="r"><code># Extract the data from the panel as a toy example.
-repos &lt;- lapply(cpData(mypanel) , &#39;[&#39; , c(&#39;data&#39; , &#39;Samples&#39;))
-# How custom data should look like
-str(repos , vec.len=1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the data from the panel as a toy example.</span>
+repos &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">cpData</span>(mypanel) , <span class="st">&#39;[&#39;</span> , <span class="kw">c</span>(<span class="st">&#39;data&#39;</span> , <span class="st">&#39;Samples&#39;</span>))
+<span class="co"># How custom data should look like</span>
+<span class="kw">str</span>(repos , <span class="dt">vec.len=</span><span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 4
 ##  $ fusions   :List of 2
 ##   ..$ data   :&#39;data.frame&#39;:  6 obs. of  7 variables:
@@ -896,22 +1028,22 @@ str(repos , vec.len=1)</code></pre>
 ##   ..$ Samples:List of 2
 ##   .. ..$ brca: chr [1:1093] &quot;TCGA-LQ-A4E4&quot; ...
 ##   .. ..$ luad: chr [1:515] &quot;TCGA-05-4249&quot; ...</code></pre>
-<pre class="r"><code># Use custom data in a new CancerPanel object
-mypanel_toy &lt;- newCancerPanel(panelexample)
-mypanel_toy &lt;- getAlterations(mypanel_toy , repos=repos)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Use custom data in a new CancerPanel object</span>
+mypanel_toy &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample)
+mypanel_toy &lt;-<span class="st"> </span><span class="kw">getAlterations</span>(mypanel_toy , <span class="dt">repos=</span>repos)</code></pre></div>
 <p>In this toy example, we extract the data from our CancerPanel object and transfer them to a new object. This operation can be useful in the moment you want to test subsets of your original panel using a freeze of your data. Remember that sample names are taken from the element ‘Sample’ of the list for each alteration type because our tool needs to know the actual reference samples for which a genomic screening were made, even if they have no alterations. If ‘Sample’ is not present, the sample names are retrieved directly from the data using column <em>case_id</em>, so remember to put them all. Adding more data than necessary is not a problem at this point, because every statistics and calculation are made after the call to <strong>subsetAlterations</strong>.</p>
 </div>
 <div id="add-or-filter-custom-data" class="section level3">
 <h3>Add or filter custom data</h3>
 <p>In case you want to add extra data from a different source, and you dispose of the data already according to the <span class="citation">@dataFull</span> slot format, you can append this dataset to an existing panel. This allows to increase the sample size for those rare tumor_types that are not present in cBioPortal.</p>
-<pre class="r"><code>new_panel &lt;- appendRepo(mypanel_toy , repos)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_panel &lt;-<span class="st"> </span><span class="kw">appendRepo</span>(mypanel_toy , repos)</code></pre></div>
 <p>Furthermore, if you want to filter certain mutations or fusions from your dataset, you can use the methods <code>filterMutations</code> and <code>filterFusions</code>. The first method, can be used with specific mutations or using a bed file.</p>
-<pre class="r"><code># Create a bedfile
-bed &lt;- data.frame(chr = paste0(&quot;chr&quot; , c(7 , 17)) 
-                  , start = c(140534632 , 41244326) 
-                  , end = c(140534732 , 41244426) 
-                  , stringsAsFactors=FALSE)
-knitr::kable(bed , row.names=FALSE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a bedfile</span>
+bed &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">chr =</span> <span class="kw">paste0</span>(<span class="st">&quot;chr&quot;</span> , <span class="kw">c</span>(<span class="dv">7</span> , <span class="dv">17</span>)) 
+                  , <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">140534632</span> , <span class="dv">41244326</span>) 
+                  , <span class="dt">end =</span> <span class="kw">c</span>(<span class="dv">140534732</span> , <span class="dv">41244426</span>) 
+                  , <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+knitr<span class="op">::</span><span class="kw">kable</span>(bed , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -933,20 +1065,20 @@ knitr::kable(bed , row.names=FALSE)</code></pre>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># Apply the filter
-# You can decide to exclude or keep only the mutations in the bed file
-new_panel &lt;- filterMutations(mypanel_toy , bed = bed , mode = &quot;exclude&quot;)
-# Filtering can be also tumor-wise
-new_panel &lt;- filterMutations(mypanel_toy , bed = bed , mode = &quot;exclude&quot; , tumor_type=&quot;brca&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Apply the filter</span>
+<span class="co"># You can decide to exclude or keep only the mutations in the bed file</span>
+new_panel &lt;-<span class="st"> </span><span class="kw">filterMutations</span>(mypanel_toy , <span class="dt">bed =</span> bed , <span class="dt">mode =</span> <span class="st">&quot;exclude&quot;</span>)
+<span class="co"># Filtering can be also tumor-wise</span>
+new_panel &lt;-<span class="st"> </span><span class="kw">filterMutations</span>(mypanel_toy , <span class="dt">bed =</span> bed , <span class="dt">mode =</span> <span class="st">&quot;exclude&quot;</span> , <span class="dt">tumor_type=</span><span class="st">&quot;brca&quot;</span>)</code></pre></div>
 </div>
 </div>
 <div id="subsetalterations" class="section level2">
 <h2>subsetAlterations</h2>
 <p>After getting alterations, we have to subset alterations for the exact specifications of our panel.</p>
-<pre class="r"><code># Subset the alterations using panel information
-mypanel &lt;- subsetAlterations(mypanel)
-# See the updated slot dataSubset
-str( cpDataSubset(mypanel) , vec.len = 1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Subset the alterations using panel information</span>
+mypanel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(mypanel)
+<span class="co"># See the updated slot dataSubset</span>
+<span class="kw">str</span>( <span class="kw">cpDataSubset</span>(mypanel) , <span class="dt">vec.len =</span> <span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 5
 ##  $ fusions   :&#39;data.frame&#39;:  6 obs. of  6 variables:
 ##   ..$ drug         : chr [1:6] &quot;Vandetanib&quot; ...
@@ -992,66 +1124,66 @@ expression or any combination of these.</p>
 <div id="coverageplot-and-coveragestackplot" class="section level2">
 <h2>coveragePlot and coverageStackPlot</h2>
 <p>Let’s draw the simplest of the coverage plot. We want to see how many samples are covered by at least one of the alteration of our panel, divided by tumor type:</p>
-<pre class="r"><code>coveragePlot(mypanel 
-            , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-            , grouping=&quot;tumor_type&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(mypanel 
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot1-1.png" width="672" /></p>
 <p>If we do not want the plot to be displayed but just the statistics, we can add the parameter noPlot set to TRUE.</p>
-<pre class="r"><code># Same command, but we ask for no plot, just the statistics
-covStats &lt;- coveragePlot(mypanel
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , grouping=&quot;tumor_type&quot; 
-             , noPlot=TRUE)
-# Proportion of covered samples by at least one alteration
-atLeastOne &lt;- covStats$plottedTable[ , 1]/covStats$Samples</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Same command, but we ask for no plot, just the statistics</span>
+covStats &lt;-<span class="st"> </span><span class="kw">coveragePlot</span>(mypanel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span> 
+             , <span class="dt">noPlot=</span><span class="ot">TRUE</span>)
+<span class="co"># Proportion of covered samples by at least one alteration</span>
+atLeastOne &lt;-<span class="st"> </span>covStats<span class="op">$</span>plottedTable[ , <span class="dv">1</span>]<span class="op">/</span>covStats<span class="op">$</span>Samples</code></pre></div>
 <p>The results appears to be extremely good, because we reached 63% of breast samples and 78% for lung adenocarcinoma samples.</p>
 <p>How many of these samples are actually actionable by at least one alteration? Since we use ‘group’ in our panel to divide druggable from non-druggable alterations, it is pretty easy to answer this question.</p>
-<pre class="r"><code># We add a new grouping variable, &#39;group&#39;
-coveragePlot(mypanel 
-            , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-            , grouping=c(&quot;tumor_type&quot; , &quot;group&quot;)
-            )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We add a new grouping variable, &#39;group&#39;</span>
+<span class="kw">coveragePlot</span>(mypanel 
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">grouping=</span><span class="kw">c</span>(<span class="st">&quot;tumor_type&quot;</span> , <span class="st">&quot;group&quot;</span>)
+            )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot2%20-1.png" width="672" /></p>
 <p>Only the 57% of breast samples are actionable and 51% of lung adenocarcinomas.</p>
 <p>Some of the drug are multitarget, like Vandetabib that acts on several kinases. So now we are interested in knowing what are the most altered genes for each drug. We could add one more grouping variable to the <strong>coveragePlot</strong> but we will end up with a very hard to read plot (one plot per gene). To overcome this difficulty, we implemented a more compact version of the coverage plot that only returns the number of samples with at least one alteration stratified for a ‘grouping’ variable.</p>
-<pre class="r"><code># the stacked coverage plot requires:
-  # &#39;var&#39; parameter (that selects the bars)
-  # &#39;grouping&#39; parameter (that selects the stratification variable, optional)
-  # &#39;tumor_type&#39; parameter (to select one or more tumor type, optional)
-par(mfrow=c(2,1))
-coverageStackPlot(mypanel
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , var=&quot;drug&quot;
-             , grouping=&quot;gene_symbol&quot;
-             , tumor_type=&quot;brca&quot;
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the stacked coverage plot requires:</span>
+  <span class="co"># &#39;var&#39; parameter (that selects the bars)</span>
+  <span class="co"># &#39;grouping&#39; parameter (that selects the stratification variable, optional)</span>
+  <span class="co"># &#39;tumor_type&#39; parameter (to select one or more tumor type, optional)</span>
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
+<span class="kw">coverageStackPlot</span>(mypanel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">tumor_type=</span><span class="st">&quot;brca&quot;</span>
              )
-coverageStackPlot(mypanel
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , var=&quot;drug&quot;
-             , grouping=&quot;gene_symbol&quot;
-             , tumor_type=&quot;luad&quot;
-             )</code></pre>
+<span class="kw">coverageStackPlot</span>(mypanel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">tumor_type=</span><span class="st">&quot;luad&quot;</span>
+             )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plotStack%20-1.png" width="672" /></p>
 <p>The stacked version of coverage plot reports a breakdown of each drug by gene and then the total samples covered by each drug. When the total is lower than the breakdown, it means that some of the samples are altered in more than one gene targeted by the same drug.</p>
 <p>From this plot we can show for example that olaparib covers, in both tumors the 10% of the samples (9% for breast and 9% for lung). The contribute of its target <em>BRCA1</em> and <em>BRCA2</em> is different. While in breast cancer the number of altered samples is splitted between the two genes, in lung the contribution of <em>BRCA2</em> is predominant ( <em>BRCA1</em> covers the 3% while <em>BRCA1</em> the 6% ).</p>
 <p>Furthermore, a multitarget drug like Vandetanib could be a valuable therapeutic option, especially in lung adenocarcinoma. It covers the 17% of the samples with a large contribution of <em>KDR</em> ( 8%) and <em>ABL2</em> (3%) that is not present in breast cancer.</p>
 <p>If the plot result is not clear, we can create an interactive version of the same graph.</p>
-<pre class="r"><code># Add parameter html=TRUE
-myHTMLPlot &lt;- coverageStackPlot(mypanel
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , var=&quot;drug&quot;
-             , grouping=&quot;gene_symbol&quot;
-             , html=TRUE)</code></pre>
-<pre class="r"><code># The plot is not displayed immediately to allow the user to embed it in markdown document or web page
-# Now run plot
-plot(myHTMLPlot)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add parameter html=TRUE</span>
+myHTMLPlot &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</span>(mypanel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">grouping=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">html=</span><span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The plot is not displayed immediately to allow the user to embed it in markdown document or web page</span>
+<span class="co"># Now run plot</span>
+<span class="kw">plot</span>(myHTMLPlot)</code></pre></div>
 <!-- ColumnChart generated in R 3.4.3 by googleVis 0.6.3 package -->
-<!-- Tue Feb 27 18:02:13 2018 -->
+<!-- Wed Feb 28 17:35:43 2018 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataColumnChartIDc4d1243e23dc () {
+function gvisDataColumnChartIDe061c5c09d6 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -1990,8 +2122,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartColumnChartIDc4d1243e23dc() {
-var data = gvisDataColumnChartIDc4d1243e23dc();
+function drawChartColumnChartIDe061c5c09d6() {
+var data = gvisDataColumnChartIDe061c5c09d6();
 var options = {};
 options["allowHtml"] = true;
 options["isStacked"] = true;
@@ -2011,7 +2143,7 @@ options["enableScrollWheel"] = true;
 options["colors"] = ['#5E4EA1','#506AAE','#3685BB','#4FA0B3','#62BCA7','#82CCA4','#A2D9A4','#BFE4A0','#DBF09A','#EDF7A3','#F9FCB5','#FFF7B2','#FEE899','#FED682','#FEBE6E','#FCA55C','#F8864E','#F16844','#E2534A','#D23B4E','#B72448','#9E0041','#A9A9A9'];
 
     var chart = new google.visualization.ColumnChart(
-    document.getElementById('ColumnChartIDc4d1243e23dc')
+    document.getElementById('ColumnChartIDe061c5c09d6')
     );
     chart.draw(data,options);
     
@@ -2035,9 +2167,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartColumnChartIDc4d1243e23dc);
+callbacks.push(drawChartColumnChartIDe061c5c09d6);
 })();
-function displayChartColumnChartIDc4d1243e23dc() {
+function displayChartColumnChartIDe061c5c09d6() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2060,9 +2192,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartIDc4d1243e23dc"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartIDe061c5c09d6"></script>
 <!-- divChart -->
-<div id="ColumnChartIDc4d1243e23dc" style="width: 500; height: 800;">
+<div id="ColumnChartIDe061c5c09d6" style="width: 500; height: 800;">
 
 </div>
 </div>
@@ -2077,94 +2209,94 @@ callbacks.shift()();
 <li>Do all the drugs have at least one altered target?</li>
 </ul>
 <p>To answer these questions, let’s draw a saturation plot.</p>
-<pre class="r"><code># Saturation plot by adding one gene at a time divided by tumor type
-saturationPlot(mypanel 
-            , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-            , grouping=&quot;tumor_type&quot;
-            , adding=&quot;gene_symbol&quot;
-            )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Saturation plot by adding one gene at a time divided by tumor type</span>
+<span class="kw">saturationPlot</span>(mypanel 
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+            )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot3%20-1.png" width="672" /></p>
 <p>The plot is quite simple to interpret. On the X axis we have genomic space, on the Y axis the mean number of alteration per sample. The plot is build by adding one gene at a time (<strong>adding</strong> parameter), using all alteration types (<strong>alterationType</strong> parameter) and drawing one curve per tumor type (<strong>grouping</strong> parameter). The genes are added by their frequency of alteration, starting from the most altered. As can be seen from the bottom right annotation, some of the genes are never altered in these tumor types. To find out who they are, we can run this simple lines of code:</p>
-<pre class="r"><code># As always, we can ask for the statistics with the option noPlot
-satStats &lt;- saturationPlot(mypanel
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , grouping=&quot;tumor_type&quot;
-             , adding=&quot;gene_symbol&quot;
-             , noPlot=TRUE
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># As always, we can ask for the statistics with the option noPlot</span>
+satStats &lt;-<span class="st"> </span><span class="kw">saturationPlot</span>(mypanel
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+             , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
              )
-# Retrieve all the genes of the panel
-panelGenes &lt;- unique( cpArguments(mypanel)$panel$gene_symbol )
-# Look for the ones that are not present in the plot with a simple setdiff
-missingGenes &lt;- sapply( c(&quot;brca&quot; , &quot;luad&quot;) , function(x) {
-                  setdiff( panelGenes 
-                        , satStats[ satStats$grouping==x , &quot;gene_symbol2&quot; ] )
+<span class="co"># Retrieve all the genes of the panel</span>
+panelGenes &lt;-<span class="st"> </span><span class="kw">unique</span>( <span class="kw">cpArguments</span>(mypanel)<span class="op">$</span>panel<span class="op">$</span>gene_symbol )
+<span class="co"># Look for the ones that are not present in the plot with a simple setdiff</span>
+missingGenes &lt;-<span class="st"> </span><span class="kw">sapply</span>( <span class="kw">c</span>(<span class="st">&quot;brca&quot;</span> , <span class="st">&quot;luad&quot;</span>) , <span class="cf">function</span>(x) {
+                  <span class="kw">setdiff</span>( panelGenes 
+                        , satStats[ satStats<span class="op">$</span>grouping<span class="op">==</span>x , <span class="st">&quot;gene_symbol2&quot;</span> ] )
                   })
-# Print out
-missingGenes</code></pre>
+<span class="co"># Print out</span>
+missingGenes</code></pre></div>
 <pre><code>## $brca
 ## [1] &quot;BRAF&quot;      &quot;RIT1&quot;      &quot;EML4__ALK&quot; &quot;HRAS&quot;     
 ## 
 ## $luad
 ## [1] &quot;HRAS&quot;</code></pre>
 <p>As we can see, <em>HRAS</em> is never altered in the positions requested in the panel, both in breast and lung cancer samples. We can think about remove it from our panel and save some genomic space. This plot can also be seen from the drug point of view, by changing the variable <em>adding</em>:</p>
-<pre class="r"><code># Saturation plot by adding one drug at a time divided by tumor type
-saturationPlot(mypanel 
-            , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-            , grouping=&quot;tumor_type&quot;
-            , adding=&quot;drug&quot;
-            , y_measure=&quot;absolute&quot;
-            )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Saturation plot by adding one drug at a time divided by tumor type</span>
+<span class="kw">saturationPlot</span>(mypanel 
+            , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+            , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+            , <span class="dt">adding=</span><span class="st">&quot;drug&quot;</span>
+            , <span class="dt">y_measure=</span><span class="st">&quot;absolute&quot;</span>
+            )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot4%20-1.png" width="672" /></p>
 <p>In this case, we plot the absolute number of cumulative covered patient (like in the coverage plot) by using the parameter <strong>y_measure</strong> set to “absolute”. We can notice that by using just Idelasib (target of <em>PIK3CA</em>) and Trastuzumab (target of <em>ERBB2</em>), we can cover almost the 50% of breast cancer patients. Moreover, two drugs have no available target and could be excluded from a potential trial. On the other hand, lung samples are predominantly mutated in <em>KRAS</em> and <em>TP53</em> and since these two genes are not targeted by any drug, the first “drug” category is indeed <em>no_drug</em>. In addition, we can appreciate a very high coverage for LUAD samples, but the saturation is reached at the point of Idelalisib/Olaparib and all other drugs increasing the coverage of 1-2%. Olaparib itself, occupies almost 25 Kbases alone with its targets by being a drug that acts on the very long genes <em>BRCA1/2</em>.</p>
 </div>
 <div id="coocmutexplot" class="section level2">
 <h2>coocMutexPlot</h2>
 <p>The information coming from the <strong>saturationPlot</strong> is useful but not complete. In fact, the order of the genes/drugs can be misleading about the true coverage of a single feature. For example, let’s plot the coverage by drug and tumor type:</p>
-<pre class="r"><code># One tumor at a time, we draw a stack plot of drug without stratification
-par(mfrow=c(2,1))
-coverageStackPlot(mypanel , var=&quot;drug&quot; 
-        , grouping=NA , tumor_type=&quot;brca&quot; , collapseByGene=TRUE)
-coverageStackPlot(mypanel , var=&quot;drug&quot; 
-        , grouping=NA , tumor_type=&quot;luad&quot; , collapseByGene=TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># One tumor at a time, we draw a stack plot of drug without stratification</span>
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
+<span class="kw">coverageStackPlot</span>(mypanel , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span> 
+        , <span class="dt">grouping=</span><span class="ot">NA</span> , <span class="dt">tumor_type=</span><span class="st">&quot;brca&quot;</span> , <span class="dt">collapseByGene=</span><span class="ot">TRUE</span>)
+<span class="kw">coverageStackPlot</span>(mypanel , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span> 
+        , <span class="dt">grouping=</span><span class="ot">NA</span> , <span class="dt">tumor_type=</span><span class="st">&quot;luad&quot;</span> , <span class="dt">collapseByGene=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot5%20-1.png" width="672" /></p>
 <p>In this case we add the parameter <strong>collapseByGene</strong>. This option is useful to prevent the package from counting two different types of alteration on the same gene and same sample to be counted twice. For example, if <em>ERBB2</em> is both amplified and overexpressed (two things that are extremely correlated) in the same sample, it will count for 1 alteration only. This parameter has an effect on the bars from 2 to 10, but obviously not on the ‘at least one’ alteration bar.</p>
 <p>From this plot we can see for example that Olaparib (a target of <em>BRCA1/2</em>) accounts for almost the 11% of breast cancer samples, while in the saturationPlot its cumulative contribute appeared to be between 5-6%. This is where the <strong>coocMutexPlot</strong> comes handy.</p>
-<pre class="r"><code># coocMutexPlot of drug divided by tumor type
-coocMutexPlot(mypanel 
-     , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-     , grouping=&quot;tumor_type&quot;
-     , var=&quot;drug&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># coocMutexPlot of drug divided by tumor type</span>
+<span class="kw">coocMutexPlot</span>(mypanel 
+     , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+     , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+     , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot6%20-1.png" width="960" /></p>
 <p>This plot represents significant mutual exclusivity and cooccurence between couples of drugs. In particular, it tests whether all the alterations targeted by a drug tends to appear in different patients or together in the same set of patients. For example, we can appreciate that Olaparib is mutual exclusive with Idelalisib, so the drugs are active on different set of patients. This is particular useful to know for balancing a basket trial design. The more two drugs are mutual exclusive, the larger is the set of druggable patients.</p>
 <p>The very same plot, using genes instead of drugs, shows a mutual exclusivity on both <em>BRCA1</em> and <em>BRCA2</em> against <em>PIK3CA</em>.</p>
-<pre class="r"><code># coocMutexPlot of genes divided by tumor type
-# To avoid plotting gene pairs with no significance, we set parameter plotrandom
-coocMutexPlot(mypanel 
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , grouping=&quot;tumor_type&quot;
-             , var=&quot;gene_symbol&quot;
-             , plotrandom=FALSE
-             )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># coocMutexPlot of genes divided by tumor type</span>
+<span class="co"># To avoid plotting gene pairs with no significance, we set parameter plotrandom</span>
+<span class="kw">coocMutexPlot</span>(mypanel 
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;gene_symbol&quot;</span>
+             , <span class="dt">plotrandom=</span><span class="ot">FALSE</span>
+             )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plot7%20-1.png" width="1440" /></p>
 <p>Cooccurence and mutual exclusivity can also be seen from the prospective of similarity, rather than pair-wise mutex. For this purpose, we developed an alternative style for the plot that exploits binary distance between occurrences of alterations between genes or drugs.</p>
-<pre class="r"><code># coocMutexPlot of drugs divided by tumor type
-# Style set to dendro
-coocMutexPlot(mypanel 
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , grouping=&quot;tumor_type&quot;
-             , var=&quot;drug&quot;
-             , style=&quot;dendro&quot;
-             )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># coocMutexPlot of drugs divided by tumor type</span>
+<span class="co"># Style set to dendro</span>
+<span class="kw">coocMutexPlot</span>(mypanel 
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">style=</span><span class="st">&quot;dendro&quot;</span>
+             )</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/plotDendro%20-1.png" width="1440" /></p>
 <p>Again, if you want just the statistics and no plot, set the parameter <strong>noPlot</strong> to TRUE.</p>
-<pre class="r"><code># coocMutexPlot of genes divided by tumor type
-coocMutexStats &lt;- coocMutexPlot(mypanel 
-             , alterationType=c(&quot;mutations&quot; , &quot;expression&quot; , &quot;copynumber&quot; , &quot;fusions&quot;)
-             , grouping=&quot;tumor_type&quot;
-             , var=&quot;drug&quot;
-             , noPlot=TRUE
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># coocMutexPlot of genes divided by tumor type</span>
+coocMutexStats &lt;-<span class="st"> </span><span class="kw">coocMutexPlot</span>(mypanel 
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">grouping=</span><span class="st">&quot;tumor_type&quot;</span>
+             , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
+             , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
              )
-knitr::kable(head(coocMutexStats) , digits = 3)</code></pre>
+knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(coocMutexStats) , <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2232,10 +2364,10 @@ knitr::kable(head(coocMutexStats) , digits = 3)</code></pre>
 <div id="create-your-own-plots" class="section level2">
 <h2>Create your own plots</h2>
 <p><em>PrecisionTrialDesigner</em> is designed to allow the user to perform a lot of tasks for designing a genomic based trial. Nevertheless, not all the possible plots are available inside the package. We implemented a function to extract the relevant information for any kind of simulation, called <code>dataExtractor</code>.</p>
-<pre class="r"><code>#Extract mutations from BRCA tumor type
-myData &lt;- dataExtractor(mypanel , alterationType = &quot;mutations&quot; , tumor_type = &quot;brca&quot;)
-# Check the format
-str(myData)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Extract mutations from BRCA tumor type</span>
+myData &lt;-<span class="st"> </span><span class="kw">dataExtractor</span>(mypanel , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span> , <span class="dt">tumor_type =</span> <span class="st">&quot;brca&quot;</span>)
+<span class="co"># Check the format</span>
+<span class="kw">str</span>(myData)</code></pre></div>
 <pre><code>## List of 3
 ##  $ data             :&#39;data.frame&#39;:   2371 obs. of  6 variables:
 ##   ..$ drug         : chr [1:2371] &quot;Selumetinib&quot; &quot;Selumetinib&quot; &quot;Selumetinib&quot; &quot;Selumetinib&quot; ...
@@ -2249,26 +2381,26 @@ str(myData)</code></pre>
 ##   ..$ all_tumors: chr [1:3846] &quot;MB-0002&quot; &quot;MB-0005&quot; &quot;MB-0006&quot; &quot;MB-0010&quot; ...
 ##  $ tumor_not_present: chr(0)</code></pre>
 <p>A data extraction is therefore a list composed by data, Samples divided by tumor type and a character vector of tumors that are not present under the requested parameters. For example, we could ask how many samples are targeted by 0, 1, 2, 3 drugs. This function is not directly implemented in our package and so we can build it up here.</p>
-<pre class="r"><code>#Extract drug samples couples
-dataDrug &lt;- unique(myData$data[ , c(&quot;case_id&quot; , &quot;drug&quot;)])
-# Retrieve all screened samples
-samps &lt;- myData$Samples$all_tumors
-# Calculate number of drugs per patient (we consider also non altered samples)
-drugsPerPatient &lt;- table( factor(dataDrug$case_id , levels = samps) )
-# Now in terms of frequency
-drugsPerPatientFreq &lt;- table(drugsPerPatient)/length(samps)
-# Ready to plot
-barplot(drugsPerPatientFreq ,  ylim = c(0,1) 
-        , main=&quot;Patients with 0, 1, 2... molecular targets&quot; 
-        , col=&quot;darkcyan&quot;)</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/customplot%20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Extract drug samples couples</span>
+dataDrug &lt;-<span class="st"> </span><span class="kw">unique</span>(myData<span class="op">$</span>data[ , <span class="kw">c</span>(<span class="st">&quot;case_id&quot;</span> , <span class="st">&quot;drug&quot;</span>)])
+<span class="co"># Retrieve all screened samples</span>
+samps &lt;-<span class="st"> </span>myData<span class="op">$</span>Samples<span class="op">$</span>all_tumors
+<span class="co"># Calculate number of drugs per patient (we consider also non altered samples)</span>
+drugsPerPatient &lt;-<span class="st"> </span><span class="kw">table</span>( <span class="kw">factor</span>(dataDrug<span class="op">$</span>case_id , <span class="dt">levels =</span> samps) )
+<span class="co"># Now in terms of frequency</span>
+drugsPerPatientFreq &lt;-<span class="st"> </span><span class="kw">table</span>(drugsPerPatient)<span class="op">/</span><span class="kw">length</span>(samps)
+<span class="co"># Ready to plot</span>
+<span class="kw">barplot</span>(drugsPerPatientFreq ,  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>) 
+        , <span class="dt">main=</span><span class="st">&quot;Patients with 0, 1, 2... molecular targets&quot;</span> 
+        , <span class="dt">col=</span><span class="st">&quot;darkcyan&quot;</span>)</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/customplot%20-1.png" width="960" /></p>
 </div>
 </div>
 <div id="panel-optimization" class="section level1">
 <h1>Panel Optimization</h1>
 <p>While copynumber, expression and fusions require reading the whole gene, mutations can be targeted with high sensitivity. For particularly large genes, according to the tumor type under examination, it is often better to target specific regions rather than sequencing the whole gene. To design such regions, a “ratiometric” approach could be the best solution. It is better to evaluate the trade-off between genomic space occupied by the panel and number of mutations captured.</p>
 <p>A shiny-based interactive application was created to allow the users to design their custom regions. For a better explanation of all the features of <strong>panelOptimizer</strong>, we suggest you to follow the manual page <code>?panelOptimizer</code> and reading carefully the instruction inside the mini app itself.</p>
-<pre class="r"><code>panOpt &lt;- panelOptimizer(mypanel)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">panOpt &lt;-<span class="st"> </span><span class="kw">panelOptimizer</span>(mypanel)</code></pre></div>
 </div>
 <div id="sample-size-and-power-calculation" class="section level1">
 <h1>Sample Size and Power Calculation</h1>
@@ -2276,27 +2408,27 @@ barplot(drugsPerPatientFreq ,  ylim = c(0,1)
 <div id="estimating-full-panel-sample-size-and-power" class="section level2">
 <h2>Estimating full panel sample size and power</h2>
 <p>First, we calculate the sample size required to obtain 4 levels of power (from 0.6 to 0.9) for 4 different postulated hazard ratios (from 0.625 to 0.3). Type I error was set to 5% (‘alpha’) and baseline event rate per unit of time was set to 0.9 (‘ber’, which correspond to 10% 1-year progression-free survival). Average follow-up time is 3 years (‘fu’). Allocation is equal between treatment and control groups (‘case.fraction’).</p>
-<pre class="r"><code>survPowerSampleSize(mypanel
-  , HR = c(0.625 , 0.5 ,  0.4 , 0.3)
-  , power = seq(0.6 , 0.9 , 0.1)
-  , alpha = 0.05
-  , ber = 0.9
-  , fu = 3
-  , case.fraction = 0.5
-  )</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv1%20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.625</span> , <span class="fl">0.5</span> ,  <span class="fl">0.4</span> , <span class="fl">0.3</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">ber =</span> <span class="fl">0.9</span>
+  , <span class="dt">fu =</span> <span class="dv">3</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  )</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv1%20-1.png" width="960" /></p>
 <p>Our function estimates the real number of samples required to start the study under the hypothesis that only a fraction of them will have at least one alteration included in the panel. The number of samples that will actually enter in the study can be retrieved using the option <strong>noPlot</strong>, in the following way.</p>
-<pre class="r"><code># Add option noPlot to retrieve results as dataframe
-sampSize &lt;- survPowerSampleSize(mypanel
-  , HR = c(0.625 , 0.5 ,  0.4 , 0.3)
-  , power = seq(0.6 , 0.9 , 0.1)
-  , alpha = 0.05
-  , ber = 0.9
-  , fu = 3
-  , case.fraction = 0.5
-  , noPlot=TRUE
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add option noPlot to retrieve results as dataframe</span>
+sampSize &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.625</span> , <span class="fl">0.5</span> ,  <span class="fl">0.4</span> , <span class="fl">0.3</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">ber =</span> <span class="fl">0.9</span>
+  , <span class="dt">fu =</span> <span class="dv">3</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  , <span class="dt">noPlot=</span><span class="ot">TRUE</span>
   )
-knitr::kable(sampSize[ sampSize$HazardRatio==0.5 , ] , row.names = FALSE)</code></pre>
+knitr<span class="op">::</span><span class="kw">kable</span>(sampSize[ sampSize<span class="op">$</span>HazardRatio<span class="op">==</span><span class="fl">0.5</span> , ] , <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2345,46 +2477,46 @@ knitr::kable(sampSize[ sampSize$HazardRatio==0.5 , ] , row.names = FALSE)</code>
 </table>
 <p>Under the column EligibleSampleSize we can see the actual number of patients in treatment and control groups combined under the postulated hypothesis (79).</p>
 <p>Our sample size estimation function can also be used to estimate power from a postulated screening sample size. We first bring the sample size from screening to eligibility (multiplying by the frequency of alterations) and then perform the calculation. As a toy example, we use the same screening sample sizes calculated before and show the calculated power.</p>
-<pre class="r"><code># Calculate power from sample size at screening
-survPowerSampleSize(mypanel
-  , HR = 0.5
-  , sample.size = sampSize[ sampSize$HazardRatio==0.5 , &quot;ScreeningSampleSize&quot;]
-  , alpha = 0.05
-  , ber = 0.9
-  , fu = 3
-  , case.fraction = 0.5
-  )</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv3%20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate power from sample size at screening</span>
+<span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">HR =</span> <span class="fl">0.5</span>
+  , <span class="dt">sample.size =</span> sampSize[ sampSize<span class="op">$</span>HazardRatio<span class="op">==</span><span class="fl">0.5</span> , <span class="st">&quot;ScreeningSampleSize&quot;</span>]
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">ber =</span> <span class="fl">0.9</span>
+  , <span class="dt">fu =</span> <span class="dv">3</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  )</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv3%20-1.png" width="960" /></p>
 <p>So with 121 patients we obtain an estimated power of .</p>
 </div>
 <div id="estimating-arm-wise-sample-size-and-power" class="section level2">
 <h2>Estimating arm-wise sample size and power</h2>
 <p>In a typical basket or umbrella design, we can also be interested in what is the power or sample size of the design of each single drug or tumor type instead of the whole panel. By adding the parameter <strong>var</strong>, this task is easy to achieve.</p>
-<pre class="r"><code># Calcualte sample size by tumor type
-survPowerSampleSize(mypanel
-  , var = &quot;tumor_type&quot;
-  , HR = c(0.625 , 0.5 ,  0.4 , 0.3)
-  , power = seq(0.6 , 0.9 , 0.1)
-  , alpha = 0.05
-  , ber = 0.9
-  , fu = 3
-  , case.fraction = 0.5
-  )</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv4%20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calcualte sample size by tumor type</span>
+<span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">var =</span> <span class="st">&quot;tumor_type&quot;</span>
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.625</span> , <span class="fl">0.5</span> ,  <span class="fl">0.4</span> , <span class="fl">0.3</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">ber =</span> <span class="fl">0.9</span>
+  , <span class="dt">fu =</span> <span class="dv">3</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  )</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv4%20-1.png" width="960" /></p>
 <p>Similarly, we can also ask a design divided by drug. Given the frequency of alterations targetable by each drug, we can estimate how many patients should be screened to obtain the minimum number of samples to reach a certain level of power. In this case, we don’t ask for all the drug type, but only <em>Olaparib</em> and <em>Idelalisib</em>.</p>
-<pre class="r"><code># Calcualte sample size by drug
-# Visualize only &quot;Olaparib&quot; and &quot;Idelalisib&quot;
-survPowerSampleSize(mypanel
-  , var = &quot;drug&quot;
-  , stratum = c(&quot;Olaparib&quot; , &quot;Idelalisib&quot;)
-  , HR = c(0.625 , 0.5 ,  0.4 , 0.3)
-  , power = seq(0.6 , 0.9 , 0.1)
-  , alpha = 0.05
-  , ber = 0.9
-  , fu = 3
-  , case.fraction = 0.5
-  )</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv5%20-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calcualte sample size by drug</span>
+<span class="co"># Visualize only &quot;Olaparib&quot; and &quot;Idelalisib&quot;</span>
+<span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">stratum =</span> <span class="kw">c</span>(<span class="st">&quot;Olaparib&quot;</span> , <span class="st">&quot;Idelalisib&quot;</span>)
+  , <span class="dt">HR =</span> <span class="kw">c</span>(<span class="fl">0.625</span> , <span class="fl">0.5</span> ,  <span class="fl">0.4</span> , <span class="fl">0.3</span>)
+  , <span class="dt">power =</span> <span class="kw">seq</span>(<span class="fl">0.6</span> , <span class="fl">0.9</span> , <span class="fl">0.1</span>)
+  , <span class="dt">alpha =</span> <span class="fl">0.05</span>
+  , <span class="dt">ber =</span> <span class="fl">0.9</span>
+  , <span class="dt">fu =</span> <span class="dv">3</span>
+  , <span class="dt">case.fraction =</span> <span class="fl">0.5</span>
+  )</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/chunkSurv5%20-1.png" width="960" /></p>
 <p>It is noteworthy that the calculations performed arm-wise are based on the assumption that each arm is completely independent from the others. In other terms, patients with two targetable alterations enter in the frequency calculations twice as they could be treated with both drugs. In a typical umbrella design (many drugs, one tumor type) the patient is generally not treated with multiple drugs and can enter in one arm only.</p>
 </div>
 <div id="priority-trial" class="section level2">
@@ -2435,18 +2567,18 @@ P(A|\bar{D}) &amp; P(B|\bar{A}\cup\bar{D}) &amp; P(C|\bar{A}\cup\bar{B}\cup\bar{
 \]</span></p>
 <p>The main diagonal (new screening line) uses the original frequencies of each drug, estimated as the number of eligible patients over the total number of samples in our CancerPanel object. Every advancement on the columns must take in consideration a depletion of all the samples that were already allocated. For example, <span class="math inline">\(P(B|\bar{A})\)</span>, ( first row , second column), calculates the number of eligible patients for B in a dataset epurated from all the samples eligible for A. If the drugs cover different pathways, the dependent frequencies are very similar to the original ones. Conversely, if you imagine two drugs with very similar molecular targets, once the first has removed all its eligible patients, very few patients can be allocated to the second treatment that will drop dramatically in frequency.</p>
 <p>Now, let’s see an example. We take into consideration a design with four drugs, and we ask for the optimal order of priority of the drugs (basically starting from the rarest).</p>
-<pre class="r"><code>drugs4 &lt;- c(&quot;Idelalisib&quot; , &quot;Olaparib&quot; , &quot;Trastuzumab&quot; , &quot;Vandetanib&quot;)
-prior4drugs &lt;- survPowerSampleSize(mypanel
-  , var = &quot;drug&quot;
-  , priority.trial = drugs4 
-  , priority.trial.order=&quot;optimal&quot;
-  , HR = 0.5
-  , power = 0.8
-  , noPlot = TRUE
-  )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">drugs4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Idelalisib&quot;</span> , <span class="st">&quot;Olaparib&quot;</span> , <span class="st">&quot;Trastuzumab&quot;</span> , <span class="st">&quot;Vandetanib&quot;</span>)
+prior4drugs &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">priority.trial =</span> drugs4 
+  , <span class="dt">priority.trial.order=</span><span class="st">&quot;optimal&quot;</span>
+  , <span class="dt">HR =</span> <span class="fl">0.5</span>
+  , <span class="dt">power =</span> <span class="fl">0.8</span>
+  , <span class="dt">noPlot =</span> <span class="ot">TRUE</span>
+  )</code></pre></div>
 <pre><code>## 
 ## Minimum Eligible Sample Size to reach 80% of power with an HR equal to 0.5 and a HR0 equal to 1 for each drug is equal to: 95</code></pre>
-<pre class="r"><code>prior4drugs</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prior4drugs</code></pre></div>
 <pre><code>## $`HR:0.5 | HR0:1 | Power:0.8`
 ## $`HR:0.5 | HR0:1 | Power:0.8`$Summary
 ##              Vandetanib Olaparib Trastuzumab Idelalisib Total
@@ -2490,14 +2622,14 @@ prior4drugs &lt;- survPowerSampleSize(mypanel
 <p>A message is telling us that each drug must reach a number of eligible patients equal to 66, under a default case/control fraction of 0.5. We are designing a trial where each drug needs 33 treated and 33 controls. Reading from the Summary, our algorithm rules that patients must be screened to obtain<br />
 eligible subjects and discarding patients that cannot be inserted in any arm of the trial.</p>
 <p>Let’s now compare the result to the ones seen in the two sections above.</p>
-<pre class="r"><code># We use stratum to create a design with only four drugs
-fullDesign &lt;- survPowerSampleSize(mypanel
-  , var = &quot;drug&quot;
-  , stratum = drugs4
-  , HR = 0.5
-  , power = 0.8
-  , noPlot = TRUE)
-knitr::kable(fullDesign)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We use stratum to create a design with only four drugs</span>
+fullDesign &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">stratum =</span> drugs4
+  , <span class="dt">HR =</span> <span class="fl">0.5</span>
+  , <span class="dt">power =</span> <span class="fl">0.8</span>
+  , <span class="dt">noPlot =</span> <span class="ot">TRUE</span>)
+knitr<span class="op">::</span><span class="kw">kable</span>(fullDesign)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2553,19 +2685,19 @@ knitr::kable(fullDesign)</code></pre>
 </tbody>
 </table>
 <p>As we can see, the Eligible Sample Size is the same as above, equal to 95. The Full Design calculates a number of patients to screen equal to 182, way lower than calculated by our priority trial. This result guarantees at least 80% of power on the whole trial, but it doesn’t assure sufficient power for all the arms of the study. Conversely, the sum of all the patients to screen assuming 4 independent trials is way higher, because a patient discarded from an arm of the study cannot be eligible for a different arm.</p>
-<pre class="r"><code>sum(fullDesign[fullDesign$Var %in% drugs4 , &quot;ScreeningSampleSize&quot;])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(fullDesign[fullDesign<span class="op">$</span>Var <span class="op">%in%</span><span class="st"> </span>drugs4 , <span class="st">&quot;ScreeningSampleSize&quot;</span>])</code></pre></div>
 <pre><code>## [1] 3120</code></pre>
 <p>If we want to calculate the post-hoc power for the whole study, using a sample size equal to the one calculated with priority trial, we can do:</p>
-<pre class="r"><code># Extract the number of samples calculated with priority.trial
-sizePrior4Drugs &lt;- prior4drugs[[1]]$Summary[&quot;Screened&quot; , &quot;Total&quot;]
-# Calculate post-hoc power, given sample.size
-postHocPower &lt;- survPowerSampleSize(mypanel
-  , var = &quot;drug&quot;
-  , stratum = drugs4
-  , HR = 0.5
-  , sample.size = sizePrior4Drugs
-  , noPlot = TRUE)
-postHocPower[ postHocPower$Var==&quot;Full Design&quot; , &quot;Power&quot;]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extract the number of samples calculated with priority.trial</span>
+sizePrior4Drugs &lt;-<span class="st"> </span>prior4drugs[[<span class="dv">1</span>]]<span class="op">$</span>Summary[<span class="st">&quot;Screened&quot;</span> , <span class="st">&quot;Total&quot;</span>]
+<span class="co"># Calculate post-hoc power, given sample.size</span>
+postHocPower &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(mypanel
+  , <span class="dt">var =</span> <span class="st">&quot;drug&quot;</span>
+  , <span class="dt">stratum =</span> drugs4
+  , <span class="dt">HR =</span> <span class="fl">0.5</span>
+  , <span class="dt">sample.size =</span> sizePrior4Drugs
+  , <span class="dt">noPlot =</span> <span class="ot">TRUE</span>)
+postHocPower[ postHocPower<span class="op">$</span>Var<span class="op">==</span><span class="st">&quot;Full Design&quot;</span> , <span class="st">&quot;Power&quot;</span>]</code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>The power is basically 100%. In conclusion, priority.trial guarantees an high level of power for the whole trial and at least the same level of power for each drug, minimizing the samples to screen.</p>
 </div>
@@ -2625,20 +2757,20 @@ postHocPower[ postHocPower$Var==&quot;Full Design&quot; , &quot;Power&quot;]</co
 <div id="tumor.freqs-calculate-weighted-frequencies" class="section level2">
 <h2>tumor.freqs: calculate weighted frequencies</h2>
 <p>As mentioned in the introduction, alteration frequencies are by default calculated on all available samples inside the object. If we want to establish the frequency of samples that can be targeted by each drug, we can run a simple <em>coverageStackPlot</em> like this:</p>
-<pre class="r"><code>coverageStackPlot(mypanel , var=&quot;drug&quot; 
-        , grouping=NA , collapseByGene=TRUE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coverageStackPlot</span>(mypanel , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span> 
+        , <span class="dt">grouping=</span><span class="ot">NA</span> , <span class="dt">collapseByGene=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/basket1%20-1.png" width="672" /></p>
 <p>This plot derives from a calculation made with 971 breast samples and 230 lung samples, that are the ones with all available data from copynumber, mutations, fusions and expression. As you can see, this is not a balanced sample because breast tumors are the large majority. What if we had the same number of samples for each tumor type?</p>
-<pre class="r"><code>coverageStackPlot(mypanel , var=&quot;drug&quot; 
-        , grouping=NA , collapseByGene=TRUE , tumor.freqs=c(brca=0.5 , luad=0.5))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coverageStackPlot</span>(mypanel , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span> 
+        , <span class="dt">grouping=</span><span class="ot">NA</span> , <span class="dt">collapseByGene=</span><span class="ot">TRUE</span> , <span class="dt">tumor.freqs=</span><span class="kw">c</span>(<span class="dt">brca=</span><span class="fl">0.5</span> , <span class="dt">luad=</span><span class="fl">0.5</span>))</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/basket2%20-1.png" width="672" /></p>
 <p>While some of the drugs do not change dramatically, some other drop down or increase significantly (check red numbers on top of the bars). For example, <em>Idelalisib</em> drops down in frequency by a 10% (before 0.3313905, now 0.236464). The reason is that is linked to <em>PIK3CA</em>, that is a gene that is rarely mutated in lung cancer, while it represents around the 30% breast cancer case. When the design is balanced, the frequency is dragged down towards the low LUAD frequency. Note that the plot is also slightly different from the previous one: now Y-axis reports the relative frequency (the same as the red text on the top of the bars), instead of the absolute number of samples that is usually reported. The reason is that tumor.freqs simply weights the tumor-wise frequencies by a 0.5 - 0.5 factor per tumor type and the original number of samples is therefore lost.</p>
 <p>If we want to check our theory about <em>PIK3CA</em>, we can simply use <em>tumor.freqs</em> in <em>cpFreq</em> function.</p>
-<pre class="r"><code># Run cpFreq with and withouth tumor.freqs
-flatfreq &lt;- cpFreq(mypanel , alterationType = &quot;mutations&quot;)
-weightedfreq &lt;- cpFreq(mypanel , alterationType = &quot;mutations&quot; , tumor.freqs=c(brca=0.5 , luad=0.5) )</code></pre>
-<pre class="r"><code># Frequency with no weights
-knitr::kable(flatfreq[ flatfreq$gene_symbol==&quot;PIK3CA&quot; , ] , row.names=FALSE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run cpFreq with and withouth tumor.freqs</span>
+flatfreq &lt;-<span class="st"> </span><span class="kw">cpFreq</span>(mypanel , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span>)
+weightedfreq &lt;-<span class="st"> </span><span class="kw">cpFreq</span>(mypanel , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span> , <span class="dt">tumor.freqs=</span><span class="kw">c</span>(<span class="dt">brca=</span><span class="fl">0.5</span> , <span class="dt">luad=</span><span class="fl">0.5</span>) )</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Frequency with no weights</span>
+knitr<span class="op">::</span><span class="kw">kable</span>(flatfreq[ flatfreq<span class="op">$</span>gene_symbol<span class="op">==</span><span class="st">&quot;PIK3CA&quot;</span> , ] , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2653,8 +2785,8 @@ knitr::kable(flatfreq[ flatfreq$gene_symbol==&quot;PIK3CA&quot; , ] , row.names=
 </tr>
 </tbody>
 </table>
-<pre class="r"><code># Frequency with balanced weights
-knitr::kable(weightedfreq[ weightedfreq$gene_symbol==&quot;PIK3CA&quot; , ] , row.names=FALSE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Frequency with balanced weights</span>
+knitr<span class="op">::</span><span class="kw">kable</span>(weightedfreq[ weightedfreq<span class="op">$</span>gene_symbol<span class="op">==</span><span class="st">&quot;PIK3CA&quot;</span> , ] , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2678,8 +2810,8 @@ knitr::kable(weightedfreq[ weightedfreq$gene_symbol==&quot;PIK3CA&quot; , ] , ro
 <li>What is the distribution and variability of this frequency?</li>
 <li>What is the maximum and minimum frequency we can expect, or in other words, the worst and best case scenario in terms of treatment opportunity?</li>
 </ol>
-<pre class="r"><code>samplefreqs &lt;- cpFreq(mypanel , alterationType = &quot;mutations&quot; , tumor.weights=c(brca=50 , luad=40))
-knitr::kable(samplefreqs[ samplefreqs$gene_symbol==&quot;PIK3CA&quot; , ] , row.names=FALSE)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samplefreqs &lt;-<span class="st"> </span><span class="kw">cpFreq</span>(mypanel , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span> , <span class="dt">tumor.weights=</span><span class="kw">c</span>(<span class="dt">brca=</span><span class="dv">50</span> , <span class="dt">luad=</span><span class="dv">40</span>))
+knitr<span class="op">::</span><span class="kw">kable</span>(samplefreqs[ samplefreqs<span class="op">$</span>gene_symbol<span class="op">==</span><span class="st">&quot;PIK3CA&quot;</span> , ] , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2690,49 +2822,49 @@ knitr::kable(samplefreqs[ samplefreqs$gene_symbol==&quot;PIK3CA&quot; , ] , row.
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.1444444</td>
+<td align="right">0.2111111</td>
 </tr>
 </tbody>
 </table>
 <p><em>tumor.weights</em> allows a random extraction of 50 and 40 samples from each tumor type and calculate the frequency. This is just 1 extraction, so the result could be completely biased. We need to run a resampling simulation to answer our questions.</p>
-<pre class="r"><code># Run cpFreq 100 times
-samplefreqsboot &lt;- replicate( 100 
-                          , cpFreq(mypanel , alterationType = &quot;mutations&quot; 
-                            , tumor.weights=c(brca=50 , luad=40)) 
-                          , simplify=FALSE)
-# Extract PIK3CA frequency in the 100 runs
-pik3caboot &lt;- sapply(samplefreqsboot , function(x) x[x$gene_symbol==&quot;PIK3CA&quot; , &quot;freq&quot;])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run cpFreq 100 times</span>
+samplefreqsboot &lt;-<span class="st"> </span><span class="kw">replicate</span>( <span class="dv">100</span> 
+                          , <span class="kw">cpFreq</span>(mypanel , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span> 
+                            , <span class="dt">tumor.weights=</span><span class="kw">c</span>(<span class="dt">brca=</span><span class="dv">50</span> , <span class="dt">luad=</span><span class="dv">40</span>)) 
+                          , <span class="dt">simplify=</span><span class="ot">FALSE</span>)
+<span class="co"># Extract PIK3CA frequency in the 100 runs</span>
+pik3caboot &lt;-<span class="st"> </span><span class="kw">sapply</span>(samplefreqsboot , <span class="cf">function</span>(x) x[x<span class="op">$</span>gene_symbol<span class="op">==</span><span class="st">&quot;PIK3CA&quot;</span> , <span class="st">&quot;freq&quot;</span>])</code></pre></div>
 <p>Now to answer the first two questions, let’s draw the distribution of our resampling:</p>
-<pre class="r"><code># calculate mean and sd of PIK3CA frequency distribution
-avgpik3ca &lt;- mean(pik3caboot)
-sdpik3ca &lt;- sd(pik3caboot)
-# Plot the distribution
-title &lt;- paste(&quot;PIK3CA frequency distribution with 50 BRCA and 40 LUAD samples&quot;
-              , paste(&quot;Mean:&quot; , round(avgpik3ca , 3))
-              , paste(&quot;SD:&quot; , round(sdpik3ca , 3))
-              , sep=&quot;\n&quot;)
-# draw a simple histogram. the red line shows the mean value
-hist(pik3caboot , col=&quot;cadetblue&quot; , breaks=30 , main=title , xlab=&quot;Frequencies of resampling&quot;)
-abline(v = avgpik3ca , col=&quot;red&quot; , lwd=3 , xpd=FALSE)</code></pre>
-<p><img src="PrecisionTrialDesigner_files/figure-html/basket6%20-1.png" width="672" /></p>
-<p>So, with our expected sample composition, we have an average of 0.225 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.036. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate mean and sd of PIK3CA frequency distribution</span>
+avgpik3ca &lt;-<span class="st"> </span><span class="kw">mean</span>(pik3caboot)
+sdpik3ca &lt;-<span class="st"> </span><span class="kw">sd</span>(pik3caboot)
+<span class="co"># Plot the distribution</span>
+title &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;PIK3CA frequency distribution with 50 BRCA and 40 LUAD samples&quot;</span>
+              , <span class="kw">paste</span>(<span class="st">&quot;Mean:&quot;</span> , <span class="kw">round</span>(avgpik3ca , <span class="dv">3</span>))
+              , <span class="kw">paste</span>(<span class="st">&quot;SD:&quot;</span> , <span class="kw">round</span>(sdpik3ca , <span class="dv">3</span>))
+              , <span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+<span class="co"># draw a simple histogram. the red line shows the mean value</span>
+<span class="kw">hist</span>(pik3caboot , <span class="dt">col=</span><span class="st">&quot;cadetblue&quot;</span> , <span class="dt">breaks=</span><span class="dv">30</span> , <span class="dt">main=</span>title , <span class="dt">xlab=</span><span class="st">&quot;Frequencies of resampling&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> avgpik3ca , <span class="dt">col=</span><span class="st">&quot;red&quot;</span> , <span class="dt">lwd=</span><span class="dv">3</span> , <span class="dt">xpd=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="PrecisionTrialDesigner_files/figure-html/basket6%20-1.png" width="960" /></p>
+<p>So, with our expected sample composition, we have an average of 0.227 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.037. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
 <p><span class="math display">\[(\theta_{\alpha/2}^{*};\theta_{1-\alpha/2}^{*})\]</span></p>
 <p>To summarize what we should expect from this study, including answering to question 3:</p>
-<pre class="r"><code># Write a simple function to calculate confidence interval of a proportion
-CI &lt;- function(x){
-  left &lt;- quantile(x , 0.025)
-  right &lt;- quantile(x , 0.975)
-  return(c(left , right))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Write a simple function to calculate confidence interval of a proportion</span>
+CI &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+  left &lt;-<span class="st"> </span><span class="kw">quantile</span>(x , <span class="fl">0.025</span>)
+  right &lt;-<span class="st"> </span><span class="kw">quantile</span>(x , <span class="fl">0.975</span>)
+  <span class="kw">return</span>(<span class="kw">c</span>(left , right))
 }
-# Create a small data.frame to summarize everything
-pik3caSummary &lt;- data.frame(Gene = &quot;PIK3CA&quot;
-                          , AverageMutationRate = round(avgpik3ca , 3)
-                          , SDMutationRate = round(sdpik3ca , 3)
-                          , MaxMutationRate = round(max(pik3caboot)[1] , 3)
-                          , MinMutationRate = round(min(pik3caboot)[1] , 3)
-                          , CI = paste( round( CI(pik3caboot) , 3) , collapse=&quot; - &quot;)
+<span class="co"># Create a small data.frame to summarize everything</span>
+pik3caSummary &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Gene =</span> <span class="st">&quot;PIK3CA&quot;</span>
+                          , <span class="dt">AverageMutationRate =</span> <span class="kw">round</span>(avgpik3ca , <span class="dv">3</span>)
+                          , <span class="dt">SDMutationRate =</span> <span class="kw">round</span>(sdpik3ca , <span class="dv">3</span>)
+                          , <span class="dt">MaxMutationRate =</span> <span class="kw">round</span>(<span class="kw">max</span>(pik3caboot)[<span class="dv">1</span>] , <span class="dv">3</span>)
+                          , <span class="dt">MinMutationRate =</span> <span class="kw">round</span>(<span class="kw">min</span>(pik3caboot)[<span class="dv">1</span>] , <span class="dv">3</span>)
+                          , <span class="dt">CI =</span> <span class="kw">paste</span>( <span class="kw">round</span>( <span class="kw">CI</span>(pik3caboot) , <span class="dv">3</span>) , <span class="dt">collapse=</span><span class="st">&quot; - &quot;</span>)
                           )
-knitr::kable(pik3caSummary , row.names=FALSE)</code></pre>
+knitr<span class="op">::</span><span class="kw">kable</span>(pik3caSummary , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2747,41 +2879,41 @@ knitr::kable(pik3caSummary , row.names=FALSE)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.225</td>
-<td align="right">0.036</td>
-<td align="right">0.333</td>
-<td align="right">0.144</td>
-<td align="left">0.167 - 0.3</td>
+<td align="right">0.227</td>
+<td align="right">0.037</td>
+<td align="right">0.311</td>
+<td align="right">0.111</td>
+<td align="left">0.144 - 0.284</td>
 </tr>
 </tbody>
 </table>
 <p>What we known now is how <em>PIK3CA</em> would behave if we randomly select 90 individuals divided in 50 breast cancer and 40 lung cancer cases.</p>
 <p>How is this affecting sample size estimation? As mentioned in the previous section, sample size at screening is influenced by the number of affected samples we expect to find. If you need to treat with <em>Idelalisib</em> a total of 100 samples, you would need at least 300 patients sequenced to obtain 100 <em>PIK3CA</em> mutated samples (considering a mutation rate of 30%). This means that while sample size at treatment is fixed and depends only from hazard ratio, power and other parameters chosen beforehand, sample size at screening depends on how lucky/unlucky we are in finding enough patients with the alteration we are targeting.</p>
 <p>Also <em>survPowerSampleSize</em> has a tumor.weights parameter that can be resampled as we did for cpFreq. Let’s see how. To simplify things, we hypothesize an hazard ratio of 2 and we want to reach a power of 80%.</p>
-<pre class="r"><code># We want to know how many samples we will need under
-  # HR = 2
-  # power = 0.8
-survboot &lt;- replicate( 100 
-                    , survPowerSampleSize(mypanel 
-                            , var=&quot;gene_symbol&quot;
-                            , alterationType = &quot;mutations&quot;
-                            , HR=2
-                            , power=0.8
-                            , tumor.weights=c(brca=50 , luad=40)
-                            , noPlot=TRUE)
-                    , simplify=FALSE)
-# Extract PIK3CA results
-survbootpik3ca &lt;- sapply(survboot , function(x) x[ x$Var==&quot;PIK3CA&quot; , &quot;ScreeningSampleSize&quot;] )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We want to know how many samples we will need under</span>
+  <span class="co"># HR = 2</span>
+  <span class="co"># power = 0.8</span>
+survboot &lt;-<span class="st"> </span><span class="kw">replicate</span>( <span class="dv">100</span> 
+                    , <span class="kw">survPowerSampleSize</span>(mypanel 
+                            , <span class="dt">var=</span><span class="st">&quot;gene_symbol&quot;</span>
+                            , <span class="dt">alterationType =</span> <span class="st">&quot;mutations&quot;</span>
+                            , <span class="dt">HR=</span><span class="dv">2</span>
+                            , <span class="dt">power=</span><span class="fl">0.8</span>
+                            , <span class="dt">tumor.weights=</span><span class="kw">c</span>(<span class="dt">brca=</span><span class="dv">50</span> , <span class="dt">luad=</span><span class="dv">40</span>)
+                            , <span class="dt">noPlot=</span><span class="ot">TRUE</span>)
+                    , <span class="dt">simplify=</span><span class="ot">FALSE</span>)
+<span class="co"># Extract PIK3CA results</span>
+survbootpik3ca &lt;-<span class="st"> </span><span class="kw">sapply</span>(survboot , <span class="cf">function</span>(x) x[ x<span class="op">$</span>Var<span class="op">==</span><span class="st">&quot;PIK3CA&quot;</span> , <span class="st">&quot;ScreeningSampleSize&quot;</span>] )</code></pre></div>
 <p>Again, we create a little table that would tell us the average scenario, the best, the worst etc. Calculation of confidence interval follows the same formula as above</p>
-<pre class="r"><code># Create a small data.frame to summarize everything (we round up to integer values)
-survSummary &lt;- data.frame(Gene = &quot;PIK3CA&quot;
-                       , Mean.Screen.Samp.Size = round(mean(survbootpik3ca))
-                       , SD.Screen.Samp.Size = round(sd(survbootpik3ca))
-                       , Max.Screen.Samp.Size = round(max(survbootpik3ca)[1])
-                       , Min.Screen.Samp.Size = round(min(survbootpik3ca)[1])
-                       , CI = paste( round( CI(survbootpik3ca)) , collapse=&quot; - &quot;)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a small data.frame to summarize everything (we round up to integer values)</span>
+survSummary &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Gene =</span> <span class="st">&quot;PIK3CA&quot;</span>
+                       , <span class="dt">Mean.Screen.Samp.Size =</span> <span class="kw">round</span>(<span class="kw">mean</span>(survbootpik3ca))
+                       , <span class="dt">SD.Screen.Samp.Size =</span> <span class="kw">round</span>(<span class="kw">sd</span>(survbootpik3ca))
+                       , <span class="dt">Max.Screen.Samp.Size =</span> <span class="kw">round</span>(<span class="kw">max</span>(survbootpik3ca)[<span class="dv">1</span>])
+                       , <span class="dt">Min.Screen.Samp.Size =</span> <span class="kw">round</span>(<span class="kw">min</span>(survbootpik3ca)[<span class="dv">1</span>])
+                       , <span class="dt">CI =</span> <span class="kw">paste</span>( <span class="kw">round</span>( <span class="kw">CI</span>(survbootpik3ca)) , <span class="dt">collapse=</span><span class="st">&quot; - &quot;</span>)
                        )
-knitr::kable(survSummary , row.names=FALSE)</code></pre>
+knitr<span class="op">::</span><span class="kw">kable</span>(survSummary , <span class="dt">row.names=</span><span class="ot">FALSE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2796,15 +2928,15 @@ knitr::kable(survSummary , row.names=FALSE)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">341</td>
-<td align="right">65</td>
-<td align="right">555</td>
-<td align="right">238</td>
-<td align="left">242 - 513</td>
+<td align="right">343</td>
+<td align="right">56</td>
+<td align="right">606</td>
+<td align="right">209</td>
+<td align="left">257 - 461</td>
 </tr>
 </tbody>
 </table>
-<p>What we learnt is that in the average scenario, we would need 341 samples to start our trial, with a minimum of 238 and, if we are very unlucky, a maximum of 555 patients at screening.</p>
+<p>What we learnt is that in the average scenario, we would need 343 samples to start our trial, with a minimum of 209 and, if we are very unlucky, a maximum of 606 patients at screening.</p>
 </div>
 </div>
 <div id="panel-design" class="section level1">
@@ -2819,11 +2951,11 @@ or any combination of these. Default is to perform design on the whole panel;</l
 <li><strong>utr</strong>: genes that demanded for the full length can be sequenced on their CDS or CDS + utr (full exons). Default FALSE</li>
 <li><strong>canonicalTranscript</strong>: decide weather to take only the canonical transcript or collapse the genomic ranges of any transcript.</li>
 </ol>
-<pre class="r"><code># Design our panel in full with no padding length and merge window equal to 100 bp
-mydesign &lt;- panelDesigner(mypanel 
-                        , padding_length=0 
-                        , merge_window=100)
-str(mydesign , vec.len=1)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Design our panel in full with no padding length and merge window equal to 100 bp</span>
+mydesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</span>(mypanel 
+                        , <span class="dt">padding_length=</span><span class="dv">0</span> 
+                        , <span class="dt">merge_window=</span><span class="dv">100</span>)
+<span class="kw">str</span>(mydesign , <span class="dt">vec.len=</span><span class="dv">1</span>)</code></pre></div>
 <pre><code>## List of 4
 ##  $ GeneIntervals  :&#39;data.frame&#39;: 378 obs. of  9 variables:
 ##   ..$ ensembl_transcript_id: chr [1:378] &quot;ENST00000372348&quot; ...
@@ -2855,9 +2987,9 @@ str(mydesign , vec.len=1)</code></pre>
 <li><strong>BedStylePanel</strong>: the entire panel in bed format, merged by chromosome, start and end.</li>
 </ol>
 <p>So if you want to submit your panel right away, just write your bed file:</p>
-<pre class="r"><code># Retrieve the panel in bed format
-bedPanel &lt;- mydesign$BedStylePanel
-head(bedPanel)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Retrieve the panel in bed format</span>
+bedPanel &lt;-<span class="st"> </span>mydesign<span class="op">$</span>BedStylePanel
+<span class="kw">head</span>(bedPanel)</code></pre></div>
 <pre><code>##     chr     start       end annotation
 ## 1  chr1 115251158 115251275       NRAS
 ## 2  chr7  55248985  55249171       EGFR
@@ -2866,8 +2998,8 @@ head(bedPanel)</code></pre>
 ## 5 chr15  66781552  66781614     MAP2K1
 ## 6 chr15  66782055  66782101     MAP2K1</code></pre>
 <p>To know the total length of my panel, just sum up all the regions in the bed file:</p>
-<pre class="r"><code># Calculate genomic space in kilo bases
-sum( bedPanel$end - bedPanel$start )/100</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate genomic space in kilo bases</span>
+<span class="kw">sum</span>( bedPanel<span class="op">$</span>end <span class="op">-</span><span class="st"> </span>bedPanel<span class="op">$</span>start )<span class="op">/</span><span class="dv">100</span></code></pre></div>
 <pre><code>## [1] 509.87</code></pre>
 <p>How <strong>panelDesigner</strong> decide the regions, according to the alteration specification?</p>
 <ol style="list-style-type: decimal">
@@ -2877,16 +3009,16 @@ sum( bedPanel$end - bedPanel$start )/100</code></pre>
 <li>mutations: if every mutations are requested, full sequence, otherwise, specific genomic targets</li>
 </ol>
 <p>As mentioned before, fusion, copynumber and expression data are probably collected through different technologies (maybe no NGS at all). Considering a specific design for every alteration type is therefore desirable.</p>
-<pre class="r"><code># Design the panel for mutations
-myMutationDesign &lt;- panelDesigner(mypanel
-                        , alterationType=&quot;mutations&quot;
-                        , padding_length=0 
-                        , merge_window=100)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Design the panel for mutations</span>
+myMutationDesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</span>(mypanel
+                        , <span class="dt">alterationType=</span><span class="st">&quot;mutations&quot;</span>
+                        , <span class="dt">padding_length=</span><span class="dv">0</span> 
+                        , <span class="dt">merge_window=</span><span class="dv">100</span>)</code></pre></div>
 <p>By setting parameter <strong>alterationType</strong>, we require a design only for mutations.</p>
 </div>
 <div id="session-information" class="section level1">
 <h1>Session Information</h1>
-<pre class="r"><code>sessionInfo()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
 <pre><code>## R version 3.4.3 (2017-11-30)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Sierra 10.12.6
@@ -2959,6 +3091,8 @@ myMutationDesign &lt;- panelDesigner(mypanel
 <p>Copyright &copy; 2017 Giorgio Melloni. All rights reserved.</p>
 
 
+</div>
+</div>
 
 </div>
 
