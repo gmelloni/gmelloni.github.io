@@ -1,0 +1,326 @@
+---
+title: "Comparison between RNA-seq and Immunohistochemistry data"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  html_document:
+    code_folding: show
+    fig_height: 8
+    fig_width: 10
+    highlight: haddock
+    theme: readable
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+In the SHIVA trial, estrogen, androgen and progesterone status (ER, AR and PR) were collected in order to associate the patients to a hormone therapy. The hormone receptors ER, AR and PR were collected using Immunohistochemistry (IHC). Immunohistochemestry values are available through TCGA for a limited number of samples but RNA-Seq could represent a valid proxy. In this section we want to explore the relationship between RNA-seq and Immunohistochemistry and, possibly, identify a threshold that we can use in the simulation to appropriately identify over-expressed samples. IHC categories for ER will be compared to *ESR1* expression values and IHC PR categories to the RNA values of *PGR* gene.
+
+Comparative analysis
+================================================================================
+
+To run the comparison analysis we will need two datasets:
+
+* Dataset with IHC values, 
+* Dataset with RNA-seq expression values
+
+Both dataset need to have in common the same patients so that we can reconstruct the index.
+
+The analysis will be run on two hormone receptors: 
+
+* ER
+* PR
+
+
+ER analysis 
+--------------------------------------------------------------------------------
+
+### IHC dataset
+
+As Input dataset we are choosing to use: 
+
+Clinical data downloaded from cBioportal for the dataset: **Breast Invasive Carcinoma (TCGA, Cell 2015)** - [LINK](https://git.ieo.eu/acc-bioinfo/meta/activity)
+
+The dataset has been downloaded and stored as  ```brca_tcga_pub2015_clinical_data.tsv```. 
+
+```{r, message=FALSE, warning=FALSE}
+suppressMessages(library(dplyr))
+suppressMessages(library(ggplot2))
+suppressMessages(library(plotly))
+suppressMessages(library(readr))
+suppressMessages(library(knitr))
+suppressMessages(library(PrecisionTrialDesigner))
+
+ihc <-readr::read_tsv("../external_resources/brca_tcga_pub2015_clinical_data.tsv")
+ihcFilter <- ihc %>% 
+  dplyr::select(`Patient ID`
+                , `ER Status By IHC`
+                , `ER Status IHC Percent Positive`
+                ) %>%
+  dplyr::filter(!is.na(`ER Status By IHC`)) %>% # Remove the <NA>
+  dplyr::filter(!is.na(`ER Status IHC Percent Positive`)) %>% # Remove the <NA>
+  dplyr::rename(case_id=`Patient ID`, er_status=`ER Status By IHC`, ihc_value=`ER Status IHC Percent Positive`)
+ 
+# preview
+kable(head(ihcFilter), caption="top 6 rows")
+```
+
+
+### RNA-seq dataset
+
+The RNA-seq dataset was extracted using PTD function.!
+
+```{r}
+panel_design <- data.frame(drug=""
+    , gene_symbol="ESR1"
+    , alteration="expression"
+    , exact_alteration="up"
+    ,	mutation_specification=""
+    ,	group="")
+
+
+panel <- newCancerPanel(panel_design)
+panel <- getAlterations(panel, tumor_type = "brca_tcga")
+panel <- subsetAlterations(panel)
+
+# Load data from SHIVA retrospective analaysis
+#panel <- readRDS("../Temp/shiva_panel.rds")
+
+# Fetch data
+rnaseq <- panel@dataFull$expression$data %>%
+  filter(tumor_type == "brca") %>%
+  filter(gene_symbol == "ESR1") %>%
+  select(case_id, expressionValue)
+
+# Preview
+kable(head(rnaseq), caption = "top 6 rows")
+```
+
+
+### Inner Join datasets
+
+Preview the results from the inner join.
+
+```{r}
+df <- dplyr::inner_join(rnaseq, ihcFilter, by="case_id")
+# preview
+kable(head(df
+          # ADD BUTTONS TO THE TABLE
+          , extensions = 'Buttons'
+          , options = list(
+               dom = 'lBfrtip'
+              , buttons = c('copy', 'csv', 'excel')
+              )
+          , caption = "Comparison between Missing and Submitted regions (bp) in the panel"
+          ))
+```
+
+
+### Comparison Analysis
+
+
+
+#### Explore RNA-seq Z-score 
+
+```{r}
+# explore z-score value
+p1 <- ggplot(df, aes(x=expressionValue)) +
+        geom_density(kernel="gaussian") + 
+        geom_vline(aes(xintercept=0.3, color="red")) + 
+        labs(x="Expression z-scores", title="Rna-seq expression density plot") + 
+        theme(legend.position = "none", plot.title=element_text(size=10))
+p1
+
+
+ggsave(filename="../Figures/fig_extra1.svg", plot=p1, device = "svg")
+```
+
+#### Explore ICH values
+
+```{r}
+# barplot 
+p2 <- ggplot(data=df, aes(x=ihc_value)) + 
+        geom_bar(stat = "count", position = "stack") + 
+        labs(title="Barplot with COUNT of patients in each ER ICH expression value (from 0 to 100%)")+
+        theme(legend.position = "none", plot.title=element_text(size=10))
+p2
+
+ggsave(filename="../Figures/fig_extra2.svg", plot=p2, device = "svg")
+```
+
+
+#### Compare
+
+```{r, fig.width=7}
+p3 <- ggplot(data=df, aes(x=ihc_value, y=expressionValue, group=1)) +
+    geom_point(colour="red", size=1, shape=21, fill="white") +
+    labs(title="Comparison between RNA-seq and IHC values for ER in Breast cancer") +
+    xlab("IHC value") +
+    ylab("RNA-seq z-score") +
+    geom_smooth(method="lm") +
+    geom_hline(yintercept =0.3) +
+    theme(legend.position = "none", plot.title=element_text(size=10))
+
+#ggplotly(p3,width = 650, height = 400, margin(t=1000))
+
+ggsave(filename="../Figures/fig_extra3.svg", plot=p3, device = "svg")
+```
+
+
+#### Fit to a linear model
+
+
+```{r}
+# Convert chategorical values to continue numerical value 
+# <10% = 1
+# 10-19% = 2
+# etc..
+df$ihc_value2 <- as.numeric(factor(df$ihc_value))
+# Fit the data into a linea regressino model ache chek the coefficients
+summary(lm(df$expressionValue ~ ihc_value2, df))
+```
+
+There is a significant linear relationship between the predictor and the outcome. Although the $R^2$ value is very low ($R^2$ indicates the percentage of total variation explained by the linear relationship with the predictors). 
+
+*  Pearson correlation: **`r cor(as.numeric(df$ihc_value2), df$expressionValue)`**
+
+### Put all the plots together
+
+
+```{r, fig.height=8, fig.width=12, echo=FALSE}
+library(grid)
+library(gridExtra)
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 2)))
+
+print(p1 + coord_flip(), vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(p3, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
+print(p2, vp = viewport(layout.pos.row = 2, layout.pos.col = 2))
+```
+
+
+PR analysis
+--------------------------------------------------------------------------------
+
+### IHC dataset
+
+```{r}
+ihcPRFilter <- ihc %>% 
+  dplyr::select(`Patient ID`
+                , `PR status by ihc`
+                , `PR status ihc percent positive`
+                ) %>%
+  dplyr::filter(!is.na(`PR status by ihc`)) %>% # Remove the <NA>
+  dplyr::filter(!is.na(`PR status ihc percent positive`)) %>% # Remove the <NA>
+  dplyr::rename(case_id=`Patient ID`, pr_status=`PR status by ihc`, ihc_value=`PR status ihc percent positive`)
+```
+
+### RNA-seq dataset
+
+The RNA-seq dataset was extracted using PTD function.!
+
+```{r}
+panel_design <- data.frame(drug=""
+    , gene_symbol="PGR"
+    , alteration="expression"
+    , exact_alteration="up"
+    ,	mutation_specification=""
+    ,	group="")
+
+
+panel <- newCancerPanel(panel_design)
+panel <- getAlterations(panel, tumor_type = "brca_tcga")
+panel <- subsetAlterations(panel)
+
+# Load data from SHIVA retrospective analaysis
+# Fetch data
+rnaseq_PR <- panel@dataFull$expression$data %>%
+  filter(tumor_type == "brca") %>%
+  filter(gene_symbol == "PGR") %>%
+  select(case_id, expressionValue)
+```
+
+### Inner join datasets
+
+```{r}
+# join
+dfPR <- dplyr::inner_join(rnaseq_PR, ihcPRFilter, by="case_id")
+```
+
+
+### Comparison analysis
+
+#### Explore RNA-seq Z-score 
+
+```{r}
+p1 <- ggplot(dfPR, aes(x=expressionValue)) +
+        geom_density(kernel="gaussian") + 
+        geom_vline(aes(xintercept=0.3, color="red")) + 
+        labs(x="Expression z-scores", title="Rna-seq expression density plot") + 
+        theme(legend.position = "none", plot.title=element_text(size=10))
+p1
+```
+
+
+#### Explore ICH values
+
+```{r}
+p2 <- ggplot(data=dfPR, aes(x=ihc_value)) + 
+        geom_bar(stat = "count", position = "stack") + 
+        labs(title="Barplot with COUNT of patients in each PR ICH expression value (from 0 to 100%)")+
+        theme(legend.position = "none", plot.title=element_text(size=10))
+p2
+```
+
+
+
+#### Compare
+
+```{r, fig.width=7}
+p3 <- ggplot(data=dfPR, aes(x=ihc_value, y=expressionValue, group=1)) +
+    geom_point(colour="red", size=1, shape=21, fill="white") +
+    labs(title="Comparison between RNA-seq and IHC values for PR in Breast cancer") +
+    xlab("IHC value") +
+    ylab("RNA-seq z-score") +
+    geom_smooth(method="lm") +
+    geom_hline(yintercept =0.3) +
+    theme(legend.position = "none", plot.title=element_text(size=10))
+
+#ggplotly(p3,width = 650, height = 400, margin(t=1000))
+p3
+```
+
+
+#### Fit to a linear model
+
+```{r}
+# Convert chategorical values to continue numerical value 
+# <10% = 1
+# 10-19% = 2
+# etc..
+dfPR$ihc_value2 <- as.numeric(factor(dfPR$ihc_value))
+# Fit the data into a linea regressino model ache chek the coefficients
+summary(lm(expressionValue ~ ihc_value2, dfPR))
+```
+
+### Put all the plots together
+
+
+```{r, fig.height=8, fig.width=12, echo=FALSE}
+library(grid)
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(2, 2)))
+
+print(p1 + coord_flip(), vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(p3, vp = viewport(layout.pos.row = 1, layout.pos.col = 2))
+print(p2, vp = viewport(layout.pos.row = 2, layout.pos.col = 2))
+
+```
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
+

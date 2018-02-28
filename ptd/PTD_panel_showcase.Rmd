@@ -1,6 +1,8 @@
 ---
 title: "Panel Showcase"
-author: "Alessandro Guida"
+author: 
+- name: "Alessandro Guida"
+  affiliation: European Institute of Oncology, Milan
 output:
   html_document:
     code_folding: show
@@ -18,13 +20,15 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 In this analysis we will simulate a basket clinical trial run on patients affected by 3 diseases: breast, lung and gastric cancer. Samples will be collected and sequencing with Next-generation sequencing technology. Patients will be assigned to treatment groups based on the genomic characterization. The panel design is based on a recent publication that defines the guidelines for precision medicine and the genes that should be included into diagnostic NGS assays for the previously indicated tumor type.  
 
-> Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.
+> Consensus on precision medicine for metastatic cancers: a report from the MAP 
+conference C.
 
-# Basket Trial Panel Showcase
+# BASKET TRIAL PANEL SHOWCASE
 
-## Objectives
+## OBJECTIVES
 
 The objective of this analysis is to: 
 
@@ -38,7 +42,8 @@ The objective of this analysis is to:
 
 The panel is designed based on the guidelines indicated in the recent publication:
 
-> Consensus on precision medicine for metastatic cancers: a report from the MAP conference C.
+> Consensus on precision medicine for metastatic cancers: a report from the MAP 
+conference C.
 
 We had to make some adjustments and interpretations in order to fit the guidelines into a panel design that would be input by the ```PTD``` package. 
 
@@ -191,12 +196,30 @@ First step is to create the panel design using an excel file according to the st
 library(DT)
 library(knitr)
 library(ggplot2)
+library(readxl)
 library(PrecisionTrialDesigner)
 
+# Helper functions
 `%++%` <- function(a,b) paste0(c(a,b), collapse = " ")
 
+# calculate the right confidence interval of a proportion
+rightCIprop <- function(p, sample_size){
+  se <- sqrt( p*(1 - p)/sample_size)
+  right <- p + 1.96*se + 0.5/sample_size
+  if (right > 1) right <- 1
+  return(right)
+}
+
+# calculate the left confidence interval of a proportion
+leftCIprop <- function(p, sample_size){
+  se <- sqrt( p*(1 - p)/sample_size)
+  left <- p - 1.96*se - 0.5/sample_size
+  if (left < 0) left <- 0
+  return(left)
+}
+
 # Import excel file in R
-panel_design <- gdata::read.xls("version_6.0/Tables/tb1_PTD_panel_showcase.xlsx")
+panel_design <- readxl::read_xlsx("version_6.0/Tables/tb1_PTD_panel_showcase.xlsx")
 # preview the input table
 datatable(panel_design)
 ```
@@ -248,6 +271,34 @@ PTD_panel <- filterMutations(PTD_panel , filtered = cosmic_df , mode = "keep")
 
 * Filtering out ** ```r  round((1 - nrow(unique(PTD_panel@dataFull$mutations$data)) / TCGA_original_number) *100, digits=2)``` % ** of the TCGA original SNVs.
 
+### Exclude predefined genomic regions from the simulation
+
+A useful feature of PTD is the possibility to remove with precision certain genomic regions from the study simulation. This is particularly relevant in the clinical routing as, we might be interested for example only in a subset of mutation in a particular portion of a gene. For example, EGFR T790M and PIK3CA exon 20 mutations are associated with resistance to 1st generation EGFR inhibitors. In this analysis we will model the SNV mutations in PIK3CA  excluding SNV located in exon 20, as well as exclusding EGFR T790M. 
+
+This can be achieved through the shiny app web interfance using the function ```panelOptimizer``` or programmatically, by applying a genomic filter:
+
+
+```{r}
+# PIK3CA, Exon20 on the hg19 genome assembly is mapped at the 
+# coordinates: chr3: 178,866,311-178,957,881
+# ==============================================================================
+# Let's create a bed file with the genomic region to exclude
+bed <- data.frame(chr = "chr3"
+                  , start = 178948013
+                  , end = 178948164
+                  , stringsAsFactors = FALSE)
+PTD_panel <- filterMutations(PTD_panel , bed = bed , mode = "exclude")
+
+# EGFR T790M can be removed by specifing the mutations using the a.a. format
+# ==============================================================================
+toberemoved <- data.frame(gene_symbol = "EGFR"
+                          , amino_acid_change = "T790M"
+                            )
+PTD_panel <- filterMutations(PTD_panel , filtered =  toberemoved, mode = "exclude")
+
+# for help and more details see ?filterMutations
+```
+
 
 ### Adjust CNA threshold to be clinically relevant
 
@@ -267,11 +318,8 @@ the rest is considered as normal copies.
 For research purposes, these criteria are very useful 
 to discover new potential gene copies alterations 
 but a clinical setting requires stronger evidence for a call, 
-especially in case of amplification.
-
-The SHIVA trial protocol, for instance, in order to consider clinically
-relevant a *AKT* amplification, it requires at least the presence of 5-6 copies.
-
+especially in case of amplification. The SHIVA trial protocol, for instance, in order to consider clinically
+relevant a *AKT* amplification, it requires at least the presence of 5-6 copies. 
 A similar granularity is not possible with the final 
 GISTIC results but it can be obtained up to a certain degree 
 using the original data provided by the GDAC Firehose (the same used by cBioPortal).
@@ -298,7 +346,7 @@ absolute number of copies in the following way:
 * 3-Inf: amplification
 
 While data from 1.1 to 2.9 are the same as before (considered normal on default), 
-now 1 is the point of -2 deletion and 3 the point of +2 amplifiaction.
+now 1 is the point of -2 deletion and 3 the point of +2 amplification.
 We have now the full spectrum of amplification from > 3 that can be used to fine-tune 
 the clinically relevant threshold (4, 5 ,6 copies for example).
 
@@ -315,22 +363,21 @@ CNA_genes <- PTD_panel@arguments$panel %>%
 # PATH: set global variable with the path to.rds files with CNA raw data
 PATH_2CNA_FILES <- "version_6.0/Temp/cna_firehose_rds/"
 
-
 # helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured
 # ==============================================================================
-get_cna_long <- function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
+get_cna_long <- function(tumor_types, PATH_2CNA_FILES, genes_chr, del_thr, amp_thr){
   
   
   # CHECKS
   # --------------------------------------------------------------------------------
   # check that PATH actually leads to a dir
-  if(!dir.exists(PATH_2rds)){ stop("path to a dir that cannot be found")}
+  if(!dir.exists(PATH_2CNA_FILES)){ stop("path to a dir that cannot be found")}
 
   # Check that all the files are found for each tumor type required in the analysis
   input_lgl <- purrr::map_lgl(tumor_types
-                              , ~ file.exists(paste0(PATH_2rds
-                                                     , toupper(.)
-                                                     , "_PTD.rds")
+                              , ~ file.exists(file.path(PATH_2CNA_FILES
+                                                     , paste0(toupper(.) , "_PTD.rds")
+                                                     )
                                               )
                               )
   
@@ -348,17 +395,17 @@ get_cna_long <- function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
 
   # Define an internal function to do the job
   # -------------------------------------------------------------------------------
-  get_CNA_long_onetumor <- function(one_tumor, PATH_2rds, genes_chr, del_thr, amp_thr){
+  get_CNA_long_onetumor <- function(one_tumor, PATH_2CNA_FILES, genes_chr, del_thr, amp_thr){
     
     # read in CNA file
-    # myfile <- readRDS(paste0(PATH_2rds, toupper(one_tumor) , "_PTD.rds"))
+    # myfile <- readRDS(paste0(PATH_2CNA_FILES, toupper(one_tumor) , "_PTD.rds"))
     # if(!file.exists(myfile)){
     #   message(myfile)
     #   return(NULL)
     # }
     # mat <- tryCatch(readRDS(myfile) , error = function(e) stop(myfile))
     
-    mat <- readRDS(paste0(PATH_2rds, toupper(one_tumor) , "_PTD.rds"))
+    mat <- readRDS(file.path(PATH_2CNA_FILES, paste0(toupper(one_tumor) , "_PTD.rds")))
     
     # extract Patients
     pats <- colnames(mat)
@@ -370,6 +417,7 @@ get_cna_long <- function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
     output <- reshape2::melt(mat , value.name = "CNAvalue")
     colnames(output) <- c("gene_symbol" , "case_id" , "CNAvalue")
       output$tumor_type <- one_tumor
+      
     # Choose cutoff values
     # -----------------------------------------------------------------------------
     # With default threshold data are now like this: 
@@ -394,7 +442,7 @@ get_cna_long <- function(tumor_type, PATH_2rds, genes_chr, del_thr, amp_thr){
   # -----------------------------------------------------------------------------
   cna_long_df <- purrr::map(tumor_types
                              , ~ get_CNA_long_onetumor(.
-                                                       , PATH_2rds
+                                                       , PATH_2CNA_FILES
                                                        , genes_chr
                                                        , del_thr
                                                        , amp_thr
@@ -512,11 +560,12 @@ population_df %>%
   tidyr::gather(Population, Frequency, seer:tcga) %>%
   ggplot(aes(x=Population, y=Frequency, fill=tumor)) + 
   geom_bar(stat="identity") + 
-  facet_grid(. ~ tumor, space="free", scales="free") +
-  ggtitle("Comparison of the initial population composition")
+  facet_grid(tumor ~ ., space="free", scales="free") +
+  ggtitle("Comparison of the initial population composition") + 
+  coord_flip()
 
-#library(svglite)
-#ggsave(filename="../Figures/fig1D.svg", plot=last_plot(), device = "svg")
+library(svglite)
+ggsave(filename="version_6.0/Figures/fig2A.svg", plot=last_plot(), device = "svg")
 
 ```
 
@@ -564,27 +613,99 @@ coveragePlot(PTD_panel
             )
 ```
 
+Simulate the panel performance with a weighted bootstrap simulation run 200 times. 
 
-```{r, include=FALSE , eval=FALSE , echo = FALSE}
-# SAVE THE IMAGE as a SVG
 
-svg(filename="../Figures/fig2A.svg", 
-    #width=7, 
-    #height=4, 
-    pointsize=12)
+```{r, include=FALSE}
 
-  coveragePlot(PTD_panel
+# Run simulation
+# ------------------------------------------------------------------------------
+N_SIMULATIONS = 200
+
+simul <- lapply(1:N_SIMULATIONS , function(x) {
+	cov <- coveragePlot(
+                 PTD_panel
                , alterationType=c("mutations" , "copynumber")
                # adjust population distribution by applying a weighted sampling bootstrap
-               , tumor.freqs = c(brca=brca_freq
-                                 , luad=luad_freq
-                                 , lusc=lusc_freq
-                                 , stad = stad_freq
-                                 , coadread = coadread_freq
+               , tumor.weights = c(brca=ceiling(brca_tot/100)
+                                 , luad=ceiling(luad_tot/100)
+                                 , lusc=ceiling(lusc_tot/100)
+                                 , stad = ceiling(stad_tot/100)
+                                 , coadread = ceiling(coadread_tot/100)
                                  )
-              )
-  
-dev.off()
+               , noPlot=TRUE
+               , maxNumAlt = 7
+              )		
+			return(cov$plottedTable/cov$Samples[1])
+		})
+
+## Prepare function for plotting Detection power with Confidenti intervals
+# ------------------------------------------------------------------------------
+
+# Convert to dataframe
+simul <- data.frame(matrix(unlist(simul)
+                        , nrow=length(simul)
+                        , byrow=T )
+                 , stringsAsFactors = FALSE)
+
+# GET STATS
+# ------------------------------------------------------------------------------
+# Calculate for each n° of alteration, the mean
+detectionPower <- colMeans(simul)
+
+# Calculate lower CI for bootstrap
+leftCI <- apply(simul,2,function(x){left <- quantile(x, 0.025)})
+
+# Calculate upper CI for bootstrap
+rightCI <- apply(simul,2,function(x){right <- quantile(x, 0.975)})
+
+# Preapre for column with # alterations
+n_alterations <- 1:length(detectionPower)
+
+# Put them all together in a data frame
+dtpow <- data.frame(n_alterations, detectionPower, leftCI, rightCI)
+
+# Generate the plot
+PTD_detection_image <- dtpow %>%
+  ggplot(aes(x=n_alterations, y=detectionPower)) + 
+  geom_bar(stat="identity" , position=position_dodge()) + 
+  scale_y_continuous(limits = c(0,1)) +
+  scale_x_continuous(breaks = n_alterations, trans = "reverse") +
+  geom_errorbar(aes(ymax=rightCI
+                    , ymin=leftCI)
+                , position=position_dodge(0.9)
+                , size=0.2
+  ) + 
+  ggtitle("Overall Detection power") +
+  annotate("text"
+           , x=n_alterations
+           , y=detectionPower+0.15
+           , label= sapply(detectionPower*100
+                           , function(x) paste(c(round(x, digits=2), "%")
+                                               , collapse=" ")
+           )
+  ) +
+  coord_flip()
+
+# Show image
+PTD_detection_image
+
+
+
+# ------------
+
+# SAVE THE IMAGE as a SVG
+
+# svg(filename="version_6.0/Figures/fig2B.svg", 
+#     #width=7,  
+#     #height=4, 
+#     pointsize=12)
+# 
+#PTD_detection_image
+
+#dev.off()
+
+ggsave(filename="version_6.0/Figures/fig2B.svg", plot=last_plot(), device = "svg")
 ```
 
 The previous plot shows the percentage of patients (*y-axis*) found to have at least one, two, three, etc, alterations (*x-axis*). The current design is capable of detecting ```r coveragePlot(PTD_panel
@@ -642,29 +763,53 @@ for(i in 1:length(dt_power_lt$plottedTable)){
   }
   # export
   df <- rbind(df
-              , data.frame(tumor_id=names(dt_power_lt$Samples[index])
-                             , freq=as.numeric(freq))
+              , data.frame( tumor_id=names(dt_power_lt$Samples[index])
+                          , freq=as.numeric(freq)
+                          , n_samples = dt_power_lt$Samples[index]
+                           )
               )
 }
 
-# generate plot 
+# calculate confidence intervals
+df$leftCI <- purrr::map2_dbl(df$freq, df$n_samples, .f=leftCIprop)
+df$rightCI <- purrr::map2_dbl(df$freq, df$n_samples, .f=rightCIprop)
+
+# sort dataframe
+df <- df %>% dplyr::arrange(freq) 
+
+# plot
 df %>%
-  dplyr::arrange(freq) %>%
   ggplot(aes(x=reorder(tumor_id, freq), y=freq*100)) + 
   geom_bar(stat="identity") + 
+  scale_y_continuous(limits = c(0,50)) +
+  geom_errorbar(aes(   ymax= leftCI*100
+                     , ymin= rightCI*100)
+                 , position=position_dodge(0.9)
+                 , size=0.2
+  ) +
+  geom_text(aes(x=df$tumor_id
+                , y=df$freq*100+0.15
+                , label = sapply(df$freq*100
+                             , function(x) paste(c(round(x, digits=2), "%")
+                                                 , collapse=" ")
+                            )
+                  ) , position = position_dodge(width = 1)
+                    , vjust = 0.5
+                    , hjust = -1.3
+              ) + 
   coord_flip() + 
   labs(title="Genomic panel detection-power in different tumor types.") +
   ylab(label = "detection power indicated as the overall population percentage") +
   xlab(label = "tumor type (TCGA ID)")
 ```
 
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig2B.svg", plot=last_plot(), device = "svg")
+```{r, message=FALSE, include=FALSE}
+ggsave(filename="version_6.0/Figures/fig2C.svg", plot=last_plot(), device = "svg")
 ```
 
 ### Patient treatment allocation
 
-We can also easily address the issue of the allocation frequency in the different treatment groups. The following plot shows the number of patients with at least one, two or more alterations that can be targeted by each drug in the trial. This is particularly important in clinical trails when you want to predict the maximum number of patients that could be allocated into a drug treatment and identify potential cohorts with few patients allocated.
+We can also easily address the issue of the allocation frequency in the different treatment groups. The following plot shows the number of patients with at least one, two or more alterations that can be targeted by each drug in the trial. This is particularly important in clinical trials when you want to predict the maximum number of patients that could be allocated into a drug treatment and identify potential cohorts with few patients allocated.
 
 
 ```{r patient treatment allocation plot, fig.height=14, fig.width=8}
@@ -687,6 +832,7 @@ coveragePlot(PTD_panel
 To make it simpler to compare, we will plot the detection power for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.
 
 ```{r max freq of patients eligible for each drug treatment}
+
 # get data from the panel simulation
 drug_df <- coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
@@ -710,7 +856,6 @@ names(drug_df)[1] <- "freq"
 drug_df %>%
   tibble::rownames_to_column("drug_name") %>%
   dplyr::filter(!grepl("no_drug", drug_name)) %>%
-  #dplyr::add_rownames("drug_name") %>%
   ggplot(aes(x=reorder(drug_name, freq), y=freq*100)) + 
   geom_bar(stat="identity") + 
   coord_flip() + 
@@ -719,9 +864,126 @@ drug_df %>%
   xlab(label = "Drug name")
 ```
 
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval=FALSE}
-ggsave(filename="../Figures/fig2C.svg", plot=last_plot(), device = "svg")
+
+Generate the same plot this time running a weighted bootstrap simulation.
+
+```{r}
+
+# Run simulation
+# ------------------------------------------------------------------------------
+N_SIMULATIONS = 200
+
+simul <- lapply(1:N_SIMULATIONS , function(x) {
+  drug_df <- coveragePlot(PTD_panel
+             , alterationType=c("mutations" , "copynumber")
+             , grouping="drug"
+             # adjust population distribution by applying a weighted sampling bootstrap
+                          , tumor.weights = c(brca=ceiling(brca_tot/100)
+                                 , luad=ceiling(luad_tot/100)
+                                 , lusc=ceiling(lusc_tot/100)
+                                 , stad = ceiling(stad_tot/100)
+                                 , coadread = ceiling(coadread_tot/100)
+                                 )
+             , colNum = 2 # number of columns in the plot
+             , cex.main = 1 # size of the plot title
+             , noPlot=TRUE
+             , maxNumAlt = 1
+ )
+  
+  return(drug_df$plottedTable/drug_df$Samples[1])
+})
+  
+# Convert to dataframe
+drug_vector <- unique(PTD_panel@arguments$panel$drug)
+
+# Create a custom function to manage the problem with the function output CoveragaPlot not 
+# outputting the same number of ites in the simualation  The function takes the labels, the 
+# vector and rematches, adding NA when a match is missing
+value2slot <- function(value_vector, labels_vector){
+
+  # Cycle through the vector
+  temp_vector <- rep(0, times=length(labels_vector))
+  for (i in 1:length(labels_vector)){
+    # for each position in the vector fetch
+    value <- value_vector[i]
+    label <- rownames(value_vector)[i] %>% gsub("drug: ", "", .)
+      
+    #get location index
+    index <- labels_vector %in%  label
+    # qc
+    if(sum(index)>1) {stop("label mateched to more than one location")}
+    # replace value to that index position
+    temp_vector[which(index)] <- value
+  }
+  
+  # add labels to the vector
+  names(temp_vector) <- labels_vector
+  
+  return(temp_vector)
+}
+# test the function
+#value2slot(simul[200][[1]], drug_vector)
+
+# apply transformation to make it into a dataframe
+simul_df <- purrr::map(simul, ~ value2slot(., drug_vector)) %>%
+  data.frame %>%
+  t()
+# remove undesired rownames
+row.names(simul_df) <- NULL
+
+# GET STATS
+# ------------------------------------------------------------------------------
+# Calculate for each n° of alteration, the mean
+detectionPower <- colMeans(simul_df)
+
+# Calculate lower CI for bootstrap
+leftCI <- apply(simul_df,2,function(x){left <- quantile(x, 0.025)})
+
+# Calculate upper CI for bootstrap
+rightCI <- apply(simul_df,2,function(x){right <- quantile(x, 0.975)})
+
+# Preapre for column with # alterations
+n_alterations <- 1:length(detectionPower)
+
+# Put them all together in a data frame
+dtpow <- data.frame(n_alterations, detectionPower, leftCI, rightCI) %>%
+  tibble::rownames_to_column("drug_name") %>% 
+  dplyr::filter(!drug_name %in% "no_drug") # remove no_drug from the dataset
+
+# Generate the plot
+PTD_detection_image <- dtpow %>%
+  ggplot(aes(x=reorder(drug_name, detectionPower), y = detectionPower)) + 
+  geom_bar(stat="identity" , position = position_dodge()) + 
+  scale_y_continuous(limits = c(0,.5)) +
+  #scale_x_discrete(labels = dtpow[order(dtpow$detectionPower, decreasing = TRUE),"drug_name"]) + 
+  #scale_x_continuous(breaks = n_alterations, trans = "reverse") +
+  geom_errorbar(aes(ymax=rightCI
+                    , ymin=leftCI)
+                , position=position_dodge(0.9)
+                , size=0.2
+  ) + 
+  ggtitle("Max frequencies of patients elibigle for each drug treatment") +
+  ylab(label = "Detection power indicated as the overall population percentage") +
+  xlab(label = "Drug name") +
+  annotate("text"
+           , x=reorder(dtpow$drug_name, dtpow$detectionPower)
+           , y=dtpow$detectionPower + 0.15
+           , label= sapply(dtpow$detectionPower*100
+                           , function(x) paste(c(round(x, digits = 2), "%")
+                                               , collapse = " ")
+           )
+  ) +
+  coord_flip()
+
+# Show image
+PTD_detection_image
 ```
+
+```{r, message=FALSE, include=FALSE}
+ggsave(filename="version_6.0/Figures/fig2D.svg", plot=last_plot(), device = "svg")
+```
+
+
 
 
 ### Panel performance evaluation
@@ -759,8 +1021,8 @@ saturationPlot(PTD_panel
             )
 ```
 
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig2D.svg", plot=last_plot(), device = "svg")
+```{r, message=FALSE, include=FALSE}
+ggsave(filename="version_6.0/Figures/fig2E.svg", plot=last_plot(), device = "svg")
 ```
 
 Each single cancer type will have different gene alteration frequencies, and therefore the order of the genes can change accordingly. In the following set of plots we will change the gene adding order, using ```asbolute``` ranking. This parameters, will not add genes based on their optimal ratio, but will priorities genes with the absolute highest number of alterations found in each single tumor group of interest
@@ -842,8 +1104,8 @@ saturationPlot(PTD_panel
             )
 ```
 
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig2E.svg"
+```{r, message=FALSE, include=FALSE}
+ggsave(filename="version_6.0/Figures/fig2F.svg"
        , plot=last_plot()
        , device = "svg"
        , width=10
@@ -965,8 +1227,8 @@ coocMutexPlot(PTD_panel
 ```
 
   
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig2F.svg"
+```{r, message=FALSE, include=FALSE}
+ggsave(filename="version_6.0/Figures/fig2G.svg"
        , plot=last_plot()
        , device = "svg"
        , width=12
@@ -1013,7 +1275,7 @@ coocMutexPlot(PTD_panel
 
 ### How many patients are eligible to more than one treatment? 
 
-Some patients are eligible to more than one terapy group. We will take advantage of this information in a later stage of the analysis as it will allows us to to optimize the patients allocation and improve the changes of the clinical trial of reaching statistical power.
+Some patients are eligible to more than one therapy group. We will take advantage of this information in a later stage of the analysis as it will allows us to to optimize the patients allocation and improve the changes of the clinical trial of reaching statistical power.
 
 ```{r}
 # Prepare dataframe on which to run the analysis
@@ -1046,7 +1308,8 @@ alPatDrug %>%
 
 ### Power analysis
 
-We can now simulated a clinical trail based on the drug-gene targeting design, and estimate the number of patients that would need to be recruited. 
+We can now simulate a clinical trial based on the drug-gene targeting design, 
+and estimate the number of patients that needs to be recruited. 
 
 * We will look at 4 **power levels**: 0.6, 0.7, 0.8, 0.9 
 * and we will consider different Hazard ratios
@@ -1056,6 +1319,7 @@ We can now simulated a clinical trail based on the drug-gene targeting design, a
 ```{r, warning=FALSE, fig.height=8, fig.width=8}
 # Generate plot
 survPowerSampleSize(PTD_panel
+  , alterationType = c("mutations" , "copynumber")
   , HR = c(0.5, 0.6, 0.7, 0.8)
   , power = seq(0.6 , 0.9 , 0.1)
   , alpha = 0.05
@@ -1069,8 +1333,8 @@ survPowerSampleSize(PTD_panel
   )
 ```
 
-```{r, include=FALSE, message=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig3A.svg", plot=last_plot(), device = "svg")
+```{r, include=FALSE, message=FALSE}
+ggsave(filename="version_6.0/Figures/fig3C.svg", plot=last_plot(), device = "svg")
 ```
 
 Preview the table with the data from the previous plot.
@@ -1095,7 +1359,7 @@ survPowerSampleSize(PTD_panel
 
 #### Power analysis per group treatment
 
-The power analysis can also be perform grouping by tumor types.
+The power analysis can also be performed grouping by tumor types.
 
 ```{r, warning=FALSE, fig.height=8, fig.width=8}
 
@@ -1118,7 +1382,7 @@ survPowerSampleSize(PTD_panel
 
 ### PATIENT ALLOCATION OPTIMIZATION
 
-In this section we will investigate how the patients could be allocated to the treatment groups. It is particuarly interesting to notice that some patients are eligible to more than one terapy group, allowing to run optimization algorithms in order to better balance the patients allocation distribution in the different treatment arms and therefore reducing the risk of not reach statistical in the clincial trial. 
+In this section we will investigate how the patients could be allocated to the treatment groups. It is particularly interesting to notice that some patients are eligible to more than one therapy group, allowing to run optimization algorithms in order to better balance the patients allocation distribution in the different treatment arms reducing the number samples to screen. 
 
 #### Number of patients required for the overall study to reach the required power (using PFS)
 
@@ -1134,7 +1398,6 @@ drugs <- c("HER2 inhibitor"
   , "BRAF inhibitor"
   , "MET inhibitor"
   , "NOTCH inhibitor"
-  , "ALK inhibitor"
   , "Immune Checkpoint Inhibitor")
 
 # Show plot
@@ -1156,7 +1419,7 @@ survPowerSampleSize(PTD_panel
 
 ```
 
-Show it in a table
+Show in a table the Power 0.8 and HR = 0.6
 
 ```{r}
 # Show it in a table
@@ -1194,31 +1457,24 @@ survPowerSampleSize(PTD_panel
 ```{r, , warning=FALSE, message=FALSE}
 propPowerSampleSize(PTD_panel
   , noPlot=FALSE
-  , alterationType = c("mutations", "copynumber", "expression")
+  , alterationType = c("mutations", "copynumber")
   , pCase = c(0.2, 0.3 , 0.4)
   , pControl = rep(0.1, 3)
-  #, power =c(0.7, 0.75, 0.8, 0.85, 0.9)
   , power = c(0.7, 0.8, 0.9)
   , alpha= 0.1
   , side = 1
   ) 
 ```
 
-```{r, message=FALSE, include=FALSE , echo=FALSE , eval = FALSE}
-ggsave(filename="../Figures/fig3B.svg", plot=last_plot(), device = "svg")
-```
 
 
-
-```{r, warning=FALSE, message=FALSE}
+```{r, , warning=FALSE, message=FALSE}
 
 propPowerSampleSize(PTD_panel
   , var = "drug"
   , alterationType = c("mutations", "copynumber")
-  , priority.trial = as.character(unique(panel_design$drug))[-4] 
+  , priority.trial = drugs 
   , priority.trial.order="optimal"
-  #, HR = 0.66
-  #, p.event=1
   , noPlot=TRUE
   , pCase = 0.3
   , pControl = 0.1
@@ -1247,22 +1503,35 @@ kable(surv2 , row.names=FALSE)
 ```
 
 
-## Per abstract
- 
-NOT OPTIMAL
+## For the Abstract
+
+### PFS 2 samples calculations
+
+Perform a 1-side 2-sample sample size calculation for PFS study using:
+
+* fu 1.883
+* case.fraction = 0.5
+* ber = 0.85
+* HR = 0.625
+* power = 0.8
+
+#### NOT OPTIMAL
 
 ```{r}
+library(parallel)
 set.seed(111)
 # NOT optimal
-surv2 <- survPowerSampleSize(PTD_panel
+surv2 <- mclapply(1:100 , function(x){
+  out <- survPowerSampleSize(PTD_panel
    , alterationType = c("mutations", "copynumber")
-   , HR = 0.66
+   , HR = 0.625
    , power = 0.8
    , alpha = 0.05
    , case.fraction = 0.5
    , ber=0.85
    , fu=1.883
    , var = "drug"
+   , side = 1
    , tumor.weights = c(brca=brca_tot
                                , luad=luad_tot
                                , lusc=lusc_tot
@@ -1270,27 +1539,51 @@ surv2 <- survPowerSampleSize(PTD_panel
                                , coadread = coadread_tot
                                )
    , noPlot=TRUE)
+  out <- out[ order(out$Var) , ]
+  return(out)
+} , mc.cores=detectCores())
 
+Screenings <- sapply(surv2 , function(x) x$ScreeningSampleSize)
+medianScreening <- apply(Screenings , 1 , function(x) {
+  paste(median(x) 
+        , paste0( "(" , quantile(x , 0.025) 
+                        , "-" 
+                        , quantile(x , 0.975) , ")"))
+})
+
+surv2DF <- data.frame(Var = surv2[[1]]$Var
+                  , ScreeningSampleSize = medianScreening
+                  , EligibleSampleSize = surv2[[1]]$EligibleSampleSize
+                  , Beta = 0.2
+                  , Power = 0.8
+                  , HR = 0.625)
 #export
 #write.table(surv2, file = "~/Desktop/notoptimal_ptd-showcase.txt", quote=FALSE, sep=",")
 
-# count n patients necessary to be recruited
-n_patients_notoptimal <- surv2  %>% 
-  dplyr::filter(!Var == "no_drug", !Var == "Full Design") %>%
-  dplyr::select(ScreeningSampleSize) %>%
-  dplyr::summarise_all(sum)
-
 #preview
-kable(surv2 , row.names=FALSE)
+kable(surv2DF[ match(c("Full Design" , drugs , "no_drug") , surv2DF$Var) , ] , row.names=FALSE)
 ```
 
-* Number of patients necessary: `r n_patients_notoptimal`
+```{r , echo=FALSE}
+# count n patients necessary to be recruited for every simulation
+n_patients_notoptimal <- apply(Screenings , 2 , function(x) {
+  sum( x[ surv2DF$Var %in% drugs ] )
+})
 
-Optimal
+n_patients_notoptimal_show <- paste(format(round(median(n_patients_notoptimal)) , scientific = FALSE)
+    , paste0( "(" 
+      , format(quantile(n_patients_notoptimal , 0.025) , scientific=FALSE) 
+      , "-" 
+      , format(quantile(n_patients_notoptimal , 0.975) , scientific=FALSE) , ")"))
 
-```{r}
-library(parallel)
-set.seed(111)
+```
+
+* Median Number of patients necessary with CI: `r n_patients_notoptimal_show`
+
+#### PRIORITY OPTIMAL
+
+```{r , message = FALSE , warning=FALSE}
+set.seed(112)
 simulSurv2 <- mclapply(1:100 , function(x) {
     survPowerSampleSize(PTD_panel
         , alterationType = c("mutations", "copynumber")
@@ -1301,8 +1594,6 @@ simulSurv2 <- mclapply(1:100 , function(x) {
         , fu=1.883
         , case.fraction = 0.5
         , collapseByGene=TRUE
-        #, tumor.weights = shivapop$Samples_n %>% 
-        #                setNames(shivapop$tcga_id) 
         , tumor.weights = c(brca=brca_tot
                                , luad=luad_tot
                                , lusc=lusc_tot
@@ -1311,6 +1602,7 @@ simulSurv2 <- mclapply(1:100 , function(x) {
                                )
         , var = "drug" 
         , noPlot=TRUE
+        , side = 1
         , priority.trial=drugs
         , priority.trial.order="optimal")$`HR:0.625 | HR0:1 | Power:0.8`$Summary
 } , mc.cores=detectCores())
@@ -1318,7 +1610,7 @@ summaryMat2 <- simulSurv2[[1]]
 for(i in rownames(summaryMat2)){
     for(j in colnames(summaryMat2)){
         vec <- sapply(simulSurv2 , function(x) x[i , j])
-        summaryMat2[i , j] <- paste(mean(vec) , 
+        summaryMat2[i , j] <- paste(median(vec) , 
                 paste0( "(" , quantile(vec , 0.025) 
                         , "-" 
                         , quantile(vec , 0.975) , ")"))
@@ -1331,6 +1623,768 @@ for(i in rownames(summaryMat2)){
 kable(summaryMat2)
 ```
 
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal <- sapply(simulSurv2 , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under optimal design (median value with CI): `r summaryMat2["Screened" , "Total"]`
+
+Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small 
+number of patients, is sufficient to cover all the other drugs in most of the cases.
+
+The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs 
+evaluated together) is `r paste0(round(100*(median(n_patients_notoptimal) - median(n_patients_optimal))/median(n_patients_notoptimal) , 2) , "%")`
+
+#### PRIORITY NON OPTIMAL
+
+Extract drug frequencies
+
+```{r}
+drugFreqs <- coverageStackPlot(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , var = "drug"
+   , grouping = NA
+   , tumor.freqs = c(brca=brca_freq
+                    , luad=luad_freq
+                    , lusc=lusc_freq
+                    , stad = stad_freq
+                    , coadread = coadread_freq) 
+        , noPlot=TRUE)$plottedTable[1, ]
+# Sort from highest to lowest
+drugFreqs <- sort(drugFreqs , decreasing = TRUE)
+# Remove no_drug
+drugFreqs <- drugFreqs[ names(drugFreqs)!="no_drug"]
+```
+
+Perform a priority trial starting from the drug with the highest frequency (NON OPTIMAL)
+
+```{r , message = FALSE , warning=FALSE}
+set.seed(112)
+simulSurv2_NO <- mclapply(1:100 , function(x) {
+    survPowerSampleSize(PTD_panel
+        , alterationType = c("mutations", "copynumber")
+        , HR = 0.625
+        , power = 0.8
+        , alpha = 0.05
+        , ber=0.85
+        , fu=1.883
+        , case.fraction = 0.5
+        , collapseByGene=TRUE
+        , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+        , var = "drug" 
+        , noPlot=TRUE
+        , side = 1
+        , priority.trial=names(drugFreqs)
+        , priority.trial.order="as.is")$`HR:0.625 | HR0:1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+summaryMat2_NO <- simulSurv2_NO[[1]]
+for(i in rownames(summaryMat2_NO)){
+    for(j in colnames(summaryMat2_NO)){
+        vec <- sapply(simulSurv2_NO , function(x) x[i , j])
+        summaryMat2_NO[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat2_NO, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(summaryMat2_NO)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal_NO <- sapply(simulSurv2_NO , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under non optimal priority design (median value with CI): `r summaryMat2_NO["Screened" , "Total"]`
+
+#### FULL SUMMARY OF THE THREE METHODS
+
+Create a dataframe with median and CI for the three methods
+
+```{r}
+pfs2 <- data.frame( Method = c("Indipendent" , "Priority Non Optimal" , "Priority Optimal")
+                    , Median = c(median(n_patients_notoptimal) 
+                                 , median(n_patients_optimal_NO) 
+                                 , median(n_patients_optimal))
+                    , CI_low = c(quantile(n_patients_notoptimal , 0.025) 
+                                 , quantile(n_patients_optimal_NO , 0.025) 
+                                 , quantile(n_patients_optimal , 0.025))
+                    , CI_high = c(quantile(n_patients_notoptimal , 0.975) 
+                                 , quantile(n_patients_optimal_NO , 0.975) 
+                                 , quantile(n_patients_optimal , 0.975)))
+```
+
+Plot as barplot
+
+```{r}
+gpfs2 <- ggplot(pfs2, aes(x=Method, y=Median)) + 
+    geom_bar(position=position_dodge(), stat="identity" 
+             , fill = c("firebrick3" , "deepskyblue4" , "seagreen4") 
+            , col=rep("black",3)) +
+    geom_errorbar(aes(ymin=CI_low, ymax=CI_high)
+                  , width=.2
+                  , position=position_dodge(.9)
+                  , size=0.2
+                  )
+gpfs2
+```
+
+```{r}
+ggsave(filename="version_6.0/Figures/fig5A.svg", plot=gpfs2, device = "svg")
+```
+
+
+### PFS 1 sample calculations
+
+Perform a 1-side 1-sample sample size calculation for PFS study using:
+
+* MED0 = 0.8154673 (corresponding to ber = 0.85)
+* MED1 = 1.304748 (corresponding to MED0/HR)
+* power = 0.8
+* fu = 1.883
+
+#### NOT OPTIMAL
+
+
+```{r}
+set.seed(111)
+# NOT optimal
+surv3 <- mclapply(1:100 , function(x){
+  out <- survPowerSampleSize1Arm(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , MED0 = 0.8154673
+   , MED1 = 1.304748
+   , power = 0.8
+   , alpha = 0.05
+   , fu = 1.883
+   , var = "drug"
+   , side = 1
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+   , noPlot=TRUE)
+  out <- out[ order(out$Var) , ]
+  return(out)
+} , mc.cores=detectCores())
+
+Screenings <- sapply(surv3 , function(x) x$ScreeningSampleSize)
+medianScreening <- apply(Screenings , 1 , function(x) {
+  paste(median(x) 
+        , paste0( "(" , quantile(x , 0.025) 
+                        , "-" 
+                        , quantile(x , 0.975) , ")"))
+})
+
+surv3DF <- data.frame(Var = surv3[[1]]$Var
+                  , ScreeningSampleSize = medianScreening
+                  , EligibleSampleSize = surv3[[1]]$EligibleSampleSize
+                  , Beta = 0.2
+                  , Power = 0.8
+                  , MED1 = 1.304748)
+#export
+#write.table(surv3, file = "~/Desktop/notoptimal_ptd-showcase.txt", quote=FALSE, sep=",")
+
+#preview
+kable(surv3DF[ match(c("Full Design" , drugs , "no_drug") , surv3DF$Var) , ] , row.names=FALSE)
+```
+
+```{r , echo=FALSE}
+# count n patients necessary to be recruited for every simulation
+n_patients_notoptimal <- apply(Screenings , 2 , function(x) {
+  sum( x[ surv3DF$Var %in% drugs ] )
+})
+
+n_patients_notoptimal_show <- paste(format(round(median(n_patients_notoptimal)) , scientific = FALSE)
+    , paste0( "(" 
+      , format(quantile(n_patients_notoptimal , 0.025) , scientific=FALSE) 
+      , "-" 
+      , format(quantile(n_patients_notoptimal , 0.975) , scientific=FALSE) , ")"))
+
+```
+
+* Median Number of patients necessary with CI: `r n_patients_notoptimal_show`
+
+#### OPTIMAL
+
+```{r}
+set.seed(112)
+simulSurv3 <- mclapply(1:100 , function(x) {
+    survPowerSampleSize1Arm(PTD_panel
+    , alterationType = c("mutations", "copynumber")
+    , MED0 = 0.8154673
+    , MED1 = 1.304748
+    , power = 0.8
+    , alpha = 0.05
+    , fu = 1.883
+    , var = "drug"
+    , side = 1
+    , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+    , noPlot=TRUE
+    , priority.trial=drugs
+    , priority.trial.order="optimal")$`MED1:1.304748 | MED0:0.8154673 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+summaryMat3 <- simulSurv3[[1]]
+for(i in rownames(summaryMat3)){
+    for(j in colnames(summaryMat3)){
+        vec <- sapply(simulSurv3 , function(x) x[i , j])
+        summaryMat3[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat3, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(summaryMat3)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal <- sapply(simulSurv3 , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under optimal design (median value with CI): `r summaryMat3["Screened" , "Total"]`
+
+Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small 
+number of patients, is sufficient to cover all the other drugs in most of the cases.
+
+The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs 
+evaluated together) is `r paste0(round(100*(median(n_patients_notoptimal) - median(n_patients_optimal))/median(n_patients_notoptimal) , 2) , "%")`
+
+#### PRIORITY NON OPTIMAL
+
+Perform a priority trial starting from the drug with the highest frequency (NON OPTIMAL)
+
+```{r , message = FALSE , warning=FALSE}
+set.seed(112)
+simulSurv3_NO <- mclapply(1:100 , function(x) {
+    survPowerSampleSize1Arm(PTD_panel
+    , alterationType = c("mutations", "copynumber")
+    , MED0 = 0.8154673
+    , MED1 = 1.304748
+    , power = 0.8
+    , alpha = 0.05
+    , fu = 1.883
+    , var = "drug"
+    , side = 1
+    , tumor.weights = c(brca=brca_tot
+                        , luad=luad_tot
+                        , lusc=lusc_tot
+                        , stad = stad_tot
+                        , coadread = coadread_tot)
+    , noPlot=TRUE
+    , priority.trial=names(drugFreqs)
+    , priority.trial.order="as.is")$`MED1:1.304748 | MED0:0.8154673 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+summaryMat3_NO <- simulSurv3_NO[[1]]
+for(i in rownames(summaryMat3_NO)){
+    for(j in colnames(summaryMat3_NO)){
+        vec <- sapply(simulSurv3_NO , function(x) x[i , j])
+        summaryMat3_NO[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat3, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(summaryMat3_NO)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal_NO <- sapply(simulSurv3_NO , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under non optimal priority design (median value with CI): `r summaryMat3_NO["Screened" , "Total"]`
+
+#### FULL SUMMARY OF THE THREE METHODS
+
+Create a dataframe with median and CI for the three methods
+
+```{r}
+pfs1 <- data.frame( Method = c("Indipendent" , "Priority Non Optimal" , "Priority Optimal")
+                    , Median = c(median(n_patients_notoptimal) 
+                                 , median(n_patients_optimal_NO) 
+                                 , median(n_patients_optimal))
+                    , CI_low = c(quantile(n_patients_notoptimal , 0.025) 
+                                 , quantile(n_patients_optimal_NO , 0.025) 
+                                 , quantile(n_patients_optimal , 0.025))
+                    , CI_high = c(quantile(n_patients_notoptimal , 0.975) 
+                                 , quantile(n_patients_optimal_NO , 0.975) 
+                                 , quantile(n_patients_optimal , 0.975)))
+kable(pfs1)
+```
+
+Plot as barplot
+
+```{r}
+gpfs1 <- ggplot(pfs1, aes(x=Method, y=Median)) + 
+    geom_bar(position=position_dodge(), stat="identity" 
+             , fill = c("firebrick3" , "deepskyblue4" , "seagreen4") 
+            , col=rep("black",3)) +
+    geom_errorbar(aes(ymin=CI_low, ymax=CI_high)
+                  , width=.2
+                  , position=position_dodge(.9)
+                  , size=0.2
+                  )
+gpfs1
+```
+
+```{r}
+ggsave(filename="version_6.0/Figures/fig5B.svg", plot=gpfs1, device = "svg")
+```
+
+### Proportion trial 2-sample
+
+Perform a 1-side 2-sample sample size calculation for difference in proportion with:
+
+* pCase = 0.4
+* pControl = 0.1
+* case.fraction = 0.5
+* power = 0.8
+
+#### NOT OPTIMAL
+
+```{r , message = FALSE , warning = FALSE}
+set.seed(111)
+# NOT optimal
+prop2 <- mclapply(1:100 , function(x){
+  out <- propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , case.fraction = 0.5
+   , type = "chisquare"
+   , var = "drug"
+   , side = 1
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+   , noPlot=TRUE)
+  out <- out[ order(out$Var) , ]
+  return(out)
+} , mc.cores=detectCores())
+
+Screenings <- sapply(prop2 , function(x) x$ScreeningSampleSize)
+medianScreening <- apply(Screenings , 1 , function(x) {
+  paste(median(x) 
+        , paste0( "(" , quantile(x , 0.025) 
+                        , "-" 
+                        , quantile(x , 0.975) , ")"))
+})
+
+prop2DF <- data.frame(Var = prop2[[1]]$Var
+                  , ScreeningSampleSize = medianScreening
+                  , EligibleSampleSize = prop2[[1]]$EligibleSampleSize
+                  , Beta = 0.2
+                  , Power = 0.8
+                  , Proportion.In.Case.Control = "0.4 - 0.1")
+#export
+#write.table(surv2, file = "~/Desktop/notoptimal_ptd-showcase.txt", quote=FALSE, sep=",")
+
+#preview
+kable(prop2DF[ match(c("Full Design" , drugs , "no_drug") , prop2DF$Var) , ] , row.names=FALSE)
+```
+
+```{r , echo=FALSE}
+# count n patients necessary to be recruited for every simulation
+n_patients_notoptimal <- apply(Screenings , 2 , function(x) {
+  sum( x[ prop2DF$Var %in% drugs ] )
+})
+
+n_patients_notoptimal_show <- paste(format(round(median(n_patients_notoptimal)) , scientific = FALSE)
+    , paste0( "(" 
+      , format(quantile(n_patients_notoptimal , 0.025) , scientific=FALSE) 
+      , "-" 
+      , format(quantile(n_patients_notoptimal , 0.975) , scientific=FALSE) , ")"))
+```
+
+* Median Number of patients necessary with CI: `r n_patients_notoptimal_show`
+
+#### OPTIMAL
+
+```{r , message = FALSE , warning = FALSE}
+set.seed(112)
+simulprop2 <- mclapply(1:100 , function(x) {
+    propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , case.fraction = 0.5
+   , var = "drug"
+   , type = "chisquare"
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               ) 
+        , noPlot=TRUE
+        , priority.trial=drugs
+        , priority.trial.order="optimal")$`pCase:0.4 | pControl:0.1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+prop2summaryMat2 <- simulprop2[[1]]
+for(i in rownames(prop2summaryMat2)){
+    for(j in colnames(prop2summaryMat2)){
+        vec <- sapply(simulprop2 , function(x) x[i , j])
+        prop2summaryMat2[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat2, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(prop2summaryMat2)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal <- sapply(simulprop2 , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under optimal design (median value): `r prop2summaryMat2["Screened" , "Total"]`
+
+Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small 
+number of patients, is sufficient to cover all the other drugs in most of the cases.
+
+The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs 
+evaluated together) is `r paste0(round(100*(median(n_patients_notoptimal) - median(n_patients_optimal))/median(n_patients_notoptimal) , 2) , "%")`
+
+#### PRIORITY NON OPTIMAL
+
+Perform a priority trial starting from the drug with the highest frequency (NON OPTIMAL)
+
+```{r , message = FALSE , warning=FALSE}
+set.seed(112)
+simulprop2_NO <- mclapply(1:100 , function(x) {
+    propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , case.fraction = 0.5
+   , var = "drug"
+   , type = "chisquare"
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               ) 
+        , noPlot=TRUE
+        , priority.trial=names(drugFreqs)
+        , priority.trial.order="as.is")$`pCase:0.4 | pControl:0.1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+prop2summaryMat2_NO <- simulprop2_NO[[1]]
+for(i in rownames(prop2summaryMat2_NO)){
+    for(j in colnames(prop2summaryMat2_NO)){
+        vec <- sapply(simulprop2_NO , function(x) x[i , j])
+        prop2summaryMat2_NO[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+#save
+#write.table(summaryMat3, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(prop2summaryMat2_NO)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal_NO <- sapply(simulprop2_NO , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under non optimal priority design (median value with CI): `r summaryMat3_NO["Screened" , "Total"]`
+
+#### FULL SUMMARY OF THE THREE METHODS
+
+Create a dataframe with median and CI for the three methods
+
+```{r}
+propd <- data.frame( Method = c("Indipendent" , "Priority Non Optimal" , "Priority Optimal")
+                    , Median = c(median(n_patients_notoptimal) 
+                                 , median(n_patients_optimal_NO) 
+                                 , median(n_patients_optimal))
+                    , CI_low = c(quantile(n_patients_notoptimal , 0.025) 
+                                 , quantile(n_patients_optimal_NO , 0.025) 
+                                 , quantile(n_patients_optimal , 0.025))
+                    , CI_high = c(quantile(n_patients_notoptimal , 0.975) 
+                                 , quantile(n_patients_optimal_NO , 0.975) 
+                                 , quantile(n_patients_optimal , 0.975)))
+kable(propd)
+```
+
+Plot as barplot
+
+```{r}
+gpropd <- ggplot(propd, aes(x=Method, y=Median)) + 
+    geom_bar(position=position_dodge(), stat="identity" 
+             , fill = c("firebrick3" , "deepskyblue4" , "seagreen4") 
+            , col=rep("black",3)) +
+    geom_errorbar(aes(ymin=CI_low, ymax=CI_high)
+                  , width=.2
+                  , position=position_dodge(.9)
+                  , size=0.2
+                  )
+gpropd
+```
+
+```{r}
+ggsave(filename="version_6.0/Figures/fig5C.svg", plot=gpropd, device = "svg")
+```
+### Proportion trial 1-sample
+
+Perform a 1-side 1-sample sample size calculation for difference in proportion with:
+
+* pCase = 0.4
+* pControl = 0.1
+* power = 0.8
+
+#### NOT OPTIMAL
+
+```{r , message = FALSE , warning = FALSE}
+set.seed(111)
+# NOT optimal
+prop3 <- mclapply(1:100 , function(x){
+  out <- propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , type = "arcsin"
+   , var = "drug"
+   , side = 1
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               )
+   , noPlot=TRUE)
+  out <- out[ order(out$Var) , ]
+  return(out)
+} , mc.cores=detectCores())
+
+Screenings <- sapply(prop3 , function(x) x$ScreeningSampleSize)
+medianScreening <- apply(Screenings , 1 , function(x) {
+  paste(median(x) 
+        , paste0( "(" , quantile(x , 0.025) 
+                        , "-" 
+                        , quantile(x , 0.975) , ")"))
+})
+
+prop3DF <- data.frame(Var = prop3[[1]]$Var
+                  , ScreeningSampleSize = medianScreening
+                  , EligibleSampleSize = prop3[[1]]$EligibleSampleSize
+                  , Beta = 0.2
+                  , Power = 0.8
+                  , Proportion.In.Case.Control = "0.4 - 0.1")
+#export
+#write.table(surv2, file = "~/Desktop/notoptimal_ptd-showcase.txt", quote=FALSE, sep=",")
+
+#preview
+kable(prop3DF[ match(c("Full Design" , drugs , "no_drug") , prop3DF$Var) , ] , row.names=FALSE)
+```
+
+```{r , echo=FALSE}
+# count n patients necessary to be recruited for every simulation
+n_patients_notoptimal <- apply(Screenings , 2 , function(x) {
+  sum( x[ prop3DF$Var %in% drugs ] )
+})
+
+n_patients_notoptimal_show <- paste(format(round(median(n_patients_notoptimal)) , scientific = FALSE)
+    , paste0( "(" 
+      , format(quantile(n_patients_notoptimal , 0.025) , scientific=FALSE) 
+      , "-" 
+      , format(quantile(n_patients_notoptimal , 0.975) , scientific=FALSE) , ")"))
+```
+
+* Median Number of patients necessary with CI: `r n_patients_notoptimal_show`
+
+#### OPTIMAL
+
+```{r , message = FALSE , warning = FALSE}
+set.seed(112)
+simulprop3 <- mclapply(1:100 , function(x) {
+    propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , var = "drug"
+   , type = "arcsin"
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               ) 
+        , noPlot=TRUE
+        , priority.trial=drugs
+        , priority.trial.order="optimal")$`pCase:0.4 | pControl:0.1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+prop3summaryMat2 <- simulprop3[[1]]
+for(i in rownames(prop3summaryMat2)){
+    for(j in colnames(prop3summaryMat2)){
+        vec <- sapply(simulprop3 , function(x) x[i , j])
+        prop3summaryMat2[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+
+#save
+#write.table(summaryMat2, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(prop3summaryMat2)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal <- sapply(simulprop3 , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under optimal design (median value): `r prop3summaryMat2["Screened" , "Total"]`
+
+Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small 
+number of patients, is sufficient to cover all the other drugs in most of the cases.
+
+The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs 
+evaluated together) is `r paste0(round(100*(median(n_patients_notoptimal) - median(n_patients_optimal))/median(n_patients_notoptimal) , 2) , "%")`
+
+#### PRIORITY NON OPTIMAL
+
+Perform a priority trial starting from the drug with the highest frequency (NON OPTIMAL)
+
+```{r , message = FALSE , warning=FALSE}
+set.seed(112)
+simulprop3_NO <- mclapply(1:100 , function(x) {
+    propPowerSampleSize(PTD_panel
+   , alterationType = c("mutations", "copynumber")
+   , pCase = 0.4
+   , pControl = 0.1
+   , power = 0.8
+   , var = "drug"
+   , type = "arcsin"
+   , tumor.weights = c(brca=brca_tot
+                               , luad=luad_tot
+                               , lusc=lusc_tot
+                               , stad = stad_tot
+                               , coadread = coadread_tot
+                               ) 
+        , noPlot=TRUE
+        , priority.trial=names(drugFreqs)
+        , priority.trial.order="as.is")$`pCase:0.4 | pControl:0.1 | Power:0.8`$Summary
+} , mc.cores=detectCores())
+prop3summaryMat2_NO <- simulprop3_NO[[1]]
+for(i in rownames(prop3summaryMat2_NO)){
+    for(j in colnames(prop3summaryMat2_NO)){
+        vec <- sapply(simulprop3_NO , function(x) x[i , j])
+        prop3summaryMat2_NO[i , j] <- paste(median(vec) , 
+                paste0( "(" , quantile(vec , 0.025) 
+                        , "-" 
+                        , quantile(vec , 0.975) , ")"))
+    }
+}
+#save
+#write.table(summaryMat3, file = "~/Desktop/optimal_ptd-showcase.txt", quote=FALSE, sep=",")
+#preview
+kable(prop3summaryMat2_NO)
+```
+
+```{r , eval=TRUE , echo=FALSE}
+n_patients_optimal_NO <- sapply(simulprop3_NO , function(x) x["Screened" , "Total"])
+```
+
+Number of patients necessary under non optimal priority design (median value with CI): `r prop3summaryMat2_NO["Screened" , "Total"]`
+
+#### FULL SUMMARY OF THE THREE METHODS
+
+Create a dataframe with median and CI for the three methods
+
+```{r}
+propd1 <- data.frame( Method = c("Indipendent" , "Priority Non Optimal" , "Priority Optimal")
+                    , Median = c(median(n_patients_notoptimal) 
+                                 , median(n_patients_optimal_NO) 
+                                 , median(n_patients_optimal))
+                    , CI_low = c(quantile(n_patients_notoptimal , 0.025) 
+                                 , quantile(n_patients_optimal_NO , 0.025) 
+                                 , quantile(n_patients_optimal , 0.025))
+                    , CI_high = c(quantile(n_patients_notoptimal , 0.975) 
+                                 , quantile(n_patients_optimal_NO , 0.975) 
+                                 , quantile(n_patients_optimal , 0.975)))
+kable(propd1)
+```
+
+Plot as barplot
+
+```{r}
+gpropd1 <- ggplot(propd1, aes(x=Method, y=Median)) + 
+    geom_bar(position=position_dodge(), stat="identity" 
+             , fill = c("firebrick3" , "deepskyblue4" , "seagreen4") 
+            , col=rep("black",3)) +
+    geom_errorbar(aes(ymin=CI_low, ymax=CI_high)
+                  , width=.2
+                  , position=position_dodge(.9)
+                  , size=0.2
+                  )
+gpropd1
+```
+
+```{r}
+ggsave(filename="version_6.0/Figures/fig5D.svg", plot=gpropd1, device = "svg")
+```
+
+## One figure for all
+
+```{r}
+sampSizeMethods <- rbind(pfs2 , pfs1 , propd , propd1)
+sampSizeMethods$Design <- rep(c("Survival 2 Sample" , "Survival 1 Sample" , "Proportion 2 Sample" , "Proportion 1 Sample") 
+                              , c(3,3,3,3))
+```
+
+```{r}
+gsampSizeMethods <- ggplot(sampSizeMethods, aes(x=Design, y=Median , fill=Method)) + 
+    geom_bar(position=position_dodge(), stat="identity" , color="black")+
+    scale_fill_manual(values=c("firebrick3" , "deepskyblue4" , "seagreen4"))+
+    geom_errorbar(aes(ymin=CI_low, ymax=CI_high)
+                  , width=.2
+                  , position=position_dodge(.9)
+                  , size=0.2
+                  )
+gsampSizeMethods
+```
+
+```{r}
+ggsave(filename="version_6.0/Figures/fig3B.svg", plot=gsampSizeMethods, device = "svg")
+```
 
 ## Session info
 
@@ -1339,3 +2393,28 @@ For reproducibility purpose:
 ```{r}
 sessionInfo()
 ```
+
+
+<!-- ```{r, eval=FALSE, echo=FALSE} -->
+<!-- ## DELETE THIS PART!!!!!!!!!!!! -->
+
+<!-- myPATH <- "~/Desktop/cosmic_18_maggio_2017" -->
+
+<!-- # upload all the files -->
+<!-- dfs <- purrr::map(dir(myPATH), function(x){ -->
+
+<!--   # get file name -->
+<!--   mygene_name <- gsub(".csv", "", x) -->
+<!--   # read in file -->
+<!--   output_df <- readr::read_csv(paste(myPATH, x, sep="/")) -->
+<!--   # add gene name -->
+<!--   output_df$gene <- mygene_name -->
+
+<!--   return(output_df) -->
+
+<!-- }) %>% bind_rows() -->
+
+<!-- # write -->
+<!-- write.csv(dfs, file="version_6.0/external_resources/cosmic_df.csv") -->
+
+<!-- ``` -->

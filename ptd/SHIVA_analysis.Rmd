@@ -1,6 +1,10 @@
 ---
 title: "Shiva Retrospective Analysis"
-author: "Alessandro Guida and Giorgio Melloni"
+author: 
+- name: "Alessandro Guida"
+  affiliation: European Institute of Oncology, Milan
+- name: "Giorgio Melloni"
+  affiliation: Harvard Medical School, Boston
 output:
   html_document:
     code_folding: show
@@ -26,10 +30,11 @@ library(ggplot2)
 library(parallel)
 library(RColorBrewer)
 library(VariantAnnotation)
+library(gridExtra)
 library(org.Hs.eg.db) # GENOME wide annotation for HUman based on Entrez Gene identifiers. 
 
 #R helper function library
-source("version_6.0/Analysis/helper_functions.R")
+source("helper_functions.R")
 
 # Define Plot color schema
 MYPALETTE <- colorRampPalette(rev(brewer.pal(11, "Spectral")), space="Lab")
@@ -45,12 +50,12 @@ INTRODUCTION
 The [**Shiva trial**](http://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(15)00188-6/abstract) 
 is a *proof of concept* randomized trial 
 based on targeted therapy using molecular characterization. 
-The trial was aiming at compare convertional therapy with 
+The trial was aiming at compare conventional therapy with 
 a genomic-driven therapy approach. However the results did not find 
 any difference in progression-free survival (PFS) between the treatment arms.
 **The goal** of this retrospective analysis is to verify 
 that the R package ```PrecisionTrialDesigner``` 
-(here-hence refered as **PTD**) can be applied for predicting 
+(here-hence referred as **PTD**) can be applied for predicting 
 population allocation in a genomic-driven clinical trial 
 design using alterations from the TCGA  repositories. 
 
@@ -62,7 +67,7 @@ The following information were collected from [https://clinicaltrials.gov/show/N
 * Compare two treatment strategies from patients with refractory cancer;
 * Tumor biopsy leads to molecular characterization 
 (mutations, amplifications, hormone receptor status). 
-If molecular abnormality is identified, patients are randomied between 
+If molecular abnormality is identified, patients are randomized between 
     * **Targeted therapy** based on molecular profiling;
     * **Conventional therapy** based on investigator's choice.
     
@@ -111,11 +116,11 @@ were assessed using Cytoscan HD according the manufacturer protocol (AffymetrixÂ
 
 #### Short Results Summury
 
-At the time of the publication on lancet (july 11 2014), 
+At the time of the publication on lancet (July 11 2014), 
 the authors have screened **496 patients** from different tumor types. 
 **203 had no targetable molecular alteration** and **293 (59.1%) patients** were enrolled in the study.
 
-* Around the cutoff time, jan 20 2015, **195 (26%)** patients had been randomly assigned
+* Around the cutoff time, Jan 20 2015, **195 (26%)** patients had been randomly assigned
     * **99** in **experimental group**;
     * **96** in **control group**;
 
@@ -165,7 +170,7 @@ AR (Androgen receptor), ER (Estrogen receptor) and PR (Progesterone receptor) we
 ```{r design panel}
 #import SHIVA Design
 # --------------------------------------------------------------------------------
-SHIVA_design <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_design_v6.1.xlsx"
+SHIVA_design <- readxl::read_excel("Supplementary_file/SHIVA_design_v6.1.xlsx"
                                     , sheet = 1
                                     , col_types = c("text", "text", "text", "text", "text", "text"))
 
@@ -202,11 +207,15 @@ The original data collected during the SHIVA trials, were provided to us by the 
 
 #### Import raw data
 
-Import in the analysis the raw data. Add a column with the TCGA tumor ID confersion ```Supplementary_file/SHIVA_conversiontable.xlsx```.
+Import in the analysis the raw data. Add a column with the TCGA tumor ID conversion ```Supplementary_file/SHIVA_conversiontable.xlsx```.
 
 ```{r import SHIVA data}
 # Read in SHIVA raw data
-merged_df <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_authorTable.xlsx"
+# merged_df <- xlsx::read.xlsx2("Supplementary_file/SHIVA_authorTable.xlsx", sheetIndex = 1)
+# cna_data <- xlsx::read.xlsx2("Supplementary_file/SHIVA_cna_data.xls", sheetIndex = 1)
+
+ 
+merged_df <- readxl::read_excel("Supplementary_file/SHIVA_authorTable.xlsx"
                                   , sheet = 1
                                   , col_names = TRUE
  #                                , col_types = rep("text", times=24)
@@ -214,7 +223,7 @@ merged_df <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_authorTabl
 
 # Import CNA data for the 496 profiled patients
 
-cna_data <- readxl::read_excel("version_6.0/Supplementary_file/SHIVA_cna_data.xls"
+cna_data <- readxl::read_excel("Supplementary_file/SHIVA_cna_data.xls"
                                 , sheet = 1
                                 , col_names = TRUE)
 ```
@@ -228,7 +237,7 @@ The objective in this section is to filter out patients that could create proble
 * find patients with no CNA data (all genes tested for CNA, in case one observation was missing it was marked as "NA").
 * We are no longer including HR in the analysis. So we have removed the filter on expression. 
 
-of the remaing now, you can check how many are ```eligible for randomization``` and therefore calculate the expected detection power. 
+of the remaining now, you can check how many are ```eligible for randomization``` and therefore calculate the expected detection power. 
 
 Select patients with a full data profile (NGS + CNA) on which to run some population inference. 
 
@@ -236,7 +245,7 @@ We have not removed those patients that were not randomized for any particular r
 
 Finally, we removed patients with TCGA tumor types  acyc, sclc, es, because have no CNA data in TCGA population.
 
-The following table shows the patients consituting the SHIVA population for this analysis.
+The following table shows the patients constituting the SHIVA population for this analysis.
 
 ```{r Filter patients}
 # Patient filtering
@@ -266,7 +275,7 @@ tumor_freq <- prop.table(tumor_weights)
 datatable_withbuttons(df_full_profile, caption = "Patients with a complete profile")
 ```
 
-The population recruited in the trial is composed by differnt types of tumor types (after conversion to TCGA tumor ids). The following barplot shows the number of patient for each tumor type.
+The population recruited in the trial is composed by different types of tumor types (after conversion to TCGA tumor ids). The following barplot shows the number of patient for each tumor type.
 
 
 ```{r shiva population tumor list}
@@ -281,13 +290,17 @@ data.frame(tumor_weights) %>%
 ```
 
 
+From the 741 patients from the study, ```r nrow(merged_df)``` are eligible for randomization. After removing patients where next-generation squecing was not performed we were left with 
+ ```r merged_df %>% dplyr::filter(!NGS == "Not done") %>% nrow()```. We then selected only those patients without tumor types compatible with TCGA tumor ids: ```r merged_df %>% dplyr::filter(!NGS == "Not done") %>% dplyr::filter(!TCGA_tumor_ID == "") %>% nrow()``` . 
+Finally, we removed patients with TCGA tumor types  acyc, sclc, es, because have no CNA data in TCGA population. Final number of patients  ```r nrow(df_full_profile)```.
+
 #### Convert the raw data from the SHIVA study to a PTD population object
 
 In this paragraph we will convert the SHIVA dataset to a format compatible with PTD. Once correctly formatted, it will be imported as a "population background". Together, with the TCGA data we will have have two population backgrounds, the SHIVA, and the TCGA. We will be able to compare them and investigate whether TCGA data can simulate the SHIVA situation.
 
 ##### Prepare CNA data
 
-For each gene, in each patient, it was reported a CNA status. For a small percentage of cases, the value reported was ambigous (e.g. "amplification, normal, delete_het").
+For each gene, in each patient, it was reported a CNA status. For a small percentage of cases, the value reported was ambiguous (e.g. "amplification, normal, delete_het").
 
 ```{r Prepare CNA SHIVA for repo}
 ################################################################################
@@ -700,7 +713,7 @@ mutations$data %>%
 
 This can be achieved using the build in argument "repo" from the PTD package.
 
-```{r SHIVA repo, warning=FALSE, message=FALSE , eval = FALSE}
+```{r SHIVA repo, warning=FALSE, message=FALSE}
 # DESIGN
 SHIVA_population <- newCancerPanel(SHIVA_design)
 #DOWNLOAD alternative
@@ -712,12 +725,7 @@ SHIVA_population <- getAlterations(SHIVA_population
 SHIVA_population <- subsetAlterations(SHIVA_population)
 
 #save a backup copy to speed up future analysis
-saveRDS(SHIVA_population, file = "version_6.0/Temp/SHIVA_population.rds")
-```
-
-
-```{r , eval=TRUE , echo = FALSE}
-SHIVA_population <- readRDS("version_6.0/Temp/SHIVA_population.rds")
+saveRDS(SHIVA_population, file = "Supplementary_file/SHIVA_population.rds")
 ```
 
 Since we are interested in balancing the TCGA population to make it match with the recruited SHIVA population, we need to estimate how many patients per tumor types will be used. 
@@ -789,11 +797,11 @@ TCGA_population <- getAlterations(TCGA_population
 TCGA_population <- subsetAlterations(TCGA_population)
 
 #save a backup copy to speed up future analysis
-saveRDS(TCGA_population, file = "version_6.0/Temp/TCGA_population.rds")
+saveRDS(TCGA_population, file = "Supplementary_file/TCGA_population.rds")
 ```
 
 ```{r, echo=FALSE}
-TCGA_population <- readRDS("version_6.0/Temp/TCGA_population.rds")
+TCGA_population <- readRDS("Supplementary_file/TCGA_population.rds")
 ```
 
 
@@ -806,7 +814,7 @@ In this section we will apply a filter to remove all the NON pathogenic mutation
 TCGA_original_number <- nrow(unique(TCGA_population@dataFull$mutations$data))
 
 # Clean TCGA popualation running a cosmic filter
-cosmic <- readr::read_csv("version_6.0/external_resources/cosmic_pathogenic_SHIVApanel")
+cosmic <- readr::read_csv("Supplementary_file/external_resources/cosmic_pathogenic_SHIVApanel")
 
 cosmic_df <- data.frame(gene_symbol = cosmic$gene
                         , amino_acid_change = sub("^p." , "" , cosmic$AA.Mutation)
@@ -867,7 +875,7 @@ absolute number of copies in the following way:
 * 3-Inf: amplification
 
 While data from 1.1 to 2.9 are the same as before (considered normal on default), 
-now 1 is the point of -2 deletion and 3 the point of +2 amplifiaction.
+now 1 is the point of -2 deletion and 3 the point of +2 amplification.
 We have now the full spectrum of amplification from > 3 that can be used to fine-tune 
 the clinically relevant threshold (4, 5 ,6 copies for example).
 
@@ -884,7 +892,7 @@ CNA_genes <- TCGA_population@arguments$panel %>%
 # PATH: set global variable with the path to.rds files with CNA raw data
 # PATH_2CNA_FILES <- "/Users/ale/IEO/projects/IEO_research/R_package_panel_and_projection/functionfactory/cna_firehose_rds/"
 # Set a relative path for reproducibility
-PATH_2CNA_FILES <- "version_6.0/Temp/cna_firehose_rds/"
+PATH_2CNA_FILES <- "Supplementary_file/cna_firehose_rds/"
 
 # helper function that reads in a firehose RDS file, filters by gene, and apply the threshold configured
 # ==============================================================================
@@ -1077,7 +1085,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=4)
+		} , mc.cores=detectCores())
 
 ## Prepare function for plotting Detection power with Confidenti intervals
 # ------------------------------------------------------------------------------
@@ -1114,6 +1122,7 @@ TCGA_detection_image <- dtpow %>%
   geom_errorbar(aes(ymax=rightCI
                     , ymin=leftCI)
                 , position=position_dodge(0.9)
+                , size=0.2
   ) + 
   ggtitle("Overall Detection power in TCGA Population") +
   annotate("text"
@@ -1151,7 +1160,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=4)
+		} , mc.cores=detectCores())
 
 TCGA_detection_muts <- simulate_detectionPower_img(simul)
 
@@ -1163,7 +1172,7 @@ simulate_detectionPower_tbl(simul) %>%
   datatable_withbuttons(caption = "Mutation only Detection Power in TCGA")
 ```
 
-Preview table with the contribution to the overall detection power by only CNA alteartions.
+Preview table with the contribution to the overall detection power by only CNA alterations.
 
 
 ```{r}
@@ -1178,7 +1187,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
 					, noPlot=TRUE
 					 )
 			return(cov$plottedTable/cov$Samples[1])
-		} , mc.cores=4)
+		} , mc.cores=detectCores())
 
 TCGA_detection_cna <- simulate_detectionPower_img(simul)
 
@@ -1191,7 +1200,7 @@ simulate_detectionPower_tbl(simul) %>%
 ```
 
 
-Preview plot with the contribution to the overall detection power by only mutation and CNA alteartions seperately
+Preview plot with the contribution to the overall detection power by only mutation and CNA alterations separately
 
 ```{r}
 gridExtra::grid.arrange(TCGA_detection_muts + ggtitle("Detection Power in TCGA: Mutation only")
@@ -1233,6 +1242,7 @@ SHIVA_detection_image <- dtpow_shiva %>%
     geom_errorbar(aes(   ymax= leftCI
                        , ymin= rightCI)
                    , position=position_dodge(0.9)
+                  , size=0.2
     ) + 
     ggtitle("Detection power SHIVA population") +
     annotate("text"
@@ -1244,10 +1254,6 @@ SHIVA_detection_image <- dtpow_shiva %>%
              )
     ) +
     coord_flip()
-  
-#Export as a svg
-#img_file = "version_6.0/Figures/fig4B.svg"
-#ggsave(filename=img_file, plot=SHIVA_detection_image, device = "svg")
   
 # Show image
 SHIVA_detection_image
@@ -1304,15 +1310,47 @@ datatable_withbuttons(cov, caption="Datatable with detection power from CNA for 
 #### Merge the Detection power from the 2 population in one plot
 
 ```{r}
-fig4a <- gridExtra::grid.arrange(TCGA_detection_image, SHIVA_detection_image)
+# plot two pics separated
+#fig4a <- gridExtra::grid.arrange(TCGA_detection_image, SHIVA_detection_image)
+
+# plot everything in one graph
+# ------------------------------------------------------------------------------
+dtpow$population <- "TCGA"
+
+dtpow_shiva %<>%
+  dplyr::rename(detectionPower=shiva_freq) %>%
+  dplyr::mutate(population = "SHIVA")
+
+# plot the dataframe merged
+fig4b <- dplyr::bind_rows(dtpow, dtpow_shiva) %>%
+  ggplot(aes(x=n_alterations, y=detectionPower, fill=population)) + 
+  geom_bar(stat="identity" , position=position_dodge()) + 
+  scale_fill_manual(values=MYPALETTE(10)[c(10,2)]) +
+  scale_y_continuous(limits = c(0,0.5)) +
+  scale_x_continuous(breaks = n_alterations, trans = "reverse") +
+  geom_errorbar(aes(ymax=rightCI
+                    , ymin=leftCI)
+                , position=position_dodge(0.9)
+                , size=0.2
+  ) + 
+  ggtitle("Overall Detection power in SHIVA and TCGA Population") +
+  geom_text(aes(label=sapply(detectionPower*100
+                             , function(x) 
+                                  paste(c(round(x, digits=2), "%"), collapse=" ")
+                      )
+                , x=n_alterations
+                , y=detectionPower)
+            , position = position_dodge(width = 0.8)
+            , vjust = 0
+            , hjust = -2) +
+  coord_flip()
 
 #Export as a svg
-#img_file = "version_6.0/Figures/fig4A.svg"
-#ggsave(filename=img_file, plot=fig4a, device = "svg", width=10, height = 8)
-
+#img_file = "Figures/fig4B.svg"
+#ggsave(filename=img_file, plot=fig4b, device = "svg", width=10, height = 8)
 
 # Preview image
-fig4a
+fig4b
 ```
 
 ### 2. Gene alteration Frequency
@@ -1373,7 +1411,7 @@ shiva_snv <- temp %>%
 merged_snv <- rbind(tcga_snv, shiva_snv)
 
 # bind SHIVA and TCGA
-fig4b <- merged_snv %>%
+fig4b_ex <- merged_snv %>%
   dplyr::mutate(gene= factor(gene, levels = unique(gene[order(freq)]))) %>%
   ggplot(aes(x=gene, y=freq, fill=population)) + 
   geom_bar(stat="identity", position=position_dodge()) +
@@ -1382,16 +1420,17 @@ fig4b <- merged_snv %>%
   geom_errorbar(aes(ymax=rightCI
                     , ymin=leftCI)
                 , position=position_dodge(0.9)
+                , size=0.2
   ) + 
  ggtitle("SNV frequency comparison in the two populations") +   
  coord_flip()
 
 
-#img_file = "version_6.0/Figures/fig4B.svg"
+#img_file = "Figures/fig4B.svg"
 #ggsave(filename=img_file, plot=fig4b, device = "svg", width=10, height = 8)
 
 # Preview
-fig4b
+fig4b_ex
 ```
 
 #### CNA
@@ -1500,6 +1539,7 @@ CNA_plot_amplification <- merged_cna_amplifications %>%
   geom_errorbar(aes(ymax=rightCI
                     , ymin=leftCI)
                 , position=position_dodge(0.9)
+                , size=0.2
   ) + 
  ggtitle("CNA Amplification frequency comparison in the two populations") +   
  coord_flip()
@@ -1514,28 +1554,29 @@ CNA_plot_deletion <- merged_cna_deletion %>%
   geom_errorbar(aes(ymax=rightCI
                     , ymin=leftCI)
                 , position=position_dodge(0.9)
+                , size=0.2
   ) + 
  ggtitle("CNA Deletion frequency comparison in the two populations") +   
  coord_flip()
 
 
 # Make the plot
-fig4c <- gridExtra::grid.arrange(CNA_plot_amplification, CNA_plot_deletion, ncol=1, heights = c(20,5))
+fig4c_ex <- gridExtra::grid.arrange(CNA_plot_amplification, CNA_plot_deletion, ncol=1, heights = c(20,5))
 
 #Export as a svg
-#img_file = "version_6.0/Figures/fig4C.svg"
+#img_file = "Figures/fig4C.svg"
 #ggsave(filename=img_file, plot=fig4c, device = "svg", width=10, height = 8)
 
 # preview plot
-fig4c
+fig4c_ex
 ```
 
 ### 3. Patient allocation by pathway
 
-In this part of the analysis we are comparing the patient allocation to the two molecular pathway threatments. 
+In this part of the analysis we are comparing the patient allocation to the two molecular pathway treatments. 
 
 
-Show the maximum  patient allocation to the molecular pathway threatmet. This is theoretical as, it presumes that one patient can be allocated to more than one treatment. There is infact a small percentage of patients with a set of alteration that makes them eligeble for both molecular treatmets.  
+Show the maximum  patient allocation to the molecular pathway treatment. This is theoretical as, it presumes that one patient can be allocated to more than one treatment. There is in fact a small percentage of patients with a set of alteration that makes them eligible for both molecular treatments.  
 
 
 
@@ -1599,7 +1640,7 @@ simul <- mclapply(1:N_SIMULATIONS , function(x) {
       tidyr::spread(group, allocation) %>%
       return()
      
-		} , mc.cores=4) %>% bind_rows
+		} , mc.cores=detectCores()) %>% bind_rows
 
 # GET STATS
 # ------------------------------------------------------------------------------
@@ -1655,7 +1696,7 @@ tcga_allocation <- data.frame(row_counter, allocation, leftCI, rightCI, populati
 merged_allocation <- rbind(shiva_allocation, tcga_allocation) %>%
   dplyr::mutate(row_counter = 1:n()) 
 
-fig4D <- merged_allocation %>%
+fig4D_ex <- merged_allocation %>%
   ggplot(aes(x=group, y=allocation, fill=population)) + 
     geom_bar(stat="identity" , position=position_dodge()) + 
     scale_fill_manual(values=MYPALETTE(10)[c(10,2)]) + 
@@ -1666,6 +1707,7 @@ fig4D <- merged_allocation %>%
     geom_errorbar(aes(ymax=rightCI
                       , ymin=leftCI)
                   , position="dodge"
+                  , size=0.2
     ) + 
     ggtitle("Patient Allocation to molecular pathway treatment, considering all the patients") + 
     geom_text(aes(label = sapply(allocation*100
@@ -1683,11 +1725,11 @@ fig4D <- merged_allocation %>%
 
 
 #Export as a svg
-#img_file = "version_6.0/Figures/fig4D.svg"
+#img_file = "Figures/fig4D.svg"
 #ggsave(filename=img_file, plot=fig4D, device = "svg")
 
 # Preview image
-fig4D
+fig4D_ex
 ```
 
 ```{r}
@@ -1697,7 +1739,7 @@ datatable_withbuttons(merged_allocation)
 
 #### Show patients eligible to both treatments separately
 
-In case of a patient eligible for both molecular pathways treatment, the SHIVA medical board would decide in with cohord to allocate the patient. To allow a better comparison, the following plot separates the patients eligible to both treatments. The y-axes shows the tot number of patients that can be allocated in a molecular pathway treatmet. 
+In case of a patient eligible for both molecular pathways treatment, the SHIVA medical board would decide in with cohort to allocate the patient. To allow a better comparison, the following plot separates the patients eligible to both treatments. The y-axes shows the tot number of patients that can be allocated in a molecular pathway treatment. 
 
 ```{r}
 # ALLOCATION FUNCTION with not predefined rule
@@ -1811,13 +1853,13 @@ merge_df <- rbind(shiva_df, tcga_df) %>%
 # ----------------------------
 #  PLOT2 - Same side barplot
 # barplot, with only the genes in the panel
-fig4E <- merge_df %>%
+fig4C <- merge_df %>%
   dplyr::mutate(origin=paste(as.character(group_treatment), as.character(dataset), sep=":")) %>%
   dplyr::mutate(row_counter = as.integer(factor(dataset, labels = c(0,1)))) %>%
   ggplot(aes(x=origin, y=freq, fill=dataset)) + 
   geom_bar(stat="identity") + 
   scale_fill_manual(values=MYPALETTE(10)[c(10,2)]) + 
-  geom_errorbar(aes(min=lowerCI, max=upperCI)) + 
+  geom_errorbar(aes(min=lowerCI, max=upperCI), size=0.2) + 
   facet_grid(. ~ group_treatment, space="free", scales="free") +
   theme(axis.text.x=element_blank()
         , axis.ticks.x= element_blank()
@@ -1826,7 +1868,7 @@ fig4E <- merge_df %>%
     labs(title="Comparison between expected allocation to molecular pathways")
 
 
-fig4E <- fig4E + geom_text(aes(x=(row_counter)
+fig4C <- fig4C + geom_text(aes(x=(row_counter)
                   , y=upperCI+.05
                   , label= sapply(freq*100
                              , function(x) paste(c(round(x, digits=2), "%")
@@ -1836,11 +1878,11 @@ fig4E <- fig4E + geom_text(aes(x=(row_counter)
 )
 
 #Export as a svg
-#img_file = "version_6.0/Figures/fig4E.svg"
-#ggsave(filename=img_file, plot=fig4E, device = "svg", width=10, height = 8)
+#img_file = "Figures/fig4C.svg"
+#ggsave(filename=img_file, plot=fig4C, device = "svg", width=10, height = 8)
 
 # preview image
-fig4E
+fig4C
 ```
 
 
@@ -1949,13 +1991,13 @@ merge_df <- rbind(shiva_df, tcga_df) %>%
 # ----------------------------
 #  PLOT2 - Same side barplot
 # barplot, with only the genes in the panel
-fig4F <- merge_df %>%
+fig4F_ex <- merge_df %>%
   dplyr::mutate(origin=paste(as.character(group_treatment), as.character(dataset), sep=":")) %>%
   dplyr::mutate(row_counter = as.integer(factor(dataset, labels = c(0,1)))) %>%
   ggplot(aes(x=origin, y=freq, fill=dataset)) + 
   geom_bar(stat="identity") + 
   scale_fill_manual(values=MYPALETTE(10)[c(10,2)]) + 
-  geom_errorbar(aes(min=lowerCI, max=upperCI)) + 
+  geom_errorbar(aes(min=lowerCI, max=upperCI), size=0.2) + 
   facet_grid(. ~ group_treatment, space="free", scales="free") +
   theme(axis.text.x=element_blank()
         , axis.ticks.x= element_blank()
@@ -1967,11 +2009,11 @@ fig4F <- merge_df %>%
 
 
 #Export as a svg
-#img_file = "version_6.0/Figures/fig4F.svg"
+#img_file = "Figures/fig4F.svg"
 #ggsave(filename=img_file, plot=fig4F, device = "svg")
 
 # Preview
-fig4F
+fig4F_ex
 ```
 
 ```{r}
@@ -1995,27 +2037,48 @@ the drug target. Basically a design to answer the question **"target therapy VS 
 
 ```{r, warning=FALSE}
 # Shiva full design
-survPowerSampleSize(SHIVA_population
+shivaSurv <- survPowerSampleSize(SHIVA_population
                     , alterationType = c("mutations", "copynumber")
                     , HR = 0.625
                     , power = seq(0.6 , 0.9 , 0.1)
                     , alpha = 0.05
                     , case.fraction = 0.5
-                    #, tumor.freqs = tumor_freq
-) + xlim(c(200,1000))
+                    , noPlot = TRUE)
+knitr::kable(shivaSurv)
 ```
+
 
 ##### TCGA
 
 ```{r, warning=FALSE}
-survPowerSampleSize(TCGA_population
+tcgaSurv <- survPowerSampleSize(TCGA_population
                     , alterationType = c("mutations", "copynumber")
                     , HR = 0.625
                     , power = seq(0.6 , 0.9 , 0.1)
                     , alpha = 0.05
                     , case.fraction = 0.5
-                    , tumor.freqs = tumor_freq
-) + xlim(c(200,1000))
+                    , noPlot = TRUE)
+knitr::kable(tcgaSurv)
+```
+
+##### SHIVA vs TCGA
+
+```{r}
+toBePlot <- rbind( cbind(shivaSurv , Study = "SHIVA") , cbind(tcgaSurv , Study = "TCGA"))
+shivaTcgaFull <- ggplot(toBePlot , aes(y=Power, x=ScreeningSampleSize, colour=Study , group=Study)) +
+			facet_grid(Var ~ . , scales="free_x") +
+			geom_line() +
+			geom_point(size=2.5 ) + 
+			xlab("Screening Sample Size") +
+			ylab("Power") +
+			theme_bw()
+shivaTcgaFull
+```
+
+```{r , echo=FALSE, message=FALSE}
+#Export as a svg
+#img_file = "Figures/tcgaVSshivaFullDesign_surv.svg"
+#ggsave(filename=img_file, plot=shivaTcgaFull, device = "svg")
 ```
 
 ##### Comparison
@@ -2043,16 +2106,17 @@ fullDesignComparison <- data.frame(ScreeningSampleSize_TCGA = tcgaFullDesign$Scr
                                 , Beta = 1 - seq(0.6 , 0.9 , 0.1)
                                 , Power = seq(0.6 , 0.9 , 0.1)
                                 , HR = 0.625)
-datatable_withbuttons(fullDesignComparison)
+datatable_withbuttons(fullDesignComparison , rownames = FALSE)
 ```
+
 
 The difference is very small. Just ```r abs(fullDesignComparison$ScreeningSampleSize_TCGA[fullDesignComparison$Power==0.8] -fullDesignComparison$ScreeningSampleSize_SHIVA[fullDesignComparison$Power==0.8])``` patients at a 80% power.
 
 ####  Design by single drug category
 
 Now we want to calculate sample size by each drug separately. This in not an optimal design 
-since it relies on the assumption of indipendent studies. 
-From this point on we will use the same value used in the design of the SHIVA trial:
+since it relies on the assumption of independent studies. 
+From this point on we will report the same value used in the design of the SHIVA trial:
 
 * power 80%
 * alpha 5%
@@ -2078,8 +2142,24 @@ shivaByDrug <- survPowerSampleSize(SHIVA_population
    #, tumor.freqs = tumor_freq
    , var = "group" 
    , noPlot=TRUE)
+Fig4D <- survPowerSampleSize(SHIVA_population
+   , alterationType = c("mutations", "copynumber")
+   , HR = 0.625
+   , power = seq(0.7 , 0.9 , 0.1)
+   , alpha = 0.05
+   , case.fraction = 0.5
+   , ber=0.85
+   , fu=1.883
+   #, tumor.freqs = tumor_freq
+   , var = "group") + ggtitle("SHIVA: design by drug category (not optimized)")
+Fig4D
+datatable_withbuttons(shivaByDrug , rownames=FALSE)
+```
 
-datatable_withbuttons(shivaByDrug)
+```{r , echo=FALSE, message=FALSE}
+#Export as a svg
+#img_file = "Figures/Fig4D.svg"
+#ggsave(filename=img_file, plot=Fig4D, device = "svg")
 ```
 
 ##### TCGA
@@ -2096,8 +2176,24 @@ tcgaByDrug <- survPowerSampleSize(TCGA_population
    , tumor.freqs = tumor_freq
    , var = "group" 
    , noPlot=TRUE)
+tcgaByDrugPlot <- survPowerSampleSize(TCGA_population
+   , alterationType = c("mutations", "copynumber")
+   , HR = 0.625
+   , power = seq(0.7 , 0.9 , 0.1)
+   , alpha = 0.05
+   , case.fraction = 0.5
+   , ber=0.85
+   , fu=1.883
+   , tumor.freqs = tumor_freq
+   , var = "group") + ggtitle("TCGA: design by drug category (not optimized)")
+tcgaByDrugPlot
+datatable_withbuttons(tcgaByDrug , rownames=FALSE)
+```
 
-datatable_withbuttons(tcgaByDrug)
+```{r , echo=FALSE, message=FALSE}
+#Export as a svg
+#img_file = "Figures/tcgaByDrugNotOptim_surv.svg"
+#ggsave(filename=img_file, plot=tcgaByDrugPlot, device = "svg")
 ```
 
 #### Design by drug: optimized
@@ -2129,7 +2225,7 @@ tcgaSimul <- mclapply(1:100 , function(x) {
         , noPlot=TRUE
         , priority.trial=c("PIK3/AKT/mTOR", "RAF/MEK")
         , priority.trial.order="optimal")$'HR:0.625 | HR0:1 | Power:0.8'$Summary
-    } , mc.cores=4)
+    } , mc.cores=detectCores())
 
 
 summaryMat <- tcgaSimul[[1]]
@@ -2148,12 +2244,20 @@ knitr::kable(summaryMat)
 The table above represents our cascade design starting from upper left. 
 The first row is the *recruitment row*: number of new patients that need to 
 be sequenced to obtain the required power. The left and right 
-*Confidence Intervals* from the bootstrap simuation are indicated in parentesis. 
+*Confidence Intervals* from the bootstrap simulation are indicated in parenthesis. 
 Starting by recruiting `r summaryMat[1,1]` 
 for the most rare drug category (`r colnames(summaryMat)[1]`) 
 we will obtain on average `r summaryMat[2,1]` eligible patients 
-and discarding `r summaryMat[3,1]` (the former are the patients not eligible to any molecular drug treatments). The non eligible patients of `r colnames(summaryMat)[1]` might be eligible for other drug categories, so we calculate whether within these patients, there is an enough number of eligible patients to reach the required power. In case the number is sufficient, the algorithm indicates how many more patients are necessary to recruit. Based on our calculations no further patientes are necessary.  
-Finally, the last column indicates the total number of patients screened, eligible, and non eligible. 
+and discarding `r summaryMat[3,1]` (the former are the patients 
+not eligible to any molecular drug treatments). 
+The non eligible patients of `r colnames(summaryMat)[1]` might be eligible 
+for other drug categories, so we calculate whether within these patients, 
+there is an enough number of eligible patients to reach the required power. 
+In case the number is sufficient, the algorithm indicates 
+how many more patients are necessary to recruit. 
+Based on our calculations no further patients are necessary.  
+Finally, the last column indicates the total number 
+of patients screened, eligible, and non eligible. 
 
 Starting from the most rare drug, we assure the minimum number of recruited patients 
 that guarantee at least 80% power for each drug and the whole study.
@@ -2182,7 +2286,7 @@ shivaSimul <- survPowerSampleSize(SHIVA_population
 knitr::kable(shivaSimul)
 ```
 
-The number of recruited patients is compatible.
+The number of recruited patients falls into the CI of the TCGA simulation and result is therefore compatible.
 
 #### Post-hoc power of the SHIVA trial
 
@@ -2192,8 +2296,8 @@ number of patients reported in the publication. From text and *Table 1* of the S
 * 496 Patients with a complete profile entered in the study
   * 203 NOT eligible
   * 293 eligible
-* 46 (molecularly target) + 43 (physician's choice) = 89 in PI3K/AKT/mTOR pathway arm
-* 13 (molecularly target) + 11 (physician's choice) = 24 in RAF/MEK pathway arm
+* 46 (molecular target) + 43 (physician's choice) = 89 in PI3K/AKT/mTOR pathway arm
+* 13 (molecular target) + 11 (physician's choice) = 24 in RAF/MEK pathway arm
 
 ##### Overall Power
 
@@ -2262,14 +2366,30 @@ plot(mypowers , mySampSizeDiff , pch=20 , col="black")
 lines(mypowers , mySampSizeDiff , col="red")
 ```
 
-It's pretty clear that we have a minimum at `r mypowers[which.min(mySampSizeDiff)]` when the sample size calculated is 
-equal to `r mySampSizeDiff[which.min(mySampSizeDiff)]+496`. This function is clearly convex in the interval (0-1) 
-of the possible power levels, so the post-hoc power resides between 0.35 and 0.45 (according to our plot points).
+```{r , echo=FALSE , message=FALSE}
+#svg(filename="Figures/postHocPowerShiva.svg", 
+#    width=7, 
+#    height=7, 
+#    pointsize=12)
+plot(mypowers , mySampSizeDiff , pch=20 , col="black")
+lines(mypowers , mySampSizeDiff , col="red")
+#dev.off()
+```
 
-For a more robust optimization, we are going to use a linear optimizer. To facilitate the process, we 
-will inizialize a value of 0.4 and lower and upper bounds of 0.35 and 0.45 (as calculated by our graphical method)
+It's pretty clear that we have a minimum at `r mypowers[which.min(mySampSizeDiff)]` 
+when the sample size calculated is 
+equal to `r mySampSizeDiff[which.min(mySampSizeDiff)]+496`. 
+This function is clearly convex in the interval (0-1) 
+of the possible power levels, so the post-hoc power resides 
+between 0.35 and 0.45 (according to our plot points).
 
-Since we are dealing with a one-dimentional problem with box constrains, we are going to use the Brent method.
+For a more robust optimization, we are going to use 
+a linear optimizer. To facilitate the process, we 
+will initialize a value of 0.4 and lower and upper 
+bounds of 0.35 and 0.45 (as calculated by our graphical method)
+
+Since we are dealing with a one-dimensional problem with 
+box constrains, we are going to use the Brent method.
 
 ```{r}
 myPHPoptim <- optim(par = 0.4 , fn = powerOptimizer 
@@ -2304,9 +2424,12 @@ plugInSampleSize <- survPowerSampleSize(SHIVA_population
 knitr::kable(plugInSampleSize)
 ```
 
-So with an approximated screened sample size of `r plugInSampleSize["Screened","Total"]` we obtain 
-`r plugInSampleSize["Eligible" , "Total"]` eligible patients divided in `r plugInSampleSize["Eligible","RAF/MEK"]` 
-for RAF/MEK pathway arm and `r plugInSampleSize["Eligible","PIK3/AKT/mTOR"]` for PIK3/AKT/mTOR pathway arm.
+So with an approximated screened sample size of 
+`r plugInSampleSize["Screened","Total"]` we obtain 
+`r plugInSampleSize["Eligible" , "Total"]` eligible patients 
+divided in `r plugInSampleSize["Eligible","RAF/MEK"]` 
+for RAF/MEK pathway arm and `r plugInSampleSize["Eligible","PIK3/AKT/mTOR"]` 
+for PIK3/AKT/mTOR pathway arm.
 
 
 ## Session info
@@ -2315,6 +2438,19 @@ For reproducibility purpose:
 
 ```{r}
 sessionInfo()
+```
+
+```{r, include=FALSE}
+# GENERATE IMAGES FOR THE PAPER
+# Make the plot
+all_fig4 <- gridExtra::grid.arrange(grid::textGrob("A"), fig4b, fig4C, Fig4D
+                                    , ncol=2
+                                    , heights = unit(c(4,4), c("in", "in"))
+                                    )
+
+#Export as a svg
+#img_file = "Figures/fig4.svg"
+#ggsave(filename=img_file, plot=all_fig4, device = "svg", width=16, height = 16)
 ```
 
 
