@@ -14,6 +14,9 @@ navbar:
           href: "SHIVA_analysis.html"
         - text: "Panel Showcase"
           href: "PTD_panel_showcase.html"
+    - text: "Download"
+      icon: fa-arrow-circle-down
+      href: "download.html"
     - text: "Install"
       icon: fa-arrow-circle-down
       href: https://gitlab.com/IEO_Research/R_package_panel_and_projection
