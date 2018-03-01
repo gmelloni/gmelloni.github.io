@@ -18,7 +18,7 @@ navbar:
       icon: fa-arrow-circle-down
       href: "download.html"
     - text: "Install"
-      icon: fa-arrow-circle-down
+      icon: fa-code
       href: https://gitlab.com/IEO_Research/R_package_panel_and_projection
     - text: "Shiny App"
       icon: fa-gear

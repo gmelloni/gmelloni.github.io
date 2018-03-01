@@ -2,4 +2,4 @@
 title: "Download"
 ---
 
-To reproduce the analysis proposed in Panel Showcase and SHIVA, click <a href="version_6.0.zip" download="analysis_ptd">here</a>
+To reproduce the analysis proposed in Panel Showcase and SHIVA, click <a href="analysis_ptd.zip" download="analysis_ptd.zip">here</a>

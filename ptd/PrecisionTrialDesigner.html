@@ -343,7 +343,7 @@ div.tocify {
 </li>
 <li>
   <a href="https://gitlab.com/IEO_Research/R_package_panel_and_projection">
-    <span class="fa fa-arrow-circle-down"></span>
+    <span class="fa fa-code-branch"></span>
      
     Install
   </a>
@@ -866,7 +866,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>( <span class="kw">h
 </tr>
 <tr class="even">
 <td align="left">all</td>
-<td align="left">Hypodiploid Acute Lymphoid Leukemia|Infant MLL-Rearranged Acute Lymphoblastic Leukemia</td>
+<td align="left">Acute Lymphoblastic Leukemia|Hypodiploid Acute Lymphoid Leukemia|Infant MLL-Rearranged Acute Lymphoblastic Leukemia</td>
 </tr>
 <tr class="odd">
 <td align="left">ampca</td>
@@ -1178,12 +1178,12 @@ myHTMLPlot &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</spa
 <span class="co"># Now run plot</span>
 <span class="kw">plot</span>(myHTMLPlot)</code></pre></div>
 <!-- ColumnChart generated in R 3.4.3 by googleVis 0.6.3 package -->
-<!-- Wed Feb 28 17:35:43 2018 -->
+<!-- Thu Mar  1 12:30:08 2018 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataColumnChartIDe061c5c09d6 () {
+function gvisDataColumnChartIDef7a68df6a3f () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2122,8 +2122,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartColumnChartIDe061c5c09d6() {
-var data = gvisDataColumnChartIDe061c5c09d6();
+function drawChartColumnChartIDef7a68df6a3f() {
+var data = gvisDataColumnChartIDef7a68df6a3f();
 var options = {};
 options["allowHtml"] = true;
 options["isStacked"] = true;
@@ -2143,7 +2143,7 @@ options["enableScrollWheel"] = true;
 options["colors"] = ['#5E4EA1','#506AAE','#3685BB','#4FA0B3','#62BCA7','#82CCA4','#A2D9A4','#BFE4A0','#DBF09A','#EDF7A3','#F9FCB5','#FFF7B2','#FEE899','#FED682','#FEBE6E','#FCA55C','#F8864E','#F16844','#E2534A','#D23B4E','#B72448','#9E0041','#A9A9A9'];
 
     var chart = new google.visualization.ColumnChart(
-    document.getElementById('ColumnChartIDe061c5c09d6')
+    document.getElementById('ColumnChartIDef7a68df6a3f')
     );
     chart.draw(data,options);
     
@@ -2167,9 +2167,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartColumnChartIDe061c5c09d6);
+callbacks.push(drawChartColumnChartIDef7a68df6a3f);
 })();
-function displayChartColumnChartIDe061c5c09d6() {
+function displayChartColumnChartIDef7a68df6a3f() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2192,9 +2192,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartIDe061c5c09d6"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartIDef7a68df6a3f"></script>
 <!-- divChart -->
-<div id="ColumnChartIDe061c5c09d6" style="width: 500; height: 800;">
+<div id="ColumnChartIDef7a68df6a3f" style="width: 500; height: 800;">
 
 </div>
 </div>
@@ -2822,7 +2822,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(samplefreqs[ sample
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.2111111</td>
+<td align="right">0.1888889</td>
 </tr>
 </tbody>
 </table>
@@ -2847,7 +2847,7 @@ title &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="s
 <span class="kw">hist</span>(pik3caboot , <span class="dt">col=</span><span class="st">&quot;cadetblue&quot;</span> , <span class="dt">breaks=</span><span class="dv">30</span> , <span class="dt">main=</span>title , <span class="dt">xlab=</span><span class="st">&quot;Frequencies of resampling&quot;</span>)
 <span class="kw">abline</span>(<span class="dt">v =</span> avgpik3ca , <span class="dt">col=</span><span class="st">&quot;red&quot;</span> , <span class="dt">lwd=</span><span class="dv">3</span> , <span class="dt">xpd=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/basket6%20-1.png" width="960" /></p>
-<p>So, with our expected sample composition, we have an average of 0.227 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.037. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
+<p>So, with our expected sample composition, we have an average of 0.223 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.039. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
 <p><span class="math display">\[(\theta_{\alpha/2}^{*};\theta_{1-\alpha/2}^{*})\]</span></p>
 <p>To summarize what we should expect from this study, including answering to question 3:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Write a simple function to calculate confidence interval of a proportion</span>
@@ -2879,11 +2879,11 @@ knitr<span class="op">::</span><span class="kw">kable</span>(pik3caSummary , <sp
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.227</td>
-<td align="right">0.037</td>
-<td align="right">0.311</td>
-<td align="right">0.111</td>
-<td align="left">0.144 - 0.284</td>
+<td align="right">0.223</td>
+<td align="right">0.039</td>
+<td align="right">0.333</td>
+<td align="right">0.156</td>
+<td align="left">0.156 - 0.3</td>
 </tr>
 </tbody>
 </table>
@@ -2928,15 +2928,15 @@ knitr<span class="op">::</span><span class="kw">kable</span>(survSummary , <span
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">343</td>
-<td align="right">56</td>
-<td align="right">606</td>
-<td align="right">209</td>
-<td align="left">257 - 461</td>
+<td align="right">346</td>
+<td align="right">67</td>
+<td align="right">555</td>
+<td align="right">230</td>
+<td align="left">252 - 513</td>
 </tr>
 </tbody>
 </table>
-<p>What we learnt is that in the average scenario, we would need 343 samples to start our trial, with a minimum of 209 and, if we are very unlucky, a maximum of 606 patients at screening.</p>
+<p>What we learnt is that in the average scenario, we would need 346 samples to start our trial, with a minimum of 230 and, if we are very unlucky, a maximum of 555 patients at screening.</p>
 </div>
 </div>
 <div id="panel-design" class="section level1">
@@ -3048,14 +3048,14 @@ myMutationDesign &lt;-<span class="st"> </span><span class="kw">panelDesigner</s
 ##  [7] assertthat_0.2.0              LowMACAAnnotation_0.99.3     
 ##  [9] interactiveDisplayBase_1.14.0 highr_0.6                    
 ## [11] blob_1.1.0                    GenomeInfoDbData_0.99.0      
-## [13] Rsamtools_1.28.0              yaml_2.1.16                  
+## [13] Rsamtools_1.28.0              yaml_2.1.17                  
 ## [15] progress_1.1.2                ggrepel_0.7.0                
 ## [17] pillar_1.2.1                  RSQLite_2.0                  
 ## [19] backports_1.1.2               lattice_0.20-35              
 ## [21] digest_0.6.15                 RColorBrewer_1.1-2           
 ## [23] XVector_0.16.0                cgdsr_1.2.10                 
 ## [25] colorspace_1.3-2              htmltools_0.3.6              
-## [27] httpuv_1.3.6                  Matrix_1.2-12                
+## [27] httpuv_1.3.6.1                Matrix_1.2-12                
 ## [29] R.oo_1.21.0                   plyr_1.8.4                   
 ## [31] pkgconfig_2.0.1               XML_3.98-1.10                
 ## [33] biomaRt_2.35.11               zlibbioc_1.22.0              
