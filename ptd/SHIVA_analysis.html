@@ -358,8 +358,8 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://gitlab.com/IEO_Research/R_package_panel_and_projection">
-    <span class="fa fa-code-branch"></span>
+  <a href="install.html">
+    <span class="fa fa-code"></span>
      
     Install
   </a>
@@ -1418,7 +1418,7 @@ TCGA_detection_image</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Preview table</span>
 <span class="kw">datatable_withbuttons</span>(dtpow, <span class="dt">caption =</span> <span class="st">&quot;Detection power TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-92b8c6a0b963292f6446" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-92b8c6a0b963292f6446">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Detection power TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.337561881188119,0.0683044554455446,0.0159282178217822,0.00466584158415842,0.00139851485148515,0.000284653465346535,0.000284653465346535],[0.294554455445545,0.0493811881188119,0.00495049504950495,0,0,0,0],[0.383663366336634,0.0891089108910891,0.0272896039603961,0.0123762376237624,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-92b8c6a0b963292f6446">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Detection power TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.339690594059406,0.0682178217821782,0.0155321782178218,0.00513613861386139,0.00147277227722772,0.000346534653465347,0.000346534653465347],[0.301918316831683,0.0469678217821782,0.00495049504950495,0,0,0,0],[0.38125,0.0915841584158416,0.0272896039603961,0.0123762376237624,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <div id="contribution-to-the-detection-power-allocated-by-alteration-type." class="section level5">
 <h5>Contribution to the detection power allocated by alteration type.</h5>
 <p>Preview table with the contribution to the overall detection power by only mutation alterations.</p>
@@ -1445,7 +1445,7 @@ TCGA_detection_muts &lt;-<span class="st"> </span><span class="kw">simulate_dete
 <span class="kw">simulate_detectionPower_tbl</span>(simul) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;Mutation only Detection Power in TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-3181c3b18ba8777b566c" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3181c3b18ba8777b566c">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Mutation only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.192141089108911,0.0183292079207921,0.00242574257425743,7.42574257425743e-05,0,0,0],[0.15835396039604,0.00742574257425743,0,0,0,0,0],[0.23019801980198,0.0321782178217822,0.00748762376237625,0.00247524752475248,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-3181c3b18ba8777b566c">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Mutation only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.189368811881188,0.0187376237623762,0.00267326732673267,2.47524752475248e-05,0,0,0],[0.15835396039604,0.00742574257425743,0,0,0,0,0],[0.22029702970297,0.032240099009901,0.0099009900990099,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>Preview table with the contribution to the overall detection power by only CNA alteartions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># COPYNUMBER CONTRIBUTION</span>
 <span class="co"># ------------------------------------------------------------------------------</span>
@@ -1469,7 +1469,7 @@ TCGA_detection_cna &lt;-<span class="st"> </span><span class="kw">simulate_detec
 <span class="kw">simulate_detectionPower_tbl</span>(simul) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;CNA only Detection Power in TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-4999d79e229171709fee" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4999d79e229171709fee">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>CNA only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.169294554455446,0.0327970297029703,0.0116460396039604,0.00440594059405941,0.00120049504950495,0.000297029702970297,0.000198019801980198],[0.136138613861386,0.0173267326732673,0.00247524752475248,0,0,0,0],[0.205445544554455,0.0495049504950495,0.0222772277227723,0.0099009900990099,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-4999d79e229171709fee">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>CNA only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.170841584158416,0.033960396039604,0.0118811881188119,0.00477722772277228,0.00132425742574257,0.000148514851485149,0.000136138613861386],[0.136014851485149,0.0198019801980198,0.00495049504950495,0,0,0,0],[0.200680693069307,0.0471534653465347,0.0198638613861386,0.0123762376237624,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>Preview plot with the contribution to the overall detection power by only mutation and CNA alteartions seperately</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(TCGA_detection_muts <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detection Power in TCGA: Mutation only&quot;</span>)
                         , TCGA_detection_cna <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detection Power in TCGA: CNA only &quot;</span>))</code></pre></div>
@@ -1951,7 +1951,7 @@ fig4D</code></pre></div>
 <p><img src="SHIVA_analysis_files/figure-html/unnamed-chunk-19-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">datatable_withbuttons</span>(merged_allocation)</code></pre></div>
 <div id="htmlwidget-af650ebc9fa190ca2fd5" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-af650ebc9fa190ca2fd5">{"x":{"filter":"none","extensions":["Buttons"],"data":[["group: PIK3/AKT/mTOR","group: RAF/MEK","group: PIK3/AKT/mTOR","group: RAF/MEK"],[1,2,3,4],[0.22029702970297,0.155940594059406,0.231324257425743,0.140841584158416],[0.178645176389618,0.119325116085963,0.200495049504951,0.116274752475248],[0.261948883016323,0.192556072032849,0.264851485148515,0.173267326732673],["SHIVA","SHIVA","TCGA","TCGA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>group<\/th>\n      <th>row_counter<\/th>\n      <th>allocation<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n      <th>population<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-af650ebc9fa190ca2fd5">{"x":{"filter":"none","extensions":["Buttons"],"data":[["group: PIK3/AKT/mTOR","group: RAF/MEK","group: PIK3/AKT/mTOR","group: RAF/MEK"],[1,2,3,4],[0.22029702970297,0.155940594059406,0.233910891089109,0.140371287128713],[0.178645176389618,0.119325116085963,0.195544554455446,0.111386138613861],[0.261948883016323,0.192556072032849,0.279764851485149,0.17085396039604],["SHIVA","SHIVA","TCGA","TCGA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>group<\/th>\n      <th>row_counter<\/th>\n      <th>allocation<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n      <th>population<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <div id="show-patients-eligible-to-both-treatments-separately" class="section level4">
 <h4>Show patients eligible to both treatments separately</h4>
 <p>In case of a patient eligible for both molecular pathways treatment, the SHIVA medical board would decide in with cohord to allocate the patient. To allow a better comparison, the following plot separates the patients eligible to both treatments. The y-axes shows the tot number of patients that can be allocated in a molecular pathway treatmet.</p>
@@ -2381,25 +2381,25 @@ knitr<span class="op">::</span><span class="kw">kable</span>(summaryMat)</code><
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">1426.94 (1182.15-1730.425)</td>
-<td align="left">0.14 (0-0)</td>
-<td align="left">1427.08 (1182.15-1730.425)</td>
+<td align="left">1430.86 (1140.6-1808.525)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">1430.86 (1140.6-1808.525)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">199.02 (199-199)</td>
-<td align="left">285.46 (219.375-374.05)</td>
-<td align="left">484.48 (418.375-573.05)</td>
+<td align="left">199 (199-199)</td>
+<td align="left">284.45 (208-383.625)</td>
+<td align="left">483.45 (407-582.625)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">943.49 (760.025-1181.725)</td>
-<td align="left">0.11 (0-0)</td>
-<td align="left">943.6 (760.025-1181.725)</td>
+<td align="left">948.41 (737.925-1229.525)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">948.41 (737.925-1229.525)</td>
 </tr>
 </tbody>
 </table>
-<p>The table above represents our cascade design starting from upper left. The first row is the <em>recruitment row</em>: number of new patients that need to be sequenced to obtain the required power. The left and right <em>Confidence Intervals</em> from the bootstrap simuation are indicated in parentesis. Starting by recruiting 1426.94 (1182.15-1730.425) for the most rare drug category (RAF/MEK) we will obtain on average 199.02 (199-199) eligible patients and discarding 943.49 (760.025-1181.725) (the former are the patients not eligible to any molecular drug treatments). The non eligible patients of RAF/MEK might be eligible for other drug categories, so we calculate whether within these patients, there is an enough number of eligible patients to reach the required power. In case the number is sufficient, the algorithm indicates how many more patients are necessary to recruit. Based on our calculations no further patientes are necessary.<br />
+<p>The table above represents our cascade design starting from upper left. The first row is the <em>recruitment row</em>: number of new patients that need to be sequenced to obtain the required power. The left and right <em>Confidence Intervals</em> from the bootstrap simuation are indicated in parentesis. Starting by recruiting 1430.86 (1140.6-1808.525) for the most rare drug category (RAF/MEK) we will obtain on average 199 (199-199) eligible patients and discarding 948.41 (737.925-1229.525) (the former are the patients not eligible to any molecular drug treatments). The non eligible patients of RAF/MEK might be eligible for other drug categories, so we calculate whether within these patients, there is an enough number of eligible patients to reach the required power. In case the number is sufficient, the algorithm indicates how many more patients are necessary to recruit. Based on our calculations no further patientes are necessary.<br />
 Finally, the last column indicates the total number of patients screened, eligible, and non eligible.</p>
 <p>Starting from the most rare drug, we assure the minimum number of recruited patients that guarantee at least 80% power for each drug and the whole study.</p>
 </div>
@@ -2626,7 +2626,7 @@ myPHPoptim</code></pre></div>
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
 ## [8] methods   base     
 ## 
 ## other attached packages:
@@ -2635,58 +2635,56 @@ myPHPoptim</code></pre></div>
 ##  [5] Rsamtools_1.28.0              Biostrings_2.44.2            
 ##  [7] XVector_0.16.0                SummarizedExperiment_1.6.5   
 ##  [9] DelayedArray_0.2.7            matrixStats_0.53.1           
-## [11] Biobase_2.36.2                RColorBrewer_1.1-2           
-## [13] dplyr_0.7.4                   magrittr_1.5                 
-## [15] purrr_0.2.4                   tibble_1.4.2                 
-## [17] gdtools_0.1.7                 svglite_1.2.1                
-## [19] bindrcpp_0.2                  readxl_1.0.0                 
-## [21] ggplot2_2.2.1.9000            DT_0.4                       
-## [23] rtracklayer_1.36.6            GenomicRanges_1.28.6         
-## [25] GenomeInfoDb_1.12.3           IRanges_2.10.5               
-## [27] S4Vectors_0.14.7              BiocGenerics_0.22.1          
-## [29] knitr_1.20                    PrecisionTrialDesigner_0.99.0
-## [31] BiocStyle_2.4.1              
+## [11] Biobase_2.36.2                GenomicRanges_1.28.6         
+## [13] GenomeInfoDb_1.12.3           IRanges_2.10.5               
+## [15] S4Vectors_0.14.7              BiocGenerics_0.22.1          
+## [17] RColorBrewer_1.1-2            dplyr_0.7.4                  
+## [19] magrittr_1.5                  purrr_0.2.4                  
+## [21] tibble_1.4.2                  gdtools_0.1.7                
+## [23] svglite_1.2.1                 bindrcpp_0.2                 
+## [25] readxl_1.0.0                  ggplot2_2.2.1.9000           
+## [27] DT_0.4                        knitr_1.20                   
+## [29] PrecisionTrialDesigner_0.99.0 BiocStyle_2.4.1              
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] bitops_1.0-6                  bit64_0.9-7                  
-##  [3] progress_1.1.2                httr_1.3.1                   
-##  [5] rprojroot_1.3-2               tools_3.4.3                  
-##  [7] backports_1.1.2               R6_2.2.2                     
-##  [9] DBI_0.7                       lazyeval_0.2.1               
-## [11] colorspace_1.3-2              gridExtra_2.3                
-## [13] tidyselect_0.2.4              prettyunits_1.0.2            
-## [15] bit_1.1-12                    curl_3.1                     
-## [17] compiler_3.4.3                LowMACAAnnotation_0.99.3     
-## [19] profileModel_0.5-9            labeling_0.3                 
-## [21] scales_0.5.0.9000             brglm_0.6.1                  
-## [23] readr_1.1.1                   digest_0.6.15                
-## [25] shinyBS_0.61                  rmarkdown_1.8                
-## [27] pkgconfig_2.0.1               htmltools_0.3.6              
-## [29] BSgenome_1.44.2               highr_0.6                    
-## [31] htmlwidgets_1.0               rlang_0.2.0                  
-## [33] RSQLite_2.0                   BiocInstaller_1.26.1         
-## [35] shiny_1.0.5                   bindr_0.1                    
-## [37] jsonlite_1.5                  crosstalk_1.0.1              
-## [39] BiocParallel_1.10.1           R.oo_1.21.0                  
-## [41] RCurl_1.95-4.10               GenomeInfoDbData_0.99.0      
-## [43] Matrix_1.2-12                 Rcpp_0.12.15                 
-## [45] munsell_0.4.3                 R.methodsS3_1.7.1            
-## [47] stringi_1.1.6                 yaml_2.1.17                  
-## [49] zlibbioc_1.22.0               plyr_1.8.4                   
-## [51] AnnotationHub_2.8.3           grid_3.4.3                   
-## [53] blob_1.1.0                    ggrepel_0.7.0                
-## [55] lattice_0.20-35               GenomicFeatures_1.28.5       
-## [57] hms_0.4.1                     pillar_1.2.1                 
-## [59] cgdsr_1.2.10                  reshape2_1.4.3               
-## [61] codetools_0.2-15              biomaRt_2.35.11              
-## [63] googleVis_0.6.3               XML_3.98-1.10                
-## [65] glue_1.2.0                    evaluate_0.10.1              
-## [67] data.table_1.10.4-3           httpuv_1.3.6.1               
-## [69] testthat_2.0.0                cellranger_1.1.0             
-## [71] tidyr_0.8.0                   gtable_0.2.0                 
-## [73] assertthat_0.2.0              mime_0.5                     
-## [75] xtable_1.8-2                  GenomicAlignments_1.12.2     
-## [77] memoise_1.1.0                 interactiveDisplayBase_1.14.0</code></pre>
+##  [1] bitops_1.0-6             bit64_0.9-7             
+##  [3] progress_1.1.2           httr_1.3.1              
+##  [5] rprojroot_1.3-2          tools_3.4.3             
+##  [7] backports_1.1.2          R6_2.2.2                
+##  [9] DBI_0.7                  lazyeval_0.2.1          
+## [11] colorspace_1.3-2         gridExtra_2.3           
+## [13] tidyselect_0.2.4         prettyunits_1.0.2       
+## [15] bit_1.1-12               curl_3.1                
+## [17] compiler_3.4.3           LowMACAAnnotation_0.99.3
+## [19] profileModel_0.5-9       rtracklayer_1.36.6      
+## [21] labeling_0.3             scales_0.5.0.9000       
+## [23] brglm_0.6.1              readr_1.1.1             
+## [25] digest_0.6.15            shinyBS_0.61            
+## [27] rmarkdown_1.8            pkgconfig_2.0.1         
+## [29] htmltools_0.3.6          BSgenome_1.44.2         
+## [31] highr_0.6                htmlwidgets_1.0         
+## [33] rlang_0.2.0              RSQLite_2.0             
+## [35] shiny_1.0.5              bindr_0.1               
+## [37] jsonlite_1.5             crosstalk_1.0.1         
+## [39] BiocParallel_1.10.1      R.oo_1.21.0             
+## [41] RCurl_1.95-4.10          GenomeInfoDbData_0.99.0 
+## [43] Matrix_1.2-12            Rcpp_0.12.15            
+## [45] munsell_0.4.3            R.methodsS3_1.7.1       
+## [47] stringi_1.1.6            yaml_2.1.17             
+## [49] zlibbioc_1.22.0          plyr_1.8.4              
+## [51] grid_3.4.3               blob_1.1.0              
+## [53] ggrepel_0.7.0            lattice_0.20-35         
+## [55] GenomicFeatures_1.28.5   hms_0.4.1               
+## [57] pillar_1.2.1             cgdsr_1.2.10            
+## [59] reshape2_1.4.3           codetools_0.2-15        
+## [61] biomaRt_2.35.11          googleVis_0.6.3         
+## [63] XML_3.98-1.10            glue_1.2.0              
+## [65] evaluate_0.10.1          data.table_1.10.4-3     
+## [67] httpuv_1.3.6.1           testthat_2.0.0          
+## [69] cellranger_1.1.0         gtable_0.2.0            
+## [71] tidyr_0.8.0              assertthat_0.2.0        
+## [73] mime_0.5                 xtable_1.8-2            
+## [75] GenomicAlignments_1.12.2 memoise_1.1.0</code></pre>
 <!--
 # THIS PART IS SUPERFLUOS
 

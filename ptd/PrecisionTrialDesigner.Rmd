@@ -114,7 +114,8 @@ it will look only for that specific fusion.
 The format for specific fusions must be always *gene1\_\_gene2*.
 
 Now that we have our panel, we need to build an object of class CancerPanel:
-```{r chunk2, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
+
+```{r chunk2, echo=TRUE , eval=TRUE , message=TRUE , warning=FALSE}
 mypanel <- newCancerPanel(panelexample)
 ```
 
@@ -126,7 +127,7 @@ Fusions follow the same rule, but when a specific fusion is requested, the lengt
 is equal to the mean of two genes involved. 
 Finally, mutations will take a length equal to the exact alteration requested 
 plus a *padding_length* that can be decided by the user. 
-Note that this calculation does not take in to account 
+Note that this calculation does not take into account 
 overlapping regions as this is just a rough estimation for simulations in which every row 
 counts for itself. For a precise calculation, refer to the last section **PanelDesigner**.
 
@@ -141,7 +142,7 @@ mypanel <- newCancerPanel(panelexample , myhost="uswest.ensembl.org")
 ```
 
 A convenient list of mirror servers can be found here: [ensembl mirrors](http://www.ensembl.org/info/about/mirrors.html). 
-The same option is also available for *panelDesign* method.
+The same option is also available for *panelDesigner* method.
 
 ### Negation rules: exclude parameter
 
@@ -156,6 +157,7 @@ exclude <- data.frame(
 	, exact_alteration=c("amino_acid_variant" , "")
 	, mutation_specification=c("T790M" , "")
 	, group=c("Driver" , "Driver")
+	, tumor_type=c("luad" , "luad")
 	, stringsAsFactors = FALSE
 )
 knitr::kable(exclude)
@@ -171,8 +173,39 @@ to all the patients with the specified alteration.
 The *group* column is instead what the new couple sample-drug 
 should be considered. In our case, *Actionable* becomes *Driver*.
 
-```{r chunk2_exclude, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
-mypanel <- newCancerPanel(panelexample , myhost="uswest.ensembl.org" , exclude = exclude)
+An extra column specifying the tumor type in which the rule is applied can be added. 
+If the rule is valid for any tumor type, simply put "" (empty string).
+
+```{r chunk2_exclude, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
+mypanel_exclude <- newCancerPanel(panelexample , myhost="uswest.ensembl.org" , exclude = exclude)
+```
+
+### Negation rules: druggability parameter
+
+Not every drug can be associated with all tumor types. Certain treatments (e.g. FDA approved) are only available for 
+approved tumor types. We implemented a second set of rules through a new data.frame:
+
+```{r druggability, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
+druggability <- data.frame(drug = c("Erlotinib" , "Olaparib" , "Erlotinib" , "Crizotinib") 
+				, tumor_type=c("luad" , "brca" , "coadread" , "brca")
+				, in_out = c("include" , "include" , "include" , "exclude")
+				, group = c("Driver" , "Driver" , "Driver" , "Driver"))
+knitr::kable(druggability)
+```
+
+To be interpreted as '*drugA* can be used only in (*include*) or not used in (*exclude*) the specific *tumor_type* and 
+it will be associated with group *Driver*'.
+
+Multiple *include* are cumulative (Erlotinib can be used only in coadread and luad).
+
+These rules are universal and do not depend on the data or the panel and are reevaluated each time a new object and new data 
+are created.
+
+```{r chunk2_exclude2, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
+mypanel_exclude <- newCancerPanel(panelexample 
+                                  , myhost="uswest.ensembl.org" 
+                                  , exclude = exclude
+                                  , druggability = druggability)
 ```
 
 ## getAlterations
@@ -180,7 +213,7 @@ mypanel <- newCancerPanel(panelexample , myhost="uswest.ensembl.org" , exclude =
 Now that we have our panel, we want to test it against tumor samples. 
 We will choose two different cancer types among the available ones: 
 
-```{r chunk3, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
+```{r chunk3, echo=TRUE , eval=TRUE , message=TRUE , warning=FALSE}
 # Check available tumor types
 knitr::kable( head(showTumorType()) , row.names=FALSE)
 # Fetch data from breast cancer and lung adenocarcinoma samples
@@ -197,7 +230,7 @@ In case you are interested into downloading the population information for all
 the tumor types, it is possible to assign "all_tumors" to the parameter 
 tumor_type ```getAlterations(mypanel , tumor_type="all_tumors")```
 
-### Specify specific cancer studies
+### Specify the cancer studies
 
 Additionally, instead of specifying the tumor type, it is also possible to display the individual study 
 associated with each tumor type and select them one by one. This for example allows 
@@ -226,12 +259,11 @@ mypanel_toy <- getAlterations(mypanel_toy , repos=repos)
 ```
 
 In this toy example, we extract the data from our CancerPanel object and transfer them to a new object. 
-This operation can be useful in the moment you want to test subsets of your original panel using a freeze of 
+This operation can be useful when you want to test subsets of your original panel using a freeze of 
 your data. Remember that sample names are taken from the element 'Sample' of the list for each alteration type 
 because our tool needs to know the actual reference samples for which a genomic screening were made, 
 even if they have no alterations. 
-If 'Sample' is not present, the sample names are retrieved directly from the data using column *case_id*, 
-so remember to put them all. 
+If 'Sample' is not present, the sample names are retrieved directly from the data using column *case_id*.
 Adding more data than necessary is not a problem at this point, because every 
 statistics and calculation are made after the call to **subsetAlterations**.
 
@@ -286,6 +318,17 @@ perform our simulations since we can easily bind together these datasets.
 If the user provides an *exclude* data.frame (either at the object construction or here), all the patients 
 excluded from certain treatment opportunities will be stored in the excluded slot. See Negation Rules section above.
 
+The *druggability* parameter can be used in this context too.
+
+For example we can use the data already downloaded and use them in a panel with an exclude and druggability parameter:
+
+```{r , echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
+mypanel_exclude <- mypanel
+mypanel_exclude <- subsetAlterations(mypanel_exclude 
+                                     , exclude=exclude 
+                                     , druggability = druggability)
+```
+
 
 # Plots and Stats
 
@@ -306,7 +349,7 @@ All plots accept a **CancerPanel** object and a grouping variable to see the plo
 by gene or tumor type. Furthermore, you can decide the kind of alteration to plot, between mutations, copynumber, fusions,  
 expression or any combination of these.
 
-## coveragePlot and coverageStackPlot
+## coveragePlot
 
 Let's draw the simplest of the coverage plot. We want to see how many samples are covered 
 by at least one of the alteration of our panel, divided by tumor type: 
@@ -359,7 +402,9 @@ atLeastOne2 <- covStats2$plottedTable[ , 1]/covStats2$Samples
 Only the `r paste0( round(unname(atLeastOne2[1]) , 2)*100 , "%")` of breast samples are actionable and 
 `r paste0( round(unname(atLeastOne2[3]) , 2)*100 , "%")` of lung adenocarcinomas.
 
-Some of the drug are multitarget, like Vandetabib that acts on several kinases. So now we are interested in knowing 
+## coverageStackPlot
+
+Some of the drugs, like Vandetanib, are multitarget that acts on several kinases. So now we are interested in knowing 
 what are the most altered genes for each drug. We could add one more grouping variable to the **coveragePlot** 
 but we will end up with a very hard to read plot (one plot per gene). To overcome this difficulty, 
 we implemented a more compact version of the coverage plot that only returns the number of samples 
@@ -442,6 +487,29 @@ plot(myHTMLPlot)
 print(myHTMLPlot , tag="chart")
 ```
 
+## Exclude parameter effect
+
+Implementing negation rules can significantly alter the number of subject that can be potentially treated by a drug. 
+In this example, we will see the effect of the exclude parameter on Erlotinib drug.
+
+```{r plotStack_exclude , echo=TRUE , eval=TRUE, fig.width=7, fig.height=14}
+# First plot with exclude activated, second without
+par(mfrow=c(2,1))
+coverageStackPlot(mypanel_exclude
+             , alterationType=c("mutations" , "expression" , "copynumber" , "fusions")
+             , var="drug"
+             , grouping=NA
+             , tumor_type="luad"
+             )
+coverageStackPlot(mypanel
+             , alterationType=c("mutations" , "expression" , "copynumber" , "fusions")
+             , var="drug"
+             , grouping=NA
+             , tumor_type="luad"
+             )
+```
+
+As you can see, ~ 1% of the patients can no longer be potentially treated with Erlotinib because of specific resistant mutations. Furthermore, Olaparib association was completely eliminated by the druggability parameter.
 
 ## saturationPlot
 
