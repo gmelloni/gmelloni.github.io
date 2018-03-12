@@ -1,7 +1,7 @@
 ---
 title: "Panel Showcase"
-author: 
-- name: "Alessandro Guida"
+author:
+- name: Alessandro Guida
   affiliation: European Institute of Oncology, Milan
 output:
   html_document:
@@ -603,7 +603,7 @@ One common question that is often considered when trying to design custom target
 ```{r coverageplot all the population}
 coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
-             # adjust population distribution by applying a weighted sampling bootstrap
+             # adjust population distribution by applying a weighted resampling
              , tumor.freqs = c(brca=brca_freq
                                , luad=luad_freq
                                , lusc=lusc_freq
@@ -613,7 +613,7 @@ coveragePlot(PTD_panel
             )
 ```
 
-Simulate the panel performance with a weighted bootstrap simulation run 200 times. 
+Simulate the panel performance with a weighted resampling simulation run 200 times. 
 
 
 ```{r, include=FALSE}
@@ -626,7 +626,7 @@ simul <- lapply(1:N_SIMULATIONS , function(x) {
 	cov <- coveragePlot(
                  PTD_panel
                , alterationType=c("mutations" , "copynumber")
-               # adjust population distribution by applying a weighted sampling bootstrap
+               # adjust population distribution by applying a weighted resampling
                , tumor.weights = c(brca=ceiling(brca_tot/100)
                                  , luad=ceiling(luad_tot/100)
                                  , lusc=ceiling(lusc_tot/100)
@@ -653,10 +653,10 @@ simul <- data.frame(matrix(unlist(simul)
 # Calculate for each n° of alteration, the mean
 detectionPower <- colMeans(simul)
 
-# Calculate lower CI for bootstrap
+# Calculate lower CI for resampling
 leftCI <- apply(simul,2,function(x){left <- quantile(x, 0.025)})
 
-# Calculate upper CI for bootstrap
+# Calculate upper CI for resampling
 rightCI <- apply(simul,2,function(x){right <- quantile(x, 0.975)})
 
 # Preapre for column with # alterations
@@ -710,7 +710,7 @@ ggsave(filename="version_6.0/Figures/fig2B.svg", plot=last_plot(), device = "svg
 
 The previous plot shows the percentage of patients (*y-axis*) found to have at least one, two, three, etc, alterations (*x-axis*). The current design is capable of detecting ```r coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
-             # adjust population distribution by applying a weighted sampling bootstrap
+             # adjust population distribution by applying a weighted sampling resampling
              , tumor.freqs = c(brca=brca_freq
                                , luad=luad_freq
                                , lusc=lusc_freq
@@ -816,7 +816,7 @@ We can also easily address the issue of the allocation frequency in the differen
 coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
              , grouping="drug"
-             # adjust population distribution by applying a weighted sampling bootstrap
+             # adjust population distribution by applying a weighted sampling resampling
              , tumor.freqs = c(brca=brca_freq
                                , luad=luad_freq
                                , lusc=lusc_freq
@@ -837,7 +837,7 @@ To make it simpler to compare, we will plot the detection power for each drug ty
 drug_df <- coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
              , grouping="drug"
-             # adjust population distribution by applying a weighted sampling bootstrap
+             # adjust population distribution by applying a weighted resampling
              , tumor.freqs = c(brca=brca_freq
                                , luad=luad_freq
                                , lusc=lusc_freq
@@ -865,7 +865,7 @@ drug_df %>%
 ```
 
 
-Generate the same plot this time running a weighted bootstrap simulation.
+Generate the same plot this time running a weighted resampling simulation.
 
 ```{r}
 
@@ -877,7 +877,7 @@ simul <- lapply(1:N_SIMULATIONS , function(x) {
   drug_df <- coveragePlot(PTD_panel
              , alterationType=c("mutations" , "copynumber")
              , grouping="drug"
-             # adjust population distribution by applying a weighted sampling bootstrap
+             # adjust population distribution by applying a weighted resampling
                           , tumor.weights = c(brca=ceiling(brca_tot/100)
                                  , luad=ceiling(luad_tot/100)
                                  , lusc=ceiling(lusc_tot/100)
@@ -936,10 +936,10 @@ row.names(simul_df) <- NULL
 # Calculate for each n° of alteration, the mean
 detectionPower <- colMeans(simul_df)
 
-# Calculate lower CI for bootstrap
+# Calculate lower CI for resampling
 leftCI <- apply(simul_df,2,function(x){left <- quantile(x, 0.025)})
 
-# Calculate upper CI for bootstrap
+# Calculate upper CI for resampling
 rightCI <- apply(simul_df,2,function(x){right <- quantile(x, 0.975)})
 
 # Preapre for column with # alterations
@@ -1009,7 +1009,7 @@ The following saturation plot shows the overall performance of the panel in a po
 saturationPlot(PTD_panel
             , alterationType=c("mutations" , "copynumber")
             , adding="gene_symbol"
-            # adjust population distribution by applying a weighted sampling bootstrap
+            # adjust population distribution by applying a weighted resampling
             , tumor.weights=c(brca=brca_tot
                              , luad = luad_tot
                              , lusc = lusc_tot

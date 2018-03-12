@@ -1,37 +1,40 @@
-name: "PTD"
+name: PTD
 navbar:
-  title: "PTD"
+  title: PTD
   type: inverse
   left:
-    - text: "Home"
-      icon: fa-home
-      href: "index.html"
-    - text: "Examples"
-      menu:
-        - text: "Vignette"
-          href: "PrecisionTrialDesigner.html"
-        - text: "Shiva Retrospective Analysis"
-          href: "SHIVA_analysis.html"
-        - text: "Panel Showcase"
-          href: "PTD_panel_showcase.html"
-    - text: "Download"
-      icon: fa-arrow-circle-down
-      href: "download.html"
-    - text: "Install"
-      icon: fa-code
-      href: "install.html"
-    - text: "Shiny App"
-      icon: fa-gear
-      href: "shinyapp.html"
-    - text: "About"
-      icon: fa-info
-      href: "about.html"
+  - text: Home
+    icon: fa-home
+    href: index.html
+  - text: Examples
+    menu:
+    - text: Vignette
+      href: PrecisionTrialDesigner.html
+    - text: Shiva Retrospective Analysis
+      href: SHIVA_analysis.html
+    - text: Panel Showcase
+      href: PTD_panel_showcase.html
+  - text: Download
+    icon: fa-arrow-circle-down
+    href: download.html
+  - text: Install
+    icon: fa-code
+    href: install.html
+  - text: Shiny App
+    icon: fa-gear
+    href: shinyapp.html
+  - text: About
+    icon: fa-info
+    href: about.html
   right:
-    - icon: fa-github-alt fa-lg
-      href: https://gmelloni.github.io
-output_dir: "."
+  - icon: fa-github-alt fa-lg
+    href: https://gmelloni.github.io
+output_dir: '.'
 output:
   html_document:
     theme: spacelab
     include:
       after_body: footer.html
+    lib_dir: site_libs
+    self_contained: no
+

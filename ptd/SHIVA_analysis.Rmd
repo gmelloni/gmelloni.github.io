@@ -1,6 +1,10 @@
 ---
 title: "Shiva Retrospective Analysis"
-author: "Alessandro Guida and Giorgio Melloni"
+author:
+- name: Alessandro Guida
+  affiliation: European Institute of Oncology, Milan
+- name: Giorgio Melloni
+  affiliation: Harvard Medical School, Boston
 output:
   html_document:
     theme: spacelab

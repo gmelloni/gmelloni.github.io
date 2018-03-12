@@ -144,69 +144,79 @@ mypanel <- newCancerPanel(panelexample , myhost="uswest.ensembl.org")
 A convenient list of mirror servers can be found here: [ensembl mirrors](http://www.ensembl.org/info/about/mirrors.html). 
 The same option is also available for *panelDesigner* method.
 
-### Negation rules: exclude parameter
+## Rules parameter
 
-There are cases in which a specified mutations or alteration is an indication for NOT giving a certain drug. A classic example is 
-when a mutation can cause resistance to a drug, even in the presence of other actionable alterations. For example we can create a data.frame like the following:
+There are specific situations where not every tumor in the panel can be associated with a drug. Such cases include 
+known drug resistance or simply drugs that are approved only for specific tumor types.
+We add a parameter called **rules** that define a set of modifiers of associations between drug and tumor types.
+For example we can create a data.frame like the following:
 
 ```{r}
-exclude <- data.frame(
-	drug=c("Erlotinib" , "Erlotinib")
-	, gene_symbol=c("EGFR" , "KRAS")
-	, alteration=c("SNV" , "SNV")
-	, exact_alteration=c("amino_acid_variant" , "")
-	, mutation_specification=c("T790M" , "")
-	, group=c("Driver" , "Driver")
-	, tumor_type=c("luad" , "luad")
+rules <- data.frame(
+	drug=c("Erlotinib" , "Erlotinib", "Erlotinib","Erlotinib","Olaparib")
+	, gene_symbol=c("EGFR" , "KRAS", "" , "", "")
+	, alteration=c("SNV" , "SNV", "" , "", "")
+	, exact_alteration=c("amino_acid_variant" , "", "" , "", "")
+	, mutation_specification=c("T790M" , "" , "" , "", "")
+	, group=c("Driver" , "Driver", "Driver" , "Driver", "Driver")
+	, tumor_type=c("luad" , "luad" , "luad" , "coadread","brca")
+	, in_out=c("exclude" , "exclude" , "include" , "include" , "include")
 	, stringsAsFactors = FALSE
 )
-knitr::kable(exclude)
+knitr::kable(rules)
 ```
 
+It can be added directly when the object is constructed or later on during **subsetAlteration**.
+
+```{r chunk2_exclude, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
+mypanel_exclude <- newCancerPanel(panelexample 
+                                  , myhost="uswest.ensembl.org" 
+                                  , rules = rules)
+```
+
+We developed two type of possible rules described below.
+
+### Drug resistance rules
+
+```{r}
+knitr::kable(rules[1:2 , ])
+```
+
+The first two rows implement a drug resistance rule. 
 Both alterations (*EGFR* T790M and *KRAS* mutations) can cause 
 resistance to *EGFR* inhibitors and all the patients harboring 
 these alterations cannot be associated with that treatment.
 
 The data.frame columns are exactly the same as the panel 
-but in this case the *drug* is a drug that cannot be assigned 
+but in this case the **drug** is a drug that cannot be assigned 
 to all the patients with the specified alteration.
-The *group* column is instead what the new couple sample-drug 
+The **group** column is instead what the new couple sample-drug 
 should be considered. In our case, *Actionable* becomes *Driver*.
 
-An extra column specifying the tumor type in which the rule is applied can be added. 
+An extra column specifying the **tumor_type** in which the rule is applied is added.
 If the rule is valid for any tumor type, simply put "" (empty string).
 
-```{r chunk2_exclude, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
-mypanel_exclude <- newCancerPanel(panelexample , myhost="uswest.ensembl.org" , exclude = exclude)
-```
+**in_out** define the type of rule. In this case is an exclusion (in_out=exclude) 
+rule so any patient harboring that mutation cannot be associated with Erlotinib. 
+Also inclusion only rules can be implemented using in_out=include.
 
-### Negation rules: druggability parameter
+### Drug association rules
+
+```{r}
+knitr::kable(rules[3:5 , ])
+```
 
 Not every drug can be associated with all tumor types. Certain treatments (e.g. FDA approved) are only available for 
-approved tumor types. We implemented a second set of rules through a new data.frame:
+specific tumor types. We implemented a second set of rules in the rows 3,4 and 5.
 
-```{r druggability, echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
-druggability <- data.frame(drug = c("Erlotinib" , "Olaparib" , "Erlotinib" , "Crizotinib") 
-				, tumor_type=c("luad" , "brca" , "coadread" , "brca")
-				, in_out = c("include" , "include" , "include" , "exclude")
-				, group = c("Driver" , "Driver" , "Driver" , "Driver"))
-knitr::kable(druggability)
-```
+The interpretation is: *drugA* can be used only in (*include*) or not used in (*exclude*) the specific *tumor_type* and 
+it will be associated with group *Driver*.
 
-To be interpreted as '*drugA* can be used only in (*include*) or not used in (*exclude*) the specific *tumor_type* and 
-it will be associated with group *Driver*'.
+Multiple *include* on the same drug are cumulative and every tumor type require a new row 
+(Erlotinib can be used only in coadread and luad).
 
-Multiple *include* are cumulative (Erlotinib can be used only in coadread and luad).
-
-These rules are universal and do not depend on the data or the panel and are reevaluated each time a new object and new data 
-are created.
-
-```{r chunk2_exclude2, echo=TRUE , eval=FALSE , message=FALSE , warning=FALSE}
-mypanel_exclude <- newCancerPanel(panelexample 
-                                  , myhost="uswest.ensembl.org" 
-                                  , exclude = exclude
-                                  , druggability = druggability)
-```
+These rules are universal and do not depend on the data or the panel. In the example we are going to develop, 
+coadread is not included but the rule can stay.
 
 ## getAlterations
 
@@ -325,8 +335,7 @@ For example we can use the data already downloaded and use them in a panel with 
 ```{r , echo=TRUE , eval=TRUE , message=FALSE , warning=FALSE}
 mypanel_exclude <- mypanel
 mypanel_exclude <- subsetAlterations(mypanel_exclude 
-                                     , exclude=exclude 
-                                     , druggability = druggability)
+                                     , rules=rules)
 ```
 
 
@@ -487,22 +496,24 @@ plot(myHTMLPlot)
 print(myHTMLPlot , tag="chart")
 ```
 
-## Exclude parameter effect
+## Rules parameter effect
 
 Implementing negation rules can significantly alter the number of subject that can be potentially treated by a drug. 
-In this example, we will see the effect of the exclude parameter on Erlotinib drug.
+In this example, we will see the effect of the **rules** parameter on Erlotinib drug in the lung dataset.
 
 ```{r plotStack_exclude , echo=TRUE , eval=TRUE, fig.width=7, fig.height=14}
 # First plot with exclude activated, second without
 par(mfrow=c(2,1))
 coverageStackPlot(mypanel_exclude
-             , alterationType=c("mutations" , "expression" , "copynumber" , "fusions")
+             , alterationType=c("mutations" , "expression" 
+                                , "copynumber" , "fusions")
              , var="drug"
              , grouping=NA
              , tumor_type="luad"
              )
 coverageStackPlot(mypanel
-             , alterationType=c("mutations" , "expression" , "copynumber" , "fusions")
+             , alterationType=c("mutations" , "expression" 
+                                , "copynumber" , "fusions")
              , var="drug"
              , grouping=NA
              , tumor_type="luad"

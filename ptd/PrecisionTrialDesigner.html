@@ -794,20 +794,22 @@ knitr<span class="op">::</span><span class="kw">kable</span>(panelexample)</code
 <span class="co"># The default is www.ensembl.org</span>
 mypanel &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span>)</code></pre></div>
 <p>A convenient list of mirror servers can be found here: <a href="http://www.ensembl.org/info/about/mirrors.html">ensembl mirrors</a>. The same option is also available for <em>panelDesigner</em> method.</p>
-<div id="negation-rules-exclude-parameter" class="section level3">
-<h3>Negation rules: exclude parameter</h3>
-<p>There are cases in which a specified mutations or alteration is an indication for NOT giving a certain drug. A classic example is when a mutation can cause resistance to a drug, even in the presence of other actionable alterations. For example we can create a data.frame like the following:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exclude &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-    <span class="dt">drug=</span><span class="kw">c</span>(<span class="st">&quot;Erlotinib&quot;</span> , <span class="st">&quot;Erlotinib&quot;</span>)
-    , <span class="dt">gene_symbol=</span><span class="kw">c</span>(<span class="st">&quot;EGFR&quot;</span> , <span class="st">&quot;KRAS&quot;</span>)
-    , <span class="dt">alteration=</span><span class="kw">c</span>(<span class="st">&quot;SNV&quot;</span> , <span class="st">&quot;SNV&quot;</span>)
-    , <span class="dt">exact_alteration=</span><span class="kw">c</span>(<span class="st">&quot;amino_acid_variant&quot;</span> , <span class="st">&quot;&quot;</span>)
-    , <span class="dt">mutation_specification=</span><span class="kw">c</span>(<span class="st">&quot;T790M&quot;</span> , <span class="st">&quot;&quot;</span>)
-    , <span class="dt">group=</span><span class="kw">c</span>(<span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span>)
-    , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad&quot;</span> , <span class="st">&quot;luad&quot;</span>)
+</div>
+<div id="rules-parameter" class="section level2">
+<h2>Rules parameter</h2>
+<p>There are specific situations where not every tumor in the panel can be associated with a drug. Such cases include known drug resistance or simply drugs that are approved only for specific tumor types. We add a parameter called <strong>rules</strong> that define a set of modifiers of associations between drug and tumor types. For example we can create a data.frame like the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rules &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
+    <span class="dt">drug=</span><span class="kw">c</span>(<span class="st">&quot;Erlotinib&quot;</span> , <span class="st">&quot;Erlotinib&quot;</span>, <span class="st">&quot;Erlotinib&quot;</span>,<span class="st">&quot;Erlotinib&quot;</span>,<span class="st">&quot;Olaparib&quot;</span>)
+    , <span class="dt">gene_symbol=</span><span class="kw">c</span>(<span class="st">&quot;EGFR&quot;</span> , <span class="st">&quot;KRAS&quot;</span>, <span class="st">&quot;&quot;</span> , <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)
+    , <span class="dt">alteration=</span><span class="kw">c</span>(<span class="st">&quot;SNV&quot;</span> , <span class="st">&quot;SNV&quot;</span>, <span class="st">&quot;&quot;</span> , <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)
+    , <span class="dt">exact_alteration=</span><span class="kw">c</span>(<span class="st">&quot;amino_acid_variant&quot;</span> , <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span> , <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)
+    , <span class="dt">mutation_specification=</span><span class="kw">c</span>(<span class="st">&quot;T790M&quot;</span> , <span class="st">&quot;&quot;</span> , <span class="st">&quot;&quot;</span> , <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>)
+    , <span class="dt">group=</span><span class="kw">c</span>(<span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span>, <span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span>, <span class="st">&quot;Driver&quot;</span>)
+    , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad&quot;</span> , <span class="st">&quot;luad&quot;</span> , <span class="st">&quot;luad&quot;</span> , <span class="st">&quot;coadread&quot;</span>,<span class="st">&quot;brca&quot;</span>)
+    , <span class="dt">in_out=</span><span class="kw">c</span>(<span class="st">&quot;exclude&quot;</span> , <span class="st">&quot;exclude&quot;</span> , <span class="st">&quot;include&quot;</span> , <span class="st">&quot;include&quot;</span> , <span class="st">&quot;include&quot;</span>)
     , <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>
 )
-knitr<span class="op">::</span><span class="kw">kable</span>(exclude)</code></pre></div>
+knitr<span class="op">::</span><span class="kw">kable</span>(rules)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -818,6 +820,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(exclude)</code></pr
 <th align="left">mutation_specification</th>
 <th align="left">group</th>
 <th align="left">tumor_type</th>
+<th align="left">in_out</th>
 </tr>
 </thead>
 <tbody>
@@ -829,6 +832,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(exclude)</code></pr
 <td align="left">T790M</td>
 <td align="left">Driver</td>
 <td align="left">luad</td>
+<td align="left">exclude</td>
 </tr>
 <tr class="even">
 <td align="left">Erlotinib</td>
@@ -838,65 +842,146 @@ knitr<span class="op">::</span><span class="kw">kable</span>(exclude)</code></pr
 <td align="left"></td>
 <td align="left">Driver</td>
 <td align="left">luad</td>
+<td align="left">exclude</td>
+</tr>
+<tr class="odd">
+<td align="left">Erlotinib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">luad</td>
+<td align="left">include</td>
+</tr>
+<tr class="even">
+<td align="left">Erlotinib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">coadread</td>
+<td align="left">include</td>
+</tr>
+<tr class="odd">
+<td align="left">Olaparib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">brca</td>
+<td align="left">include</td>
 </tr>
 </tbody>
 </table>
-<p>Both alterations (<em>EGFR</em> T790M and <em>KRAS</em> mutations) can cause resistance to <em>EGFR</em> inhibitors and all the patients harboring these alterations cannot be associated with that treatment.</p>
-<p>The data.frame columns are exactly the same as the panel but in this case the <em>drug</em> is a drug that cannot be assigned to all the patients with the specified alteration. The <em>group</em> column is instead what the new couple sample-drug should be considered. In our case, <em>Actionable</em> becomes <em>Driver</em>.</p>
-<p>An extra column specifying the tumor type in which the rule is applied can be added. If the rule is valid for any tumor type, simply put “” (empty string).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel_exclude &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span> , <span class="dt">exclude =</span> exclude)</code></pre></div>
-</div>
-<div id="negation-rules-druggability-parameter" class="section level3">
-<h3>Negation rules: druggability parameter</h3>
-<p>Not every drug can be associated with all tumor types. Certain treatments (e.g. FDA approved) are only available for approved tumor types. We implemented a second set of rules through a new data.frame:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">druggability &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">drug =</span> <span class="kw">c</span>(<span class="st">&quot;Erlotinib&quot;</span> , <span class="st">&quot;Olaparib&quot;</span> , <span class="st">&quot;Erlotinib&quot;</span> , <span class="st">&quot;Crizotinib&quot;</span>) 
-                , <span class="dt">tumor_type=</span><span class="kw">c</span>(<span class="st">&quot;luad&quot;</span> , <span class="st">&quot;brca&quot;</span> , <span class="st">&quot;coadread&quot;</span> , <span class="st">&quot;brca&quot;</span>)
-                , <span class="dt">in_out =</span> <span class="kw">c</span>(<span class="st">&quot;include&quot;</span> , <span class="st">&quot;include&quot;</span> , <span class="st">&quot;include&quot;</span> , <span class="st">&quot;exclude&quot;</span>)
-                , <span class="dt">group =</span> <span class="kw">c</span>(<span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span> , <span class="st">&quot;Driver&quot;</span>))
-knitr<span class="op">::</span><span class="kw">kable</span>(druggability)</code></pre></div>
+<p>It can be added directly when the object is constructed or later on during <strong>subsetAlteration</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel_exclude &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample 
+                                  , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span> 
+                                  , <span class="dt">rules =</span> rules)</code></pre></div>
+<p>We developed two type of possible rules described below.</p>
+<div id="drug-resistance-rules" class="section level3">
+<h3>Drug resistance rules</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(rules[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span> , ])</code></pre></div>
 <table>
 <thead>
 <tr class="header">
 <th align="left">drug</th>
+<th align="left">gene_symbol</th>
+<th align="left">alteration</th>
+<th align="left">exact_alteration</th>
+<th align="left">mutation_specification</th>
+<th align="left">group</th>
 <th align="left">tumor_type</th>
 <th align="left">in_out</th>
-<th align="left">group</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">Erlotinib</td>
+<td align="left">EGFR</td>
+<td align="left">SNV</td>
+<td align="left">amino_acid_variant</td>
+<td align="left">T790M</td>
+<td align="left">Driver</td>
 <td align="left">luad</td>
-<td align="left">include</td>
-<td align="left">Driver</td>
-</tr>
-<tr class="even">
-<td align="left">Olaparib</td>
-<td align="left">brca</td>
-<td align="left">include</td>
-<td align="left">Driver</td>
-</tr>
-<tr class="odd">
-<td align="left">Erlotinib</td>
-<td align="left">coadread</td>
-<td align="left">include</td>
-<td align="left">Driver</td>
-</tr>
-<tr class="even">
-<td align="left">Crizotinib</td>
-<td align="left">brca</td>
 <td align="left">exclude</td>
+</tr>
+<tr class="even">
+<td align="left">Erlotinib</td>
+<td align="left">KRAS</td>
+<td align="left">SNV</td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">Driver</td>
+<td align="left">luad</td>
+<td align="left">exclude</td>
 </tr>
 </tbody>
 </table>
-<p>To be interpreted as ‘<em>drugA</em> can be used only in (<em>include</em>) or not used in (<em>exclude</em>) the specific <em>tumor_type</em> and it will be associated with group <em>Driver</em>’.</p>
-<p>Multiple <em>include</em> are cumulative (Erlotinib can be used only in coadread and luad).</p>
-<p>These rules are universal and do not depend on the data or the panel and are reevaluated each time a new object and new data are created.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel_exclude &lt;-<span class="st"> </span><span class="kw">newCancerPanel</span>(panelexample 
-                                  , <span class="dt">myhost=</span><span class="st">&quot;uswest.ensembl.org&quot;</span> 
-                                  , <span class="dt">exclude =</span> exclude
-                                  , <span class="dt">druggability =</span> druggability)</code></pre></div>
+<p>The first two rows implement a drug resistance rule. Both alterations (<em>EGFR</em> T790M and <em>KRAS</em> mutations) can cause resistance to <em>EGFR</em> inhibitors and all the patients harboring these alterations cannot be associated with that treatment.</p>
+<p>The data.frame columns are exactly the same as the panel but in this case the <strong>drug</strong> is a drug that cannot be assigned to all the patients with the specified alteration. The <strong>group</strong> column is instead what the new couple sample-drug should be considered. In our case, <em>Actionable</em> becomes <em>Driver</em>.</p>
+<p>An extra column specifying the <strong>tumor_type</strong> in which the rule is applied is added. If the rule is valid for any tumor type, simply put “” (empty string).</p>
+<p><strong>in_out</strong> define the type of rule. In this case is an exclusion (in_out=exclude) rule so any patient harboring that mutation cannot be associated with Erlotinib. Also inclusion only rules can be implemented using in_out=include.</p>
+</div>
+<div id="drug-association-rules" class="section level3">
+<h3>Drug association rules</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">kable</span>(rules[<span class="dv">3</span><span class="op">:</span><span class="dv">5</span> , ])</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">drug</th>
+<th align="left">gene_symbol</th>
+<th align="left">alteration</th>
+<th align="left">exact_alteration</th>
+<th align="left">mutation_specification</th>
+<th align="left">group</th>
+<th align="left">tumor_type</th>
+<th align="left">in_out</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td align="left">Erlotinib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">luad</td>
+<td align="left">include</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td align="left">Erlotinib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">coadread</td>
+<td align="left">include</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="left">Olaparib</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">Driver</td>
+<td align="left">brca</td>
+<td align="left">include</td>
+</tr>
+</tbody>
+</table>
+<p>Not every drug can be associated with all tumor types. Certain treatments (e.g. FDA approved) are only available for specific tumor types. We implemented a second set of rules in the rows 3,4 and 5.</p>
+<p>The interpretation is: <em>drugA</em> can be used only in (<em>include</em>) or not used in (<em>exclude</em>) the specific <em>tumor_type</em> and it will be associated with group <em>Driver</em>.</p>
+<p>Multiple <em>include</em> on the same drug are cumulative and every tumor type require a new row (Erlotinib can be used only in coadread and luad).</p>
+<p>These rules are universal and do not depend on the data or the panel. In the example we are going to develop, coadread is not included but the rule can stay.</p>
 </div>
 </div>
 <div id="getalterations" class="section level2">
@@ -1213,8 +1298,7 @@ mypanel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(
 <p>For example we can use the data already downloaded and use them in a panel with an exclude and druggability parameter:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mypanel_exclude &lt;-<span class="st"> </span>mypanel
 mypanel_exclude &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span>(mypanel_exclude 
-                                     , <span class="dt">exclude=</span>exclude 
-                                     , <span class="dt">druggability =</span> druggability)</code></pre></div>
+                                     , <span class="dt">rules=</span>rules)</code></pre></div>
 </div>
 </div>
 <div id="plots-and-stats" class="section level1">
@@ -1282,12 +1366,12 @@ myHTMLPlot &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</spa
 <span class="co"># Now run plot</span>
 <span class="kw">plot</span>(myHTMLPlot)</code></pre></div>
 <!-- ColumnChart generated in R 3.4.3 by googleVis 0.6.3 package -->
-<!-- Thu Mar  8 14:09:59 2018 -->
+<!-- Mon Mar 12 16:49:15 2018 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataColumnChartID135f5559e7661 () {
+function gvisDataColumnChartID35e291f3630 () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2226,8 +2310,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartColumnChartID135f5559e7661() {
-var data = gvisDataColumnChartID135f5559e7661();
+function drawChartColumnChartID35e291f3630() {
+var data = gvisDataColumnChartID35e291f3630();
 var options = {};
 options["allowHtml"] = true;
 options["isStacked"] = true;
@@ -2247,7 +2331,7 @@ options["enableScrollWheel"] = true;
 options["colors"] = ['#5E4EA1','#506AAE','#3685BB','#4FA0B3','#62BCA7','#82CCA4','#A2D9A4','#BFE4A0','#DBF09A','#EDF7A3','#F9FCB5','#FFF7B2','#FEE899','#FED682','#FEBE6E','#FCA55C','#F8864E','#F16844','#E2534A','#D23B4E','#B72448','#9E0041','#A9A9A9'];
 
     var chart = new google.visualization.ColumnChart(
-    document.getElementById('ColumnChartID135f5559e7661')
+    document.getElementById('ColumnChartID35e291f3630')
     );
     chart.draw(data,options);
     
@@ -2271,9 +2355,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartColumnChartID135f5559e7661);
+callbacks.push(drawChartColumnChartID35e291f3630);
 })();
-function displayChartColumnChartID135f5559e7661() {
+function displayChartColumnChartID35e291f3630() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2296,25 +2380,27 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID135f5559e7661"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID35e291f3630"></script>
 <!-- divChart -->
-<div id="ColumnChartID135f5559e7661" style="width: 500; height: 800;">
+<div id="ColumnChartID35e291f3630" style="width: 500; height: 800;">
 
 </div>
 </div>
-<div id="exclude-parameter-effect" class="section level2">
-<h2>Exclude parameter effect</h2>
-<p>Implementing negation rules can significantly alter the number of subject that can be potentially treated by a drug. In this example, we will see the effect of the exclude parameter on Erlotinib drug.</p>
+<div id="rules-parameter-effect" class="section level2">
+<h2>Rules parameter effect</h2>
+<p>Implementing negation rules can significantly alter the number of subject that can be potentially treated by a drug. In this example, we will see the effect of the <strong>rules</strong> parameter on Erlotinib drug in the lung dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First plot with exclude activated, second without</span>
 <span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
 <span class="kw">coverageStackPlot</span>(mypanel_exclude
-             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> 
+                                , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
              , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
              , <span class="dt">grouping=</span><span class="ot">NA</span>
              , <span class="dt">tumor_type=</span><span class="st">&quot;luad&quot;</span>
              )
 <span class="kw">coverageStackPlot</span>(mypanel
-             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
+             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;expression&quot;</span> 
+                                , <span class="st">&quot;copynumber&quot;</span> , <span class="st">&quot;fusions&quot;</span>)
              , <span class="dt">var=</span><span class="st">&quot;drug&quot;</span>
              , <span class="dt">grouping=</span><span class="ot">NA</span>
              , <span class="dt">tumor_type=</span><span class="st">&quot;luad&quot;</span>
@@ -2946,7 +3032,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(samplefreqs[ sample
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.1777778</td>
+<td align="right">0.1888889</td>
 </tr>
 </tbody>
 </table>
@@ -2971,7 +3057,7 @@ title &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="s
 <span class="kw">hist</span>(pik3caboot , <span class="dt">col=</span><span class="st">&quot;cadetblue&quot;</span> , <span class="dt">breaks=</span><span class="dv">30</span> , <span class="dt">main=</span>title , <span class="dt">xlab=</span><span class="st">&quot;Frequencies of resampling&quot;</span>)
 <span class="kw">abline</span>(<span class="dt">v =</span> avgpik3ca , <span class="dt">col=</span><span class="st">&quot;red&quot;</span> , <span class="dt">lwd=</span><span class="dv">3</span> , <span class="dt">xpd=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/basket6%20-1.png" width="960" /></p>
-<p>So, with our expected sample composition, we have an average of 0.218 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.036. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
+<p>So, with our expected sample composition, we have an average of 0.217 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.04. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
 <p><span class="math display">\[(\theta_{\alpha/2}^{*};\theta_{1-\alpha/2}^{*})\]</span></p>
 <p>To summarize what we should expect from this study, including answering to question 3:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Write a simple function to calculate confidence interval of a proportion</span>
@@ -3003,11 +3089,11 @@ knitr<span class="op">::</span><span class="kw">kable</span>(pik3caSummary , <sp
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.218</td>
-<td align="right">0.036</td>
-<td align="right">0.3</td>
-<td align="right">0.133</td>
-<td align="left">0.144 - 0.284</td>
+<td align="right">0.217</td>
+<td align="right">0.04</td>
+<td align="right">0.322</td>
+<td align="right">0.1</td>
+<td align="left">0.144 - 0.295</td>
 </tr>
 </tbody>
 </table>
@@ -3052,15 +3138,15 @@ knitr<span class="op">::</span><span class="kw">kable</span>(survSummary , <span
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">339</td>
-<td align="right">67</td>
-<td align="right">513</td>
-<td align="right">222</td>
-<td align="left">247 - 476</td>
+<td align="right">348</td>
+<td align="right">77</td>
+<td align="right">606</td>
+<td align="right">196</td>
+<td align="left">247 - 555</td>
 </tr>
 </tbody>
 </table>
-<p>What we learnt is that in the average scenario, we would need 339 samples to start our trial, with a minimum of 222 and, if we are very unlucky, a maximum of 513 patients at screening.</p>
+<p>What we learnt is that in the average scenario, we would need 348 samples to start our trial, with a minimum of 196 and, if we are very unlucky, a maximum of 606 patients at screening.</p>
 </div>
 </div>
 <div id="panel-design" class="section level1">
