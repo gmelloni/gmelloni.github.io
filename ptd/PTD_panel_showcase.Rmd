@@ -32,7 +32,7 @@ conference C.
 
 The objective of this analysis is to: 
 
-1. **Simulate the panel "detection power"** (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.
+1. **Simulate the panel "detected fraction"** (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.
 2. **Simulate a genomic driven clinical trial:** As we might risk to have "unbalanced" group treatment, we would like to know in advance the patient allocation frequency to different treatment arms based on the alteration frequency in the cancer population;
 3. **Estimate the number of patients needed to be screened**;
 4. **Optimize the size of the panel and therefore reduce experimental cost**;
@@ -595,9 +595,9 @@ coverageStackPlot(PTD_panel
 ```
 
 
-#### Panel detection power in the overall population
+#### Panel detected fraction in the overall population
 
-One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (*x-axis*) found in the sample (patient) population (*y-axis*). The panel *detection power* can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detection power in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis. 
+One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (*x-axis*) found in the sample (patient) population (*y-axis*). The panel *detected fraction* can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detected fraction in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis. 
 
 
 ```{r coverageplot all the population}
@@ -639,7 +639,7 @@ simul <- lapply(1:N_SIMULATIONS , function(x) {
 			return(cov$plottedTable/cov$Samples[1])
 		})
 
-## Prepare function for plotting Detection power with Confidenti intervals
+## Prepare function for plotting detected fraction with Confidenti intervals
 # ------------------------------------------------------------------------------
 
 # Convert to dataframe
@@ -676,7 +676,7 @@ PTD_detection_image <- dtpow %>%
                 , position=position_dodge(0.9)
                 , size=0.2
   ) + 
-  ggtitle("Overall Detection power") +
+  ggtitle("Overall detected fraction") +
   annotate("text"
            , x=n_alterations
            , y=detectionPower+0.15
@@ -736,7 +736,7 @@ coveragePlot(PTD_panel
              )
 ```
 
-To allow and easy comparison of the detection power in different tumor types we have redesign the plots into one unique barplot.
+To allow and easy comparison of the detected fraction in different tumor types we have redesign the plots into one unique barplot.
 
 ```{r}
 # get data from the panel simulation
@@ -799,7 +799,7 @@ df %>%
               ) + 
   coord_flip() + 
   labs(title="Genomic panel detection-power in different tumor types.") +
-  ylab(label = "detection power indicated as the overall population percentage") +
+  ylab(label = "detected fraction indicated as the overall population percentage") +
   xlab(label = "tumor type (TCGA ID)")
 ```
 
@@ -829,7 +829,7 @@ coveragePlot(PTD_panel
 ```
 
 
-To make it simpler to compare, we will plot the detection power for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.
+To make it simpler to compare, we will plot the detected fraction for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.
 
 ```{r max freq of patients eligible for each drug treatment}
 
@@ -860,7 +860,7 @@ drug_df %>%
   geom_bar(stat="identity") + 
   coord_flip() + 
   labs(title="Max frequencies of patients elibigle for each drug treatment") + 
-  ylab(label = "detection power indicated as the overall population percentage") +
+  ylab(label = "detected fraction indicated as the overall population percentage") +
   xlab(label = "Drug name")
 ```
 
@@ -963,7 +963,7 @@ PTD_detection_image <- dtpow %>%
                 , size=0.2
   ) + 
   ggtitle("Max frequencies of patients elibigle for each drug treatment") +
-  ylab(label = "Detection power indicated as the overall population percentage") +
+  ylab(label = "detected fraction indicated as the overall population percentage") +
   xlab(label = "Drug name") +
   annotate("text"
            , x=reorder(dtpow$drug_name, dtpow$detectionPower)
@@ -990,9 +990,9 @@ ggsave(filename="version_6.0/Figures/fig2D.svg", plot=last_plot(), device = "svg
 
 The design phase of a panel requires the user to make the important decision about what genes to include. ```PTD``` provides a suite of tools envisioned to aid the user during the decision process and evaluate the performance of the panel.
 
-#### Rank genes in the design in terms of genomic space/detection power {.tabset}
+#### Rank genes in the design in terms of genomic space/detected fraction {.tabset}
 
-The following plot was studied to investigate the relationship between the "cost" of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detection power in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types. 
+The following plot was studied to investigate the relationship between the "cost" of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detected fraction in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types. 
 
 In order to optimize a panel design, we might be interested to know:
 
@@ -1156,9 +1156,9 @@ saturationPlot(PTD_panel
 
 
 
-#### Panel detection power of each alteration type in the overall population
+#### Panel detected fraction of each alteration type in the overall population
 
-SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detection power of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detection power.  
+SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detected fraction of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detected fraction.  
 
 
 ```{r, fig.height=8, fig.width=8}

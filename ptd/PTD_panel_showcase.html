@@ -413,7 +413,7 @@ European Institute of Oncology, Milan<br>
 <h2>OBJECTIVES</h2>
 <p>The objective of this analysis is to:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Simulate the panel “detection power”</strong> (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.</li>
+<li><strong>Simulate the panel “detected fraction”</strong> (defined as the number of patients with at least one alteration detectable by the genomic panel) in different tumor types.</li>
 <li><strong>Simulate a genomic driven clinical trial:</strong> As we might risk to have “unbalanced” group treatment, we would like to know in advance the patient allocation frequency to different treatment arms based on the alteration frequency in the cancer population;</li>
 <li><strong>Estimate the number of patients needed to be screened</strong>;</li>
 <li><strong>Optimize the size of the panel and therefore reduce experimental cost</strong>;</li>
@@ -1046,9 +1046,9 @@ population_df <span class="op">%&gt;%</span>
                   )</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
 </div>
-<div id="panel-detection-power-in-the-overall-population" class="section level4">
-<h4>Panel detection power in the overall population</h4>
-<p>One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (<em>x-axis</em>) found in the sample (patient) population (<em>y-axis</em>). The panel <em>detection power</em> can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detection power in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis.</p>
+<div id="panel-detected-fraction-in-the-overall-population" class="section level4">
+<h4>Panel detected fraction in the overall population</h4>
+<p>One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (<em>x-axis</em>) found in the sample (patient) population (<em>y-axis</em>). The panel <em>detected fraction</em> can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in visualizing the detected fraction in a population background composed by patients from breast, lung, and gastric cancer. For simplicity fusion information are not included in the analysis.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(PTD_panel
              , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
              <span class="co"># adjust population distribution by applying a weighted resampling</span>
@@ -1076,7 +1076,7 @@ population_df <span class="op">%&gt;%</span>
                                )
              )</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/coverage%20plot%20tumor%20specific-1.png" width="960" /></p>
-<p>To allow and easy comparison of the detection power in different tumor types we have redesign the plots into one unique barplot.</p>
+<p>To allow and easy comparison of the detected fraction in different tumor types we have redesign the plots into one unique barplot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get data from the panel simulation</span>
 dt_power_lt &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</span>(PTD_panel
                   , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>) 
@@ -1137,7 +1137,7 @@ df <span class="op">%&gt;%</span>
               ) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Genomic panel detection-power in different tumor types.&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detection power indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detected fraction indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;tumor type (TCGA ID)&quot;</span>)</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
 </div>
@@ -1160,7 +1160,7 @@ df <span class="op">%&gt;%</span>
              , <span class="dt">cex.main =</span> <span class="dv">1</span> <span class="co"># size of the plot title</span>
 )</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/patient%20treatment%20allocation%20plot-1.png" width="768" /></p>
-<p>To make it simpler to compare, we will plot the detection power for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.</p>
+<p>To make it simpler to compare, we will plot the detected fraction for each drug type in a unique plot. The following code will put all the previous plot together in one unique barplot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get data from the panel simulation</span>
 drug_df &lt;-<span class="st"> </span><span class="kw">coveragePlot</span>(PTD_panel
              , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>)
@@ -1188,7 +1188,7 @@ drug_df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Max frequencies of patients elibigle for each drug treatment&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detection power indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detected fraction indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;Drug name&quot;</span>)</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/max%20freq%20of%20patients%20eligible%20for%20each%20drug%20treatment-1.png" width="960" /></p>
 <p>Generate the same plot this time running a weighted resampling simulation.</p>
@@ -1286,7 +1286,7 @@ PTD_detection_image &lt;-<span class="st"> </span>dtpow <span class="op">%&gt;%<
                 , <span class="dt">size=</span><span class="fl">0.2</span>
   ) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Max frequencies of patients elibigle for each drug treatment&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Detection power indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;detected fraction indicated as the overall population percentage&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;Drug name&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>
            , <span class="dt">x=</span><span class="kw">reorder</span>(dtpow<span class="op">$</span>drug_name, dtpow<span class="op">$</span>detectionPower)
@@ -1305,9 +1305,9 @@ PTD_detection_image</code></pre></div>
 <div id="panel-performance-evaluation" class="section level3">
 <h3>Panel performance evaluation</h3>
 <p>The design phase of a panel requires the user to make the important decision about what genes to include. <code>PTD</code> provides a suite of tools envisioned to aid the user during the decision process and evaluate the performance of the panel.</p>
-<div id="rank-genes-in-the-design-in-terms-of-genomic-spacedetection-power" class="section level4 tabset">
-<h4>Rank genes in the design in terms of genomic space/detection power</h4>
-<p>The following plot was studied to investigate the relationship between the “cost” of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detection power in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types.</p>
+<div id="rank-genes-in-the-design-in-terms-of-genomic-spacedetected-fraction" class="section level4 tabset">
+<h4>Rank genes in the design in terms of genomic space/detected fraction</h4>
+<p>The following plot was studied to investigate the relationship between the “cost” of adding new genes to the panel (as a function of genomic space to be included among the genomic regions to be targeted) and the detected fraction in terms of the mean number of alterations found in the samples (cancer population), for that specific gene in a specific set of tumor types.</p>
 <p>In order to optimize a panel design, we might be interested to know:</p>
 <ul>
 <li>What genes are most altered in the tumor types of interest;</li>
@@ -1438,9 +1438,9 @@ PTD_detection_image</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/unnamed-chunk-19-1.png" width="960" /></p>
 </div>
 </div>
-<div id="panel-detection-power-of-each-alteration-type-in-the-overall-population" class="section level4">
-<h4>Panel detection power of each alteration type in the overall population</h4>
-<p>SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detection power of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detection power.</p>
+<div id="panel-detected-fraction-of-each-alteration-type-in-the-overall-population" class="section level4">
+<h4>Panel detected fraction of each alteration type in the overall population</h4>
+<p>SNV and indels detection are today part of standard analysis for NGS application.However, CNA (Copy number alteration) detection, or fusion analysis are still not standardized analysis and they do not represent an easy implementation. In the following plot we will investigate the contribution of the detected fraction of each alteration type in case. This will help us quantify, in case we decide to opt out the detection of some of the alteration type, the influence of each single alteration type in the detected fraction.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saturationPlot</span>(PTD_panel
             , <span class="dt">alterationType=</span><span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span> , <span class="st">&quot;copynumber&quot;</span>, <span class="st">&quot;fusions&quot;</span>)
             , <span class="dt">adding=</span><span class="st">&quot;gene_symbol&quot;</span>
@@ -2308,7 +2308,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="left">241 (236.475-245.525)</td>
+<td align="left">241 (237-245)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2316,7 +2316,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">8959 (7586.65-10403.55)</td>
+<td align="left">8997 (7275.75-11292.95)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2324,7 +2324,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">1757 (1611-1879.4)</td>
+<td align="left">1761.5 (1644.425-1908.025)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2332,7 +2332,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">527 (510.475-551.575)</td>
+<td align="left">530 (510.475-550.675)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2340,7 +2340,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">6461 (5594.8-7355.025)</td>
+<td align="left">6308 (5452.3-7304.5)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2348,7 +2348,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">1589 (1453-1714.625)</td>
+<td align="left">1596.5 (1511.125-1725.925)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2356,7 +2356,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">4676 (4180.2-5331)</td>
+<td align="left">4625 (4156.075-5227.775)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2364,7 +2364,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">3676 (3245.25-4198.325)</td>
+<td align="left">3734.5 (3325.725-4132)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2372,7 +2372,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">9604 (7956-11792.75)</td>
+<td align="left">9604 (8230.925-12338.7)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2380,7 +2380,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">2821 (2562.4-3086.2)</td>
+<td align="left">2836 (2632.175-3187.825)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2388,7 +2388,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">11911.5 (9777.025-14710.05)</td>
+<td align="left">11978 (9559.375-14915.725)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2396,7 +2396,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">732 (701.95-757.1)</td>
+<td align="left">730.5 (701.95-755.2)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2405,7 +2405,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 52254 (48149.77-56253.55)</li>
+<li>Median Number of patients necessary with CI: 52246 (48387.62-57198.95)</li>
 </ul>
 </div>
 <div id="priority-optimal" class="section level4">
@@ -2453,8 +2453,8 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <tr class="header">
 <th></th>
 <th align="left">Immune Checkpoint Inhibitor</th>
-<th align="left">MET inhibitor</th>
 <th align="left">HER2 inhibitor</th>
+<th align="left">MET inhibitor</th>
 <th align="left">EGFR inhibitor</th>
 <th align="left">ALK inhibitor</th>
 <th align="left">BRAF inhibitor</th>
@@ -2468,9 +2468,9 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">11845 (5804.475-14214)</td>
-<td align="left">0 (0-1333.425)</td>
-<td align="left">0 (0-765.774999999997)</td>
+<td align="left">11651.5 (357.35-14314.8)</td>
+<td align="left">0 (0-839.149999999999)</td>
+<td align="left">0 (0-10825.75)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2478,27 +2478,27 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">12031.5 (10298.025-14214)</td>
+<td align="left">11978 (10624.35-14314.8)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">157 (157-172.525)</td>
-<td align="left">174 (157-217.575)</td>
-<td align="left">190.5 (157-237.625)</td>
-<td align="left">278 (214.175-334.15)</td>
-<td align="left">309 (248.475-375.75)</td>
-<td align="left">408.5 (339-505.775)</td>
-<td align="left">552.5 (446-684.05)</td>
-<td align="left">853 (726.6-1057.575)</td>
-<td align="left">813.5 (676.225-990.049999999999)</td>
-<td align="left">2548.5 (2152.225-2979.075)</td>
-<td align="left">6308.5 (5416.6-7356.075)</td>
+<td align="left">157 (157-173.525)</td>
+<td align="left">186 (157-256.725)</td>
+<td align="left">174.5 (157-244.525)</td>
+<td align="left">280.5 (224-364.15)</td>
+<td align="left">309 (253-381.525)</td>
+<td align="left">410.5 (349.95-503.675)</td>
+<td align="left">553.5 (467.9-705.525)</td>
+<td align="left">842 (733.425-1059.5)</td>
+<td align="left">810.5 (668-1011.6)</td>
+<td align="left">2515.5 (2213.8-3066.975)</td>
+<td align="left">6267.5 (5531.425-7504.9)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">5684.5 (2757.4-6928.75)</td>
-<td align="left">0 (0-646.275)</td>
-<td align="left">0 (0-369.099999999999)</td>
+<td align="left">5601 (172.8-6879)</td>
+<td align="left">0 (0-399.15)</td>
+<td align="left">0 (0-5241.775)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2506,13 +2506,13 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">5789.5 (4859.775-6931.125)</td>
+<td align="left">5749.5 (5061.125-6879)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value with CI): 12031.5 (10298.025-14214)</p>
+<p>Number of patients necessary under optimal design (median value with CI): 11978 (10624.35-14314.8)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 76.98%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 77.07%</p>
 </div>
 <div id="priority-non-optimal" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -2590,49 +2590,49 @@ summaryMat2_NO &lt;-<span class="st"> </span>simulSurv2_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">527 (512-542.525)</td>
-<td align="left">1228 (1107.225-1330.575)</td>
-<td align="left">668 (506.475-801.875)</td>
-<td align="left">1749 (1500.65-2012.95)</td>
-<td align="left">1011.5 (495.6-1542.575)</td>
-<td align="left">2530 (1909.3-3184.4)</td>
-<td align="left">2163.5 (1257.225-3356.325)</td>
-<td align="left">5991 (4125.95-8031.425)</td>
-<td align="left">2520.5 (144-5101.025)</td>
-<td align="left">6053 (3191.175-9276.1)</td>
-<td align="left">24570.5 (21751-28371.775)</td>
+<td align="left">528.5 (512.475-545)</td>
+<td align="left">1214.5 (1128.275-1306.575)</td>
+<td align="left">662 (508.9-823.675)</td>
+<td align="left">1746 (1480.575-1999.3)</td>
+<td align="left">1020.5 (570.325-1567.725)</td>
+<td align="left">2484.5 (1907.425-3116.6)</td>
+<td align="left">2400 (1455.4-3669.7)</td>
+<td align="left">5926.5 (4650.85-7408.275)</td>
+<td align="left">2525.5 (104.975-4778.025)</td>
+<td align="left">6173 (2813.9-9465.45)</td>
+<td align="left">24725 (21783.875-28552.975)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">7060.5 (6241.2-8137.6)</td>
-<td align="left">1693 (1490.325-2014.525)</td>
-<td align="left">1347 (1168.225-1588.5)</td>
-<td align="left">658.5 (559.85-779)</td>
-<td align="left">671.5 (581.475-794.925)</td>
-<td align="left">385 (336.375-451.1)</td>
-<td align="left">353 (289.325-415.625)</td>
-<td align="left">204.5 (180.475-226.1)</td>
-<td align="left">201.5 (178.475-232.575)</td>
+<td align="left">7118.5 (6166.6-8283.775)</td>
+<td align="left">1731 (1513.375-2018.525)</td>
+<td align="left">1366 (1148.8-1624.05)</td>
+<td align="left">669 (569.225-828.65)</td>
+<td align="left">681 (569.7-818.875)</td>
+<td align="left">391 (326.95-465.575)</td>
+<td align="left">342.5 (295.475-414.775)</td>
+<td align="left">200 (184.475-233.525)</td>
+<td align="left">204 (175-238.1)</td>
 <td align="left">157 (157-157)</td>
-<td align="left">12754.5 (11392.9-14504.975)</td>
+<td align="left">12886.5 (11329-14770.95)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">253.5 (241.95-267.05)</td>
-<td align="left">589 (532.85-641.775)</td>
-<td align="left">321 (242.95-388.675)</td>
-<td align="left">837.5 (716.95-967.1)</td>
-<td align="left">484.5 (235.85-747.975)</td>
-<td align="left">1213 (919.575-1542.5)</td>
-<td align="left">1039.5 (600.9-1607.05)</td>
-<td align="left">2866 (1972.3-3872.3)</td>
-<td align="left">1188.5 (68.525-2433.975)</td>
-<td align="left">5970 (3143.75-9168.25)</td>
-<td align="left">14666.5 (12311.575-18531.7)</td>
+<td align="left">253 (242.475-267.525)</td>
+<td align="left">582 (540-633.575)</td>
+<td align="left">315.5 (239.95-397.525)</td>
+<td align="left">837.5 (698.275-965.975)</td>
+<td align="left">490.5 (270.475-750.975)</td>
+<td align="left">1196 (918.85-1508)</td>
+<td align="left">1159 (699.55-1750.225)</td>
+<td align="left">2846.5 (2203.55-3564.325)</td>
+<td align="left">1213.5 (50.825-2284.525)</td>
+<td align="left">6086.5 (2771.525-9362.175)</td>
+<td align="left">14969.5 (12210.3-18324.6)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 24570.5 (21751-28371.775)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 24725 (21783.875-28552.975)</p>
 </div>
 <div id="full-summary-of-the-three-methods" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -2738,7 +2738,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">2283 (1967.775-2730.7)</td>
+<td align="left">2283 (1906-2758.7)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2746,7 +2746,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">447 (422-485.25)</td>
+<td align="left">447.5 (415-487.575)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2754,7 +2754,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">134 (130-139)</td>
+<td align="left">134 (131-139)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2762,7 +2762,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">1627 (1425.3-1829.825)</td>
+<td align="left">1580 (1422-1862.775)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2770,7 +2770,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">406 (378-437.525)</td>
+<td align="left">403.5 (376.95-435.525)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2778,7 +2778,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">1166 (1030.9-1345)</td>
+<td align="left">1176 (1009.25-1312.825)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2786,7 +2786,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">932.5 (853.425-1059.825)</td>
+<td align="left">951.5 (830.75-1047.1)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2794,7 +2794,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">2481 (2106-3018)</td>
+<td align="left">2470 (2139-3020.175)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2802,7 +2802,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">723 (654.75-803.05)</td>
+<td align="left">725 (665-787.625)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2810,7 +2810,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">3001.5 (2514.325-3599.2)</td>
+<td align="left">3052 (2525.725-3800.825)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2818,7 +2818,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">187 (180-192.525)</td>
+<td align="left">187 (181-193.525)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2827,7 +2827,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 13285 (12367.9-14262.52)</li>
+<li>Median Number of patients necessary with CI: 13336 (12555.42-14065.77)</li>
 </ul>
 </div>
 <div id="optimal" class="section level4">
@@ -2888,9 +2888,9 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">2953 (59.85-3647.725)</td>
-<td align="left">0 (0-3018)</td>
-<td align="left">0 (0-1561.94999999998)</td>
+<td align="left">3052 (204.95-3800.825)</td>
+<td align="left">0 (0-2875.275)</td>
+<td align="left">0 (0-166.324999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2898,27 +2898,27 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">3052 (2755.4-3647.725)</td>
+<td align="left">3096 (2610.75-3800.825)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">40 (40-45)</td>
-<td align="left">45 (40-60.525)</td>
-<td align="left">48 (40-63.525)</td>
-<td align="left">70 (58.475-90.525)</td>
-<td align="left">80 (64.95-96.525)</td>
-<td align="left">104 (91.475-131.05)</td>
-<td align="left">142 (120.95-176.25)</td>
-<td align="left">219 (189.95-269.525)</td>
-<td align="left">207 (181.95-251.05)</td>
-<td align="left">643 (573.95-775.675)</td>
-<td align="left">1581.5 (1435.75-1916.175)</td>
+<td align="left">40 (40-44)</td>
+<td align="left">44 (40-60)</td>
+<td align="left">48 (40-64.05)</td>
+<td align="left">72 (57.475-93.525)</td>
+<td align="left">80 (62.425-101.15)</td>
+<td align="left">107.5 (84.95-134.15)</td>
+<td align="left">143.5 (122-179.725)</td>
+<td align="left">223 (180.475-277.675)</td>
+<td align="left">208 (168.475-251.575)</td>
+<td align="left">651.5 (540.8-801.1)</td>
+<td align="left">1621 (1356.925-1965.525)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">1408 (28.95-1757.175)</td>
-<td align="left">0 (0-1461.7)</td>
-<td align="left">0 (0-739.774999999991)</td>
+<td align="left">1454 (99.5-1837.7)</td>
+<td align="left">0 (0-1375.625)</td>
+<td align="left">0 (0-80.8999999999997)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2926,13 +2926,13 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">1454.5 (1305.075-1757.175)</td>
+<td align="left">1489 (1235.175-1837.7)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value with CI): 3052 (2755.4-3647.725)</p>
+<p>Number of patients necessary under optimal design (median value with CI): 3096 (2610.75-3800.825)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 77.03%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 76.78%</p>
 </div>
 <div id="priority-non-optimal-1" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -2992,49 +2992,49 @@ summaryMat3_NO &lt;-<span class="st"> </span>simulSurv3_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">135 (129.95-139)</td>
-<td align="left">313.5 (285-344.05)</td>
-<td align="left">162.5 (119.475-215.525)</td>
-<td align="left">444 (385.475-507.05)</td>
-<td align="left">260 (152.175-403.4)</td>
-<td align="left">637 (489.475-785.25)</td>
-<td align="left">576 (317.85-891.575)</td>
-<td align="left">1473 (1111.875-1960.4)</td>
-<td align="left">655 (74.35-1382.675)</td>
-<td align="left">1625.5 (804.9-2390.475)</td>
-<td align="left">6375.5 (5651.7-7487)</td>
+<td align="left">135 (130.475-139)</td>
+<td align="left">309 (283.95-340.05)</td>
+<td align="left">165.5 (130.7-212.525)</td>
+<td align="left">441 (360.95-517.05)</td>
+<td align="left">245 (109.75-394.575)</td>
+<td align="left">655 (472.3-848.2)</td>
+<td align="left">537 (306.75-874)</td>
+<td align="left">1524.5 (1121.075-2019.225)</td>
+<td align="left">652.5 (88.525-1307.7)</td>
+<td align="left">1614 (813.375-2612.55)</td>
+<td align="left">6348 (5582.675-7427.15)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">1817.5 (1607.9-2144.75)</td>
-<td align="left">442 (383.325-516)</td>
-<td align="left">357.5 (309-425.625)</td>
-<td align="left">172 (149-201.05)</td>
-<td align="left">175.5 (149.475-216.775)</td>
-<td align="left">102 (86-123.525)</td>
-<td align="left">91 (77-106.525)</td>
-<td align="left">52.5 (47-63.525)</td>
-<td align="left">52 (46-59.525)</td>
+<td align="left">1827 (1582.7-2136.525)</td>
+<td align="left">443 (384.95-519.625)</td>
+<td align="left">354 (304.375-424.05)</td>
+<td align="left">172 (150-203)</td>
+<td align="left">177 (149.475-210.575)</td>
+<td align="left">98 (84.425-125.15)</td>
+<td align="left">91 (76.475-107)</td>
+<td align="left">52 (48-62)</td>
+<td align="left">52 (45-61.525)</td>
 <td align="left">40 (40-40)</td>
-<td align="left">3302.5 (2942.125-3854.9)</td>
+<td align="left">3306 (2908.9-3784.25)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">66 (61.475-68.525)</td>
-<td align="left">150.5 (136-166.05)</td>
-<td align="left">78 (57.475-102.05)</td>
-<td align="left">213 (183.425-245.525)</td>
-<td align="left">125.5 (72.85-197.15)</td>
-<td align="left">306.5 (241-378.05)</td>
-<td align="left">277 (152.9-424.35)</td>
-<td align="left">715.5 (533.175-941.15)</td>
-<td align="left">314 (35.725-667.825)</td>
-<td align="left">1604 (792.425-2362.475)</td>
-<td align="left">3878.5 (3148.225-4724.375)</td>
+<td align="left">65 (61-68)</td>
+<td align="left">148 (134.95-165.525)</td>
+<td align="left">79 (62.375-103.525)</td>
+<td align="left">212 (171.475-249.05)</td>
+<td align="left">119 (51.9-190.525)</td>
+<td align="left">313 (224.075-409.525)</td>
+<td align="left">257 (144.425-421.4)</td>
+<td align="left">727.5 (538.475-959.924999999999)</td>
+<td align="left">313 (42.575-621.375)</td>
+<td align="left">1592.5 (802.425-2584.075)</td>
+<td align="left">3864.5 (3216.15-4890.45)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 6375.5 (5651.7-7487)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 6348 (5582.675-7427.15)</p>
 </div>
 <div id="full-summary-of-the-three-methods-1" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3062,21 +3062,21 @@ summaryMat3_NO &lt;-<span class="st"> </span>simulSurv3_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">13285.0</td>
-<td align="right">12367.9</td>
-<td align="right">14262.525</td>
+<td align="right">13336</td>
+<td align="right">12555.425</td>
+<td align="right">14065.775</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">6375.5</td>
-<td align="right">5651.7</td>
-<td align="right">7487.000</td>
+<td align="right">6348</td>
+<td align="right">5582.675</td>
+<td align="right">7427.150</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">3052.0</td>
-<td align="right">2755.4</td>
-<td align="right">3647.725</td>
+<td align="right">3096</td>
+<td align="right">2610.750</td>
+<td align="right">3800.825</td>
 </tr>
 </tbody>
 </table>
@@ -3171,7 +3171,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">2603 (2199.725-3157.6)</td>
+<td align="left">2625 (2214.725-3290.225)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3179,7 +3179,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">517 (480.375-560.575)</td>
+<td align="left">512.5 (479.475-548.575)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3187,7 +3187,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">155 (150-159)</td>
+<td align="left">155 (151-159.525)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3195,7 +3195,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">1865.5 (1619-2177.875)</td>
+<td align="left">1871 (1602-2185)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3203,7 +3203,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">466 (434.9-501.1)</td>
+<td align="left">469 (437.95-499.525)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3211,7 +3211,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">1350 (1174.55-1539)</td>
+<td align="left">1332.5 (1196.825-1528.2)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3219,7 +3219,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">1093 (982.85-1204.1)</td>
+<td align="left">1076 (982.85-1226.475)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3227,7 +3227,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">2765 (2375.55-3491.475)</td>
+<td align="left">2789 (2460-3359)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3235,7 +3235,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">836 (748-920.725)</td>
+<td align="left">827 (761.375-899.575)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3243,7 +3243,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">3433 (2931.95-4032.3)</td>
+<td align="left">3433 (2800.875-4251.45)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3251,7 +3251,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">213 (207-221)</td>
+<td align="left">214 (207-223)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3260,7 +3260,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 15170 (14237.4-16109.07)</li>
+<li>Median Number of patients necessary with CI: 15236 (14025.83-16590.28)</li>
 </ul>
 </div>
 <div id="optimal-1" class="section level4">
@@ -3320,9 +3320,9 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">4328 (362.6-5150.175)</td>
-<td align="left">0 (0-4063.1)</td>
-<td align="left">0 (0-387.799999999999)</td>
+<td align="left">4376 (163.725-5510.425)</td>
+<td align="left">0 (0-4043.625)</td>
+<td align="left">0 (0-356.1)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3330,27 +3330,27 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">4425 (3861.9-5150.175)</td>
+<td align="left">4476 (3861-5510.425)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">58 (58-63)</td>
-<td align="left">66 (58-77.525)</td>
-<td align="left">69.5 (58-88.05)</td>
-<td align="left">103.5 (85.475-129)</td>
-<td align="left">115.5 (91.9-141)</td>
-<td align="left">153.5 (127-178)</td>
-<td align="left">205 (171.95-244.05)</td>
-<td align="left">318.5 (271-377.1)</td>
-<td align="left">298.5 (257-366.55)</td>
-<td align="left">926.5 (800.95-1070.575)</td>
-<td align="left">2305.5 (2001.425-2680)</td>
+<td align="left">58 (58-63.525)</td>
+<td align="left">65 (58-87.525)</td>
+<td align="left">70 (58-89.05)</td>
+<td align="left">102.5 (85.475-136.525)</td>
+<td align="left">117 (94.475-143.05)</td>
+<td align="left">153.5 (127.475-199.05)</td>
+<td align="left">206 (172-262.15)</td>
+<td align="left">318 (262.475-396.1)</td>
+<td align="left">304 (254-381.775)</td>
+<td align="left">934.5 (796.425-1155.825)</td>
+<td align="left">2324 (2009.425-2862.625)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">2074.5 (172.95-2474.5)</td>
-<td align="left">0 (0-1969.675)</td>
-<td align="left">0 (0-184.649999999999)</td>
+<td align="left">2073 (77.725-2667.325)</td>
+<td align="left">0 (0-1931.45)</td>
+<td align="left">0 (0-172.075)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3358,13 +3358,13 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">2127 (1854.9-2474.5)</td>
+<td align="left">2142.5 (1829.475-2667.325)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value): 4425 (3861.9-5150.175)</p>
+<p>Number of patients necessary under optimal design (median value): 4476 (3861-5510.425)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 70.83%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 70.62%</p>
 </div>
 <div id="priority-non-optimal-2" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -3423,49 +3423,49 @@ prop2summaryMat2_NO &lt;-<span class="st"> </span>simulprop2_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">195 (189.475-202)</td>
-<td align="left">448 (406.85-482.525)</td>
-<td align="left">240.5 (194.425-287)</td>
-<td align="left">629 (542.9-748.2)</td>
-<td align="left">386 (201.225-550.725)</td>
-<td align="left">950.5 (709.675-1228.575)</td>
-<td align="left">852 (349.35-1238.35)</td>
-<td align="left">2258 (1595.85-2788.8)</td>
-<td align="left">967 (63.125-1800.175)</td>
-<td align="left">2333.5 (1318.6-3425.675)</td>
-<td align="left">9246.5 (8174.075-10468.5)</td>
+<td align="left">195.5 (189.475-202)</td>
+<td align="left">444 (409-493.3)</td>
+<td align="left">239.5 (201.95-299.05)</td>
+<td align="left">652.5 (573.95-744.675)</td>
+<td align="left">371 (196.825-576.4)</td>
+<td align="left">923 (682.55-1192.4)</td>
+<td align="left">867.5 (442.875-1362.675)</td>
+<td align="left">2191.5 (1529.225-3122.825)</td>
+<td align="left">1025 (146.3-1833.775)</td>
+<td align="left">2320.5 (1327.225-3449.55)</td>
+<td align="left">9269 (7875.525-10628.3)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">2665 (2353.475-3071)</td>
-<td align="left">649 (543.95-759.175)</td>
-<td align="left">518 (435.85-596.525)</td>
-<td align="left">251.5 (206.95-290.525)</td>
-<td align="left">254.5 (213.9-296.525)</td>
-<td align="left">143.5 (123-176.525)</td>
-<td align="left">131 (107.475-156.525)</td>
-<td align="left">76 (68.475-90.1)</td>
-<td align="left">75 (66-85.575)</td>
-<td align="left">58 (58-59)</td>
-<td align="left">4822.5 (4259.875-5467.325)</td>
+<td align="left">2662.5 (2281.225-3056.55)</td>
+<td align="left">655.5 (553.375-756.4)</td>
+<td align="left">521.5 (428.95-605.525)</td>
+<td align="left">245.5 (208.475-286.575)</td>
+<td align="left">253 (211.275-313)</td>
+<td align="left">148 (120.475-177.525)</td>
+<td align="left">132 (108.9-159.525)</td>
+<td align="left">76.5 (67-88.525)</td>
+<td align="left">75 (66.475-86)</td>
+<td align="left">58 (58-58.525)</td>
+<td align="left">4822 (4135.275-5472.925)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">94 (90-98.525)</td>
-<td align="left">215 (194.425-235.05)</td>
-<td align="left">116 (92.475-138.525)</td>
-<td align="left">303 (261.475-360.675)</td>
-<td align="left">185 (98.275-263.525)</td>
-<td align="left">456.5 (337.125-587.4)</td>
-<td align="left">406 (165.725-590.9)</td>
-<td align="left">1074 (768.125-1363.825)</td>
-<td align="left">467 (30.325-860.25)</td>
-<td align="left">2303 (1299.125-3388.15)</td>
-<td align="left">5594.5 (4793.75-6722.625)</td>
+<td align="left">95 (90-99)</td>
+<td align="left">212.5 (196.475-237.525)</td>
+<td align="left">115 (96.475-145.525)</td>
+<td align="left">312.5 (275.475-356.575)</td>
+<td align="left">178 (93.65-277.725)</td>
+<td align="left">443 (325.8-570.975)</td>
+<td align="left">421.5 (210.85-664.525)</td>
+<td align="left">1053 (737.75-1495.35)</td>
+<td align="left">492.5 (70.7-883.525)</td>
+<td align="left">2287 (1305.9-3410.175)</td>
+<td align="left">5578 (4486.425-6855.65)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 6375.5 (5651.7-7487)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 6348 (5582.675-7427.15)</p>
 </div>
 <div id="full-summary-of-the-three-methods-2" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3493,21 +3493,21 @@ prop2summaryMat2_NO &lt;-<span class="st"> </span>simulprop2_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">15170.0</td>
-<td align="right">14237.400</td>
-<td align="right">16109.075</td>
+<td align="right">15235.5</td>
+<td align="right">14025.825</td>
+<td align="right">16590.275</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">9246.5</td>
-<td align="right">8174.075</td>
-<td align="right">10468.500</td>
+<td align="right">9269.0</td>
+<td align="right">7875.525</td>
+<td align="right">10628.300</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">4425.0</td>
-<td align="right">3861.900</td>
-<td align="right">5150.175</td>
+<td align="right">4476.0</td>
+<td align="right">3861.000</td>
+<td align="right">5510.425</td>
 </tr>
 </tbody>
 </table>
@@ -3600,7 +3600,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">739 (636-901)</td>
+<td align="left">742 (633.375-915.25)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3608,7 +3608,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">145 (135.475-157.525)</td>
+<td align="left">145.5 (135-154)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3616,7 +3616,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">44 (42.475-46)</td>
+<td align="left">44 (43-46)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3624,7 +3624,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">527.5 (472.375-639.075)</td>
+<td align="left">526 (458.8-654)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3632,7 +3632,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">133 (123.475-141.525)</td>
+<td align="left">133 (124.475-140)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3640,7 +3640,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">382 (334-425)</td>
+<td align="left">383.5 (347.95-428.15)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3648,7 +3648,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">307 (268.95-356.575)</td>
+<td align="left">308 (273-344.525)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3656,7 +3656,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">803 (687.375-930.5)</td>
+<td align="left">789 (679.225-945.25)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3664,7 +3664,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">235 (216.475-259)</td>
+<td align="left">235 (210.95-259.675)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3672,7 +3672,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">981 (796-1280)</td>
+<td align="left">981 (798.975-1236.775)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3680,7 +3680,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">61 (58.475-63)</td>
+<td align="left">61 (58-63)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3689,7 +3689,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 4288 (4066.85-4730.7)</li>
+<li>Median Number of patients necessary with CI: 4288 (4026.325-4688.55)</li>
 </ul>
 </div>
 <div id="optimal-2" class="section level4">
@@ -3733,8 +3733,8 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <tr class="header">
 <th></th>
 <th align="left">Immune Checkpoint Inhibitor</th>
-<th align="left">HER2 inhibitor</th>
 <th align="left">MET inhibitor</th>
+<th align="left">HER2 inhibitor</th>
 <th align="left">EGFR inhibitor</th>
 <th align="left">ALK inhibitor</th>
 <th align="left">BRAF inhibitor</th>
@@ -3748,9 +3748,9 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">1214.5 (29.375-1552)</td>
-<td align="left">0 (0-136.499999999999)</td>
-<td align="left">0 (0-1183.3)</td>
+<td align="left">1208 (62.425-1479.5)</td>
+<td align="left">0 (0-1163.425)</td>
+<td align="left">0 (0-65.3499999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3758,27 +3758,27 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">1235 (1060.225-1552)</td>
+<td align="left">1232 (1057.85-1479.5)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
 <td align="left">16 (16-18)</td>
-<td align="left">19 (16-25)</td>
-<td align="left">19 (16-26.05)</td>
-<td align="left">29 (22.475-36.525)</td>
-<td align="left">32 (26-40)</td>
-<td align="left">43 (34-55)</td>
-<td align="left">57 (46-74.625)</td>
-<td align="left">87 (74.95-117)</td>
-<td align="left">84.5 (69.95-107.05)</td>
-<td align="left">257.5 (223-331.1)</td>
-<td align="left">644 (558.475-814.5)</td>
+<td align="left">18 (16-24)</td>
+<td align="left">20 (16-26)</td>
+<td align="left">29 (22-36.05)</td>
+<td align="left">32 (26-39.525)</td>
+<td align="left">44 (35.475-54)</td>
+<td align="left">57.5 (48-69.525)</td>
+<td align="left">87 (73.475-105.05)</td>
+<td align="left">84 (70.95-105)</td>
+<td align="left">258.5 (224.375-315)</td>
+<td align="left">641.5 (554.475-769.775)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">585 (14.425-739.5)</td>
-<td align="left">0 (0-65.7499999999997)</td>
-<td align="left">0 (0-562.25)</td>
+<td align="left">579 (29.475-717.5)</td>
+<td align="left">0 (0-553.925)</td>
+<td align="left">0 (0-31.6749999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3786,13 +3786,13 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">591.5 (501.7-739.5)</td>
+<td align="left">587.5 (507.475-717.5)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value): 1235 (1060.225-1552)</p>
+<p>Number of patients necessary under optimal design (median value): 1232 (1057.85-1479.5)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 71.2%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 71.27%</p>
 </div>
 <div id="priority-non-optimal-3" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -3851,48 +3851,48 @@ prop3summaryMat2_NO &lt;-<span class="st"> </span>simulprop3_NO[[<span class="dv
 <tr class="odd">
 <td>Screened</td>
 <td align="left">54 (52-56)</td>
-<td align="left">124 (113.475-135)</td>
-<td align="left">68 (51.475-88.525)</td>
-<td align="left">177.5 (145.325-209.05)</td>
-<td align="left">106 (51.9-156.525)</td>
-<td align="left">259 (199.475-338.4)</td>
-<td align="left">217 (115.7-349.2)</td>
-<td align="left">616 (445.2-827.125)</td>
-<td align="left">254.5 (42.65-512.55)</td>
-<td align="left">619.5 (353.925-949.975)</td>
-<td align="left">2498.5 (2146.45-2922.15)</td>
+<td align="left">123 (111.475-136.1)</td>
+<td align="left">67.5 (52.475-83.525)</td>
+<td align="left">179 (142.95-214.15)</td>
+<td align="left">110 (54.9-161.05)</td>
+<td align="left">262.5 (202.425-336.1)</td>
+<td align="left">233.5 (132.475-339.05)</td>
+<td align="left">588 (410.3-800.375)</td>
+<td align="left">283 (77.275-546.075)</td>
+<td align="left">623.5 (347.8-945.975)</td>
+<td align="left">2540.5 (2237.425-2885.975)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">719 (622.7-860.7)</td>
-<td align="left">174.5 (148.475-209)</td>
-<td align="left">138.5 (118-170.05)</td>
-<td align="left">67 (58.475-86)</td>
-<td align="left">69.5 (57.475-84)</td>
-<td align="left">40 (33.475-49)</td>
-<td align="left">36 (29-46)</td>
-<td align="left">21 (19-24)</td>
-<td align="left">21 (19-24)</td>
+<td align="left">734 (636.9-839.25)</td>
+<td align="left">179 (155.475-202.575)</td>
+<td align="left">141 (120.95-165.05)</td>
+<td align="left">69 (58.95-82.525)</td>
+<td align="left">70 (58.475-81.525)</td>
+<td align="left">40 (33.475-47)</td>
+<td align="left">36 (31-44.1)</td>
+<td align="left">22 (19-25)</td>
+<td align="left">21 (19-23.525)</td>
 <td align="left">16 (16-16)</td>
-<td align="left">1300 (1125.7-1534.1)</td>
+<td align="left">1330 (1167.7-1511.075)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
 <td align="left">27 (25-28)</td>
-<td align="left">60 (54.475-66)</td>
-<td align="left">33 (25-42.525)</td>
-<td align="left">85.5 (68.95-100)</td>
-<td align="left">51 (24.95-75.525)</td>
-<td align="left">123 (96-160.775)</td>
-<td align="left">105 (55.9-167.15)</td>
-<td align="left">292.5 (211.7-401.25)</td>
-<td align="left">122.5 (20.325-244.25)</td>
-<td align="left">611.5 (348.45-939.975)</td>
-<td align="left">1500.5 (1215.55-1887)</td>
+<td align="left">59.5 (53-65.525)</td>
+<td align="left">33 (25-40.525)</td>
+<td align="left">85.5 (68.475-102.1)</td>
+<td align="left">52 (26.95-77.575)</td>
+<td align="left">126.5 (97-161.05)</td>
+<td align="left">112 (63.475-163.525)</td>
+<td align="left">279.5 (194.275-388.125)</td>
+<td align="left">135.5 (37.375-258.625)</td>
+<td align="left">615.5 (342.275-934.45)</td>
+<td align="left">1522.5 (1292.75-1881.175)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 2498.5 (2146.45-2922.15)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 2540.5 (2237.425-2885.975)</p>
 </div>
 <div id="full-summary-of-the-three-methods-3" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3920,21 +3920,21 @@ prop3summaryMat2_NO &lt;-<span class="st"> </span>simulprop3_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">4288.5</td>
-<td align="right">4066.850</td>
-<td align="right">4730.70</td>
+<td align="right">4288.0</td>
+<td align="right">4026.325</td>
+<td align="right">4688.550</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">2498.5</td>
-<td align="right">2146.450</td>
-<td align="right">2922.15</td>
+<td align="right">2540.5</td>
+<td align="right">2237.425</td>
+<td align="right">2885.975</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">1235.0</td>
-<td align="right">1060.225</td>
-<td align="right">1552.00</td>
+<td align="right">1232.0</td>
+<td align="right">1057.850</td>
+<td align="right">1479.500</td>
 </tr>
 </tbody>
 </table>

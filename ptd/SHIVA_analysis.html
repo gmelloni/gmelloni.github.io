@@ -617,7 +617,7 @@ cna_data &lt;-<span class="st"> </span>readxl<span class="op">::</span><span cla
 <li>find patients with no CNA data (all genes tested for CNA, in case one observation was missing it was marked as “NA”).</li>
 <li>We are no longer including HR in the analysis. So we have removed the filter on expression.</li>
 </ul>
-<p>of the remaing now, you can check how many are <code>eligible for randomization</code> and therefore calculate the expected detection power.</p>
+<p>of the remaing now, you can check how many are <code>eligible for randomization</code> and therefore calculate the expected detected fraction.</p>
 <p>Select patients with a full data profile (NGS + CNA) on which to run some population inference.</p>
 <p>We have not removed those patients that were not randomized for any particular reasons (death, consensus withdrawal, ..) as long as the mutational profile is known.</p>
 <p>Finally, we removed patients with TCGA tumor types acyc, sclc, es, because have no CNA data in TCGA population.</p>
@@ -1347,11 +1347,11 @@ TCGA_population &lt;-<span class="st"> </span><span class="kw">subsetAlterations
 <li><strong>ANALYSIS 3)</strong> Patient allocation;</li>
 <li><strong>ANALYSIS 4)</strong> Power analysis of the study.</li>
 </ul>
-<div id="detection-power" class="section level3">
-<h3>1. Detection power</h3>
-<div id="detection-power-tcga-population" class="section level4">
-<h4>Detection power TCGA population</h4>
-<p>One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (<em>x-axis</em>) found in the sample (patient) population (<em>y-axis</em>). The panel <em>detection power</em> can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in comparing the detection power in the TCGA and SHIVA population. The TCGA population, will be corrected with a weighted bootstrap approach, to match the composition of the SHIVA population during recruitment.</p>
+<div id="detected-fraction" class="section level3">
+<h3>1. Detected Fraction</h3>
+<div id="detected-fraction-tcga-population" class="section level4">
+<h4>Detected Fraction TCGA population</h4>
+<p>One common question that is often considered when trying to design custom target enrichment panel, is the percentage of the population that would be “captured” by the design of the panel. The following plot shows the number of alteration (<em>x-axis</em>) found in the sample (patient) population (<em>y-axis</em>). The panel <em>detected fraction</em> can be defined as the number of patients with at least one alteration detectable by the genomic panel. In this simulation we are interested in comparing the detected fraction in the TCGA and SHIVA population. The TCGA population, will be corrected with a weighted bootstrap approach, to match the composition of the SHIVA population during recruitment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run simulation</span>
 <span class="co"># ------------------------------------------------------------------------------</span>
 N_SIMULATIONS =<span class="st"> </span><span class="dv">200</span>
@@ -1367,7 +1367,7 @@ simul &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class
             <span class="kw">return</span>(cov<span class="op">$</span>plottedTable<span class="op">/</span>cov<span class="op">$</span>Samples[<span class="dv">1</span>])
         } , <span class="dt">mc.cores=</span><span class="dv">4</span>)
 
-## Prepare function for plotting Detection power with Confidenti intervals
+## Prepare function for plotting detected fraction with Confidenti intervals
 <span class="co"># ------------------------------------------------------------------------------</span>
 
 <span class="co"># Convert to dataframe</span>
@@ -1403,7 +1403,7 @@ TCGA_detection_image &lt;-<span class="st"> </span>dtpow <span class="op">%&gt;%
                     , <span class="dt">ymin=</span>leftCI)
                 , <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>)
   ) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Overall Detection power in TCGA Population&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Overall detected fraction in TCGA Population&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>
            , <span class="dt">x=</span>n_alterations
            , <span class="dt">y=</span>detectionPower<span class="op">+</span><span class="fl">0.15</span>
@@ -1418,12 +1418,12 @@ TCGA_detection_image &lt;-<span class="st"> </span>dtpow <span class="op">%&gt;%
 TCGA_detection_image</code></pre></div>
 <p><img src="SHIVA_analysis_files/figure-html/simulation%20TCGA-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Preview table</span>
-<span class="kw">datatable_withbuttons</span>(dtpow, <span class="dt">caption =</span> <span class="st">&quot;Detection power TCGA&quot;</span>)</code></pre></div>
+<span class="kw">datatable_withbuttons</span>(dtpow, <span class="dt">caption =</span> <span class="st">&quot;detected fraction TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-92b8c6a0b963292f6446" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-92b8c6a0b963292f6446">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Detection power TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.33865099009901,0.0693069306930693,0.0159034653465347,0.00517326732673267,0.00138613861386139,0.000321782178217822,0.000321782178217822],[0.299504950495049,0.047029702970297,0.00742574257425743,0,0,0,0],[0.376299504950495,0.0891707920792079,0.0272277227722772,0.0123762376237624,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<div id="contribution-to-the-detection-power-allocated-by-alteration-type." class="section level5">
-<h5>Contribution to the detection power allocated by alteration type.</h5>
-<p>Preview table with the contribution to the overall detection power by only mutation alterations.</p>
+<script type="application/json" data-for="htmlwidget-92b8c6a0b963292f6446">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>detected fraction TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.339170792079208,0.07,0.0162995049504951,0.00517326732673267,0.00158415841584158,0.000284653465346535,0.000284653465346535],[0.301918316831683,0.047029702970297,0.00495049504950495,0,0,0,0],[0.376299504950495,0.0891707920792079,0.0272277227722772,0.0123762376237624,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="contribution-to-the-detected-fraction-allocated-by-alteration-type." class="section level5">
+<h5>Contribution to the detected fraction allocated by alteration type.</h5>
+<p>Preview table with the contribution to the overall detected fraction by only mutation alterations.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># MUTATION CONTRIBUTIONS</span>
 <span class="co"># ------------------------------------------------------------------------------</span>
 
@@ -1441,14 +1441,14 @@ simul &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class
 TCGA_detection_muts &lt;-<span class="st"> </span><span class="kw">simulate_detectionPower_img</span>(simul)
 
 <span class="co"># Preview image</span>
-<span class="co">#TCGA_detection_muts + ggtitle(&quot;Mutation only Detection Power in TCGA&quot;)</span>
+<span class="co">#TCGA_detection_muts + ggtitle(&quot;Mutation only detected fraction in TCGA&quot;)</span>
 
 <span class="co"># preview table</span>
 <span class="kw">simulate_detectionPower_tbl</span>(simul) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;Mutation only Detection Power in TCGA&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;Mutation only detected fraction in TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-3181c3b18ba8777b566c" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3181c3b18ba8777b566c">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Mutation only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.190618811881188,0.0197277227722772,0.00263613861386139,6.18811881188119e-05,0,0,0],[0.155940594059406,0.00742574257425743,0,0,0,0,0],[0.225309405940594,0.0321782178217822,0.00742574257425743,6.18811881188259e-05,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<p>Preview table with the contribution to the overall detection power by only CNA alteartions.</p>
+<script type="application/json" data-for="htmlwidget-3181c3b18ba8777b566c">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Mutation only detected fraction in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.192339108910891,0.0193688118811881,0.00268564356435644,3.71287128712871e-05,0,0,0],[0.160891089108911,0.00742574257425743,0,0,0,0,0],[0.225309405940594,0.0321782178217822,0.00742574257425743,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Preview table with the contribution to the overall detected fraction by only CNA alteartions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># COPYNUMBER CONTRIBUTION</span>
 <span class="co"># ------------------------------------------------------------------------------</span>
 simul &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>N_SIMULATIONS , <span class="cf">function</span>(x) {
@@ -1465,22 +1465,22 @@ simul &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class
 TCGA_detection_cna &lt;-<span class="st"> </span><span class="kw">simulate_detectionPower_img</span>(simul)
 
 <span class="co"># Preview image</span>
-<span class="co">#TCGA_detection_cna + ggtitle(&quot;CNA only Detection Power in TCGA&quot;)</span>
+<span class="co">#TCGA_detection_cna + ggtitle(&quot;CNA only detected fraction in TCGA&quot;)</span>
 
 <span class="co"># Preview table</span>
 <span class="kw">simulate_detectionPower_tbl</span>(simul) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;CNA only Detection Power in TCGA&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">datatable_withbuttons</span>(<span class="dt">caption =</span> <span class="st">&quot;CNA only detected fraction in TCGA&quot;</span>)</code></pre></div>
 <div id="htmlwidget-4999d79e229171709fee" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4999d79e229171709fee">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>CNA only Detection Power in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.170519801980198,0.0333910891089109,0.0116089108910891,0.00482673267326733,0.00146039603960396,0.000334158415841584,0.000235148514851485],[0.13855198019802,0.0173267326732673,0.00247524752475248,0,0,0,0],[0.200556930693069,0.051980198019802,0.0198019801980198,0.0099009900990099,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<p>Preview plot with the contribution to the overall detection power by only mutation and CNA alteartions seperately</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(TCGA_detection_muts <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detection Power in TCGA: Mutation only&quot;</span>)
-                        , TCGA_detection_cna <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detection Power in TCGA: CNA only &quot;</span>))</code></pre></div>
+<script type="application/json" data-for="htmlwidget-4999d79e229171709fee">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>CNA only detected fraction in TCGA<\/caption>","data":[[1,2,3,4,5,6,7],[0.170185643564356,0.0329579207920792,0.011720297029703,0.00491336633663366,0.00148514851485149,0.000334158415841584,0.000284653465346535],[0.138613861386139,0.019740099009901,0.00247524752475248,0,0,0,0],[0.203032178217822,0.0495049504950495,0.0222772277227723,0.0099009900990099,0.00495049504950495,0.00247524752475248,0.00247524752475248]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>detectionPower<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Preview plot with the contribution to the overall detected fraction by only mutation and CNA alteartions seperately</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(TCGA_detection_muts <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;detected fraction in TCGA: Mutation only&quot;</span>)
+                        , TCGA_detection_cna <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;detected fraction in TCGA: CNA only &quot;</span>))</code></pre></div>
 <p><img src="SHIVA_analysis_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
 </div>
 </div>
-<div id="detection-power-shiva-population" class="section level4">
-<h4>Detection power SHIVA population</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate shiva detection power</span>
+<div id="detected-fraction-shiva-population" class="section level4">
+<h4>Detected fraction SHIVA population</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate shiva detected fraction</span>
 shiva_detect &lt;-<span class="kw">suppressWarnings</span>(
                   <span class="kw">coveragePlot</span>(SHIVA_population
                    , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
@@ -1513,7 +1513,7 @@ SHIVA_detection_image &lt;-<span class="st"> </span>dtpow_shiva <span class="op"
                        , <span class="dt">ymin=</span> rightCI)
                    , <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>)
     ) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detection power SHIVA population&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Detected fraction SHIVA population&quot;</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>
              , <span class="dt">x=</span>n_alterations
              , <span class="dt">y=</span>shiva_freq<span class="op">+</span><span class="fl">0.15</span>
@@ -1535,8 +1535,8 @@ SHIVA_detection_image</code></pre></div>
 <span class="kw">datatable_withbuttons</span>(dtpow_shiva)</code></pre></div>
 <div id="htmlwidget-e3e03dbd631418c3596a" style="width:100%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-e3e03dbd631418c3596a">{"x":{"filter":"none","extensions":["Buttons"],"data":[[1,2,3,4,5,6,7],[0.329207920792079,0.0866336633663366,0.0148514851485149,0.00495049504950495,0.00495049504950495,0,0],[0.28214613946382,0.0579656971904369,0.00181877339889137,0,0,0,0],[0.376269702120339,0.115301629542236,0.0278841968981383,0.0130321510734944,0.0130321510734944,0.00123762376237624,0.00123762376237624]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>shiva_freq<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<div id="contribution-to-the-detection-power-allocated-by-alteration-type.-1" class="section level5">
-<h5>Contribution to the detection power allocated by alteration type.</h5>
+<div id="contribution-to-the-detected-fraction-allocated-by-alteration-type.-1" class="section level5">
+<h5>Contribution to the detected fraction allocated by alteration type.</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coveragePlot</span>(SHIVA_population
              , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
              , <span class="dt">grouping =</span> <span class="st">&quot;alteration_id&quot;</span>
@@ -1555,9 +1555,9 @@ cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>( cov<span c
 cov<span class="op">$</span>leftCI &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dbl</span>(cov<span class="op">$</span>freq, <span class="op">~</span><span class="st"> </span><span class="kw">leftCIprop</span>(., <span class="kw">sum</span>(tumor_weights)))
 cov<span class="op">$</span>rightCI &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dbl</span>(cov<span class="op">$</span>freq, <span class="op">~</span><span class="st"> </span><span class="kw">rightCIprop</span>(., <span class="kw">sum</span>(tumor_weights)))
 
-<span class="kw">datatable_withbuttons</span>(cov, <span class="dt">caption=</span><span class="st">&quot;Datatable with detection power from Mutations for the SHIVA population&quot;</span>)</code></pre></div>
+<span class="kw">datatable_withbuttons</span>(cov, <span class="dt">caption=</span><span class="st">&quot;Datatable with detected fraction from Mutations for the SHIVA population&quot;</span>)</code></pre></div>
 <div id="htmlwidget-5802e92eb9928a5ad22f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5802e92eb9928a5ad22f">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Datatable with detection power from Mutations for the SHIVA population<\/caption>","data":[["X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.155940594059406,0.0099009900990099,0,0,0,0,0,0,0,0],[0.119325116085963,0,0,0,0,0,0,0,0,0],[0.192556072032849,0.0207934301624336,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>freq<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5802e92eb9928a5ad22f">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Datatable with detected fraction from Mutations for the SHIVA population<\/caption>","data":[["X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.155940594059406,0.0099009900990099,0,0,0,0,0,0,0,0],[0.119325116085963,0,0,0,0,0,0,0,0,0],[0.192556072032849,0.0207934301624336,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>freq<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># SHIVA copynumber ONLY</span>
 cov &lt;-<span class="st"> </span><span class="kw">coveragePlot</span>(SHIVA_population
              , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;copynumber&quot;</span>)
@@ -1570,13 +1570,13 @@ cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>( cov<span c
 cov<span class="op">$</span>leftCI &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dbl</span>(cov<span class="op">$</span>freq, <span class="op">~</span><span class="st"> </span><span class="kw">leftCIprop</span>(., <span class="kw">sum</span>(tumor_weights)))
 cov<span class="op">$</span>rightCI &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_dbl</span>(cov<span class="op">$</span>freq, <span class="op">~</span><span class="st"> </span><span class="kw">rightCIprop</span>(., <span class="kw">sum</span>(tumor_weights)))
 
-<span class="kw">datatable_withbuttons</span>(cov, <span class="dt">caption=</span><span class="st">&quot;Datatable with detection power from CNA for the SHIVA population&quot;</span>)</code></pre></div>
+<span class="kw">datatable_withbuttons</span>(cov, <span class="dt">caption=</span><span class="st">&quot;Datatable with detected fraction from CNA for the SHIVA population&quot;</span>)</code></pre></div>
 <div id="htmlwidget-657c7f63a458f40ac334" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-657c7f63a458f40ac334">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Datatable with detection power from CNA for the SHIVA population<\/caption>","data":[["X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.206235011990408,0.0599520383693046,0.0143884892086331,0.00479616306954436,0.00239808153477218,0,0,0,0,0],[0.165543250496292,0.0355648742863058,0.00153836162380009,0,0,0,0,0,0,0],[0.246926773484524,0.0843392024523033,0.0272386167934661,0.0127708152611908,0.00840523984740132,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>freq<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-657c7f63a458f40ac334">{"x":{"filter":"none","extensions":["Buttons"],"caption":"<caption>Datatable with detected fraction from CNA for the SHIVA population<\/caption>","data":[["X1","X2","X3","X4","X5","X6","X7","X8","X9","X10"],[0.206235011990408,0.0599520383693046,0.0143884892086331,0.00479616306954436,0.00239808153477218,0,0,0,0,0],[0.165543250496292,0.0355648742863058,0.00153836162380009,0,0,0,0,0,0,0],[0.246926773484524,0.0843392024523033,0.0272386167934661,0.0127708152611908,0.00840523984740132,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624,0.00123762376237624]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>n_alterations<\/th>\n      <th>freq<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-<div id="merge-the-detection-power-from-the-2-population-in-one-plot" class="section level4">
-<h4>Merge the Detection power from the 2 population in one plot</h4>
+<div id="merge-the-detected-fraction-from-the-2-population-in-one-plot" class="section level4">
+<h4>Merge the detected fraction from the 2 population in one plot</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fig4a &lt;-<span class="st"> </span>gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(TCGA_detection_image, SHIVA_detection_image)</code></pre></div>
 <p><img src="SHIVA_analysis_files/figure-html/unnamed-chunk-16-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Export as a svg</span>
@@ -1953,7 +1953,7 @@ fig4D</code></pre></div>
 <p><img src="SHIVA_analysis_files/figure-html/unnamed-chunk-19-1.png" width="960" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">datatable_withbuttons</span>(merged_allocation)</code></pre></div>
 <div id="htmlwidget-af650ebc9fa190ca2fd5" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-af650ebc9fa190ca2fd5">{"x":{"filter":"none","extensions":["Buttons"],"data":[["group: PIK3/AKT/mTOR","group: RAF/MEK","group: PIK3/AKT/mTOR","group: RAF/MEK"],[1,2,3,4],[0.22029702970297,0.155940594059406,0.23269801980198,0.140556930693069],[0.178645176389618,0.119325116085963,0.200495049504951,0.111386138613861],[0.261948883016323,0.192556072032849,0.27240099009901,0.173267326732673],["SHIVA","SHIVA","TCGA","TCGA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>group<\/th>\n      <th>row_counter<\/th>\n      <th>allocation<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n      <th>population<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-af650ebc9fa190ca2fd5">{"x":{"filter":"none","extensions":["Buttons"],"data":[["group: PIK3/AKT/mTOR","group: RAF/MEK","group: PIK3/AKT/mTOR","group: RAF/MEK"],[1,2,3,4],[0.22029702970297,0.155940594059406,0.233861386138614,0.140309405940594],[0.178645176389618,0.119325116085963,0.198019801980198,0.10884900990099],[0.261948883016323,0.192556072032849,0.26980198019802,0.168378712871287],["SHIVA","SHIVA","TCGA","TCGA"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>group<\/th>\n      <th>row_counter<\/th>\n      <th>allocation<\/th>\n      <th>leftCI<\/th>\n      <th>rightCI<\/th>\n      <th>population<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"lBfrtip","buttons":["copy","csv","excel"],"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <div id="show-patients-eligible-to-both-treatments-separately" class="section level4">
 <h4>Show patients eligible to both treatments separately</h4>
 <p>In case of a patient eligible for both molecular pathways treatment, the SHIVA medical board would decide in with cohord to allocate the patient. To allow a better comparison, the following plot separates the patients eligible to both treatments. The y-axes shows the tot number of patients that can be allocated in a molecular pathway treatmet.</p>
@@ -2383,25 +2383,25 @@ knitr<span class="op">::</span><span class="kw">kable</span>(summaryMat)</code><
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">1455.28 (1094.125-1808.525)</td>
-<td align="left">3.21 (0-55.0499999999993)</td>
-<td align="left">1458.49 (1147.25-1808.525)</td>
+<td align="left">1458.97 (1166-1828)</td>
+<td align="left">2.15 (0-21.5249999999997)</td>
+<td align="left">1461.12 (1182.675-1828)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">199.42 (199-205.2)</td>
-<td align="left">290.55 (199-375.15)</td>
-<td align="left">489.97 (412.475-574.15)</td>
+<td align="left">199.3 (199-201.625)</td>
+<td align="left">289.59 (203.275-376.525)</td>
+<td align="left">488.89 (407-575.525)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">967.35 (699.125-1259.575)</td>
-<td align="left">2.56 (0-45.1749999999994)</td>
-<td align="left">969.9 (725.525-1259.575)</td>
+<td align="left">971.8 (764.75-1251.625)</td>
+<td align="left">1.72 (0-16.7999999999997)</td>
+<td align="left">973.5 (769.475-1251.625)</td>
 </tr>
 </tbody>
 </table>
-<p>The table above represents our cascade design starting from upper left. The first row is the <em>recruitment row</em>: number of new patients that need to be sequenced to obtain the required power. The left and right <em>Confidence Intervals</em> from the bootstrap simuation are indicated in parentesis. Starting by recruiting 1455.28 (1094.125-1808.525) for the most rare drug category (RAF/MEK) we will obtain on average 199.42 (199-205.2) eligible patients and discarding 967.35 (699.125-1259.575) (the former are the patients not eligible to any molecular drug treatments). The non eligible patients of RAF/MEK might be eligible for other drug categories, so we calculate whether within these patients, there is an enough number of eligible patients to reach the required power. In case the number is sufficient, the algorithm indicates how many more patients are necessary to recruit. Based on our calculations no further patientes are necessary.<br />
+<p>The table above represents our cascade design starting from upper left. The first row is the <em>recruitment row</em>: number of new patients that need to be sequenced to obtain the required power. The left and right <em>Confidence Intervals</em> from the bootstrap simuation are indicated in parentesis. Starting by recruiting 1458.97 (1166-1828) for the most rare drug category (RAF/MEK) we will obtain on average 199.3 (199-201.625) eligible patients and discarding 971.8 (764.75-1251.625) (the former are the patients not eligible to any molecular drug treatments). The non eligible patients of RAF/MEK might be eligible for other drug categories, so we calculate whether within these patients, there is an enough number of eligible patients to reach the required power. In case the number is sufficient, the algorithm indicates how many more patients are necessary to recruit. Based on our calculations no further patientes are necessary.<br />
 Finally, the last column indicates the total number of patients screened, eligible, and non eligible.</p>
 <p>Starting from the most rare drug, we assure the minimum number of recruited patients that guarantee at least 80% power for each drug and the whole study.</p>
 </div>
@@ -2503,7 +2503,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(phPower)</code></pr
 </tr>
 </tbody>
 </table>
-<p>A cohort of 496 individuals can guarantee a power of 0.72 with an eligible sample size of 164. The reason for the discrepancy with the eligible size of the original SHIVA study is the lack of the entire Hormone arm that decreases the detection power in this analysis. The entire study reaches this power but do not guarantees that each single arm has the same power level.</p>
+<p>A cohort of 496 individuals can guarantee a power of 0.72 with an eligible sample size of 164. The reason for the discrepancy with the eligible size of the original SHIVA study is the lack of the entire Hormone arm that decreases the detected fraction in this analysis. The entire study reaches this power but do not guarantees that each single arm has the same power level.</p>
 </div>
 <div id="optimized-power" class="section level5">
 <h5>Optimized power</h5>

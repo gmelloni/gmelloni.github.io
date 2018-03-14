@@ -1366,12 +1366,12 @@ myHTMLPlot &lt;-<span class="st"> </span><span class="kw">coverageStackPlot</spa
 <span class="co"># Now run plot</span>
 <span class="kw">plot</span>(myHTMLPlot)</code></pre></div>
 <!-- ColumnChart generated in R 3.4.3 by googleVis 0.6.3 package -->
-<!-- Mon Mar 12 16:49:15 2018 -->
+<!-- Wed Mar 14 11:50:27 2018 -->
 <!-- jsHeader -->
 <script type="text/javascript">
  
 // jsData 
-function gvisDataColumnChartID35e291f3630 () {
+function gvisDataColumnChartID9fce1bf2d52e () {
 var data = new google.visualization.DataTable();
 var datajson =
 [
@@ -2310,8 +2310,8 @@ return(data);
 }
  
 // jsDrawChart
-function drawChartColumnChartID35e291f3630() {
-var data = gvisDataColumnChartID35e291f3630();
+function drawChartColumnChartID9fce1bf2d52e() {
+var data = gvisDataColumnChartID9fce1bf2d52e();
 var options = {};
 options["allowHtml"] = true;
 options["isStacked"] = true;
@@ -2331,7 +2331,7 @@ options["enableScrollWheel"] = true;
 options["colors"] = ['#5E4EA1','#506AAE','#3685BB','#4FA0B3','#62BCA7','#82CCA4','#A2D9A4','#BFE4A0','#DBF09A','#EDF7A3','#F9FCB5','#FFF7B2','#FEE899','#FED682','#FEBE6E','#FCA55C','#F8864E','#F16844','#E2534A','#D23B4E','#B72448','#9E0041','#A9A9A9'];
 
     var chart = new google.visualization.ColumnChart(
-    document.getElementById('ColumnChartID35e291f3630')
+    document.getElementById('ColumnChartID9fce1bf2d52e')
     );
     chart.draw(data,options);
     
@@ -2355,9 +2355,9 @@ if (newPackage)
   pkgs.push(chartid);
   
 // Add the drawChart function to the global list of callbacks
-callbacks.push(drawChartColumnChartID35e291f3630);
+callbacks.push(drawChartColumnChartID9fce1bf2d52e);
 })();
-function displayChartColumnChartID35e291f3630() {
+function displayChartColumnChartID9fce1bf2d52e() {
   var pkgs = window.__gvisPackages = window.__gvisPackages || [];
   var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
   window.clearTimeout(window.__gvisLoad);
@@ -2380,9 +2380,9 @@ callbacks.shift()();
 // jsFooter
 </script>
 <!-- jsChart -->
-<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID35e291f3630"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?callback=displayChartColumnChartID9fce1bf2d52e"></script>
 <!-- divChart -->
-<div id="ColumnChartID35e291f3630" style="width: 500; height: 800;">
+<div id="ColumnChartID9fce1bf2d52e" style="width: 500; height: 800;">
 
 </div>
 </div>
@@ -3032,7 +3032,7 @@ knitr<span class="op">::</span><span class="kw">kable</span>(samplefreqs[ sample
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.1888889</td>
+<td align="right">0.2111111</td>
 </tr>
 </tbody>
 </table>
@@ -3057,7 +3057,7 @@ title &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="s
 <span class="kw">hist</span>(pik3caboot , <span class="dt">col=</span><span class="st">&quot;cadetblue&quot;</span> , <span class="dt">breaks=</span><span class="dv">30</span> , <span class="dt">main=</span>title , <span class="dt">xlab=</span><span class="st">&quot;Frequencies of resampling&quot;</span>)
 <span class="kw">abline</span>(<span class="dt">v =</span> avgpik3ca , <span class="dt">col=</span><span class="st">&quot;red&quot;</span> , <span class="dt">lwd=</span><span class="dv">3</span> , <span class="dt">xpd=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p><img src="PrecisionTrialDesigner_files/figure-html/basket6%20-1.png" width="960" /></p>
-<p>So, with our expected sample composition, we have an average of 0.217 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.04. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
+<p>So, with our expected sample composition, we have an average of 0.226 samples mutated on <em>PIK3CA</em> with a standard deviation of 0.035. Also a confidence interval for our measure can be calculated, using percentile bootstrap confidence interval</p>
 <p><span class="math display">\[(\theta_{\alpha/2}^{*};\theta_{1-\alpha/2}^{*})\]</span></p>
 <p>To summarize what we should expect from this study, including answering to question 3:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Write a simple function to calculate confidence interval of a proportion</span>
@@ -3089,11 +3089,11 @@ knitr<span class="op">::</span><span class="kw">kable</span>(pik3caSummary , <sp
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">0.217</td>
-<td align="right">0.04</td>
-<td align="right">0.322</td>
-<td align="right">0.1</td>
-<td align="left">0.144 - 0.295</td>
+<td align="right">0.226</td>
+<td align="right">0.035</td>
+<td align="right">0.311</td>
+<td align="right">0.156</td>
+<td align="left">0.167 - 0.289</td>
 </tr>
 </tbody>
 </table>
@@ -3138,15 +3138,15 @@ knitr<span class="op">::</span><span class="kw">kable</span>(survSummary , <span
 <tbody>
 <tr class="odd">
 <td align="left">PIK3CA</td>
-<td align="right">348</td>
-<td align="right">77</td>
+<td align="right">344</td>
+<td align="right">73</td>
 <td align="right">606</td>
-<td align="right">196</td>
-<td align="left">247 - 555</td>
+<td align="right">238</td>
+<td align="left">247 - 535</td>
 </tr>
 </tbody>
 </table>
-<p>What we learnt is that in the average scenario, we would need 348 samples to start our trial, with a minimum of 196 and, if we are very unlucky, a maximum of 606 patients at screening.</p>
+<p>What we learnt is that in the average scenario, we would need 344 samples to start our trial, with a minimum of 238 and, if we are very unlucky, a maximum of 606 patients at screening.</p>
 </div>
 </div>
 <div id="panel-design" class="section level1">
