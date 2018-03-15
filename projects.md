@@ -77,6 +77,8 @@ to identify driver genes from exome-sequencing data
 from a cohort of cancer samples.
 ```
 
+Available on [SourceForge](https://sourceforge.net/projects/dotsfinder/)
+
 **Melloni GEM**, Ogier AGE, de Pretis S, Mazzarella L, Pelizzola M, Pelicci PG and Riva L. 
 [DOTS-Finder: a comprehensive tool for assessing driver genes in cancer genomes.](https://genomemedicine.biomedcentral.com/articles/10.1186/gm563) 
 Genome Medicine 2014, 6:44, DOI: 10.1186/gm563
