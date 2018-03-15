@@ -5,7 +5,7 @@ layout: page
 
 # Out
 
-Sanarico AG, Ronchini C, Croce A, Memmi E, Cammarata UA, De Antoni A, Larvogna S, Divona M, Giacò L, **Melloni GEM**, Lo Coco F, Melino G, Pelicci PG and Bernassola F The E3 ubiquitin ligase WWP1 sustains the growth of acute myeloid leukemia. Leukemia (2017) http://dx.doi.org/10.1038/leu.2017.342
+Sanarico AG, Ronchini C, Croce A, Memmi E, Cammarata UA, De Antoni A, Larvogna S, Divona M, Giacò L, **Melloni GEM**, Lo Coco F, Melino G, Pelicci PG and Bernassola F The E3 ubiquitin ligase WWP1 sustains the growth of acute myeloid leukemia. *Leukemia* (2017) http://dx.doi.org/10.1038/leu.2017.342
 
 Richichi C, Fornasari L, **Melloni GEM**, Brescia P, Patanè M, Del Bene M, Mustafa DAM, Kros JM, Pollo B, Pruneri G, Sciandivasci A, Munzone E, DiMeco F, Pelicci PG, Riva L, Pelicci G. Mutations targeting the coagulation pathway are enriched in brain metastases *Scientific Reports* 7, Article number: 6573 (2017) doi:10.1038/s41598-017-06811-x
 
@@ -24,14 +24,16 @@ Bodini M, Ronchini C, Giacò L, Russo A, **Melloni GEM**, Luzi L, Sardella D, Vo
 
 **Melloni GEM**, Ogier AGE, de Pretis S, Mazzarella L, Pelizzola M, Pelicci PG and Riva L. DOTS-Finder: a comprehensive tool for assessing driver genes in cancer genomes. *Genome Medicine* 2014, 6:44, doi: 10.1186/gm563
 
-Riva L, Ronchini C, Bodini M, Lo-Coco F, Lavorgna S, Ottone T, Martinelli G, Iacobucci I, Tarella C, Cignetti A, Volorio S, Bernard L, Russo A, **Melloni GEM**, Luzi L, Alcalay M, Dellino GI, Pelicci PG. Acute promyelocytic leukemias share cooperative mutations with other myeloid-leukemia subgroups. *Blood Cancer J.* 2013 Sep 13;3:e147. doi: 10.1038/bcj.2013.46.
+Riva L, Ronchini C, Bodini M, Lo-Coco F, Lavorgna S, Ottone T, Martinelli G, Iacobucci I, Tarella C, Cignetti A, Volorio S, Bernard L, Russo A, **Melloni GEM**, Luzi L, Alcalay M, Dellino GI, Pelicci PG. Acute promyelocytic leukemias share cooperative mutations with other myeloid-leukemia subgroups. *Blood Cancer Journal* 2013 Sep 13;3:e147. doi: 10.1038/bcj.2013.46.
 
 # On the run
 
-**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Designer (PTD): a bioinformatic tool to aid in the design of genetic biomarker-driven clinical trials (under review in JCO - Precision Oncology)
+**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Designer (PTD): a bioinformatic tool to aid in the design of genetic biomarker-driven clinical trials (under review in *JCO - Precision Oncology*)
 
-Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, Melloni G, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E Very low depth whole genome sequencing in complex trait association studies, bioRxiv (2017) doi: https://doi.org/10.1101/169789 [](http://www.biorxiv.org/content/early/2017/07/28/169789) )
+Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, **Melloni G**, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E Very low depth whole genome sequencing in complex trait association studies, bioRxiv (2017) doi: https://doi.org/10.1101/169789 [](http://www.biorxiv.org/content/early/2017/07/28/169789) )
 
 Dellino G, Palluzzi F, Piccioni R, Furia L, **Melloni GEM**, Guido D, Giacò L, Luzi L, Cittaro D, Faretta M, Crosetto N and Pelicci PG. Unresolved Double Strand Breaks in normal mammary cells are enriched at specific promoter regions and overlap with breakpoints of breast-cancer associated translocations (submitted)
 
-Santoro A, Vlachou T, Luzi L, Pasi C, Reavie L, **Melloni G**, Bonetti P, D'Elia E, Casoli L, Sabò A, Nicassio F, Moroni M, Dellino G, Amati, B, Pelicci PG. Loss of p53 in breast cancer leads to Myc activation and reprogramming of cancer stem cells (under review in Cell Reports)
+Santoro A, Vlachou T, Luzi L, Pasi C, Reavie L, **Melloni G**, Bonetti P, D'Elia E, Casoli L, Sabò A, Nicassio F, Moroni M, Dellino G, Amati, B, Pelicci PG. Loss of p53 in breast cancer leads to Myc activation and reprogramming of cancer stem cells (under review in *Cell Reports*)
+
+Gilly A, Suveges D, Kuchenbaecker K, Pollard M, Southam L, Hatzikotoulas K, Farmaki AE, Bjornland T, Waples R, Appel EVR, Casalone E, **Melloni G**, Killian B, Rayner NW, Ntallia I, Kundu K, Walter K, Danesh J, Butterworth A, Barroso I, Tsafantakis E, Dedoussis G, Moltke I, Zeggini E Insights into the allelic architecture of complex trait loci from cohort-wide whole genome sequencing (submitted)

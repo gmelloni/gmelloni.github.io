@@ -56,6 +56,8 @@ A shiny app to normalize continuous traits in Genome-wide
 association studies
 ```
 
+Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, Melloni G, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E [Very low depth whole genome sequencing in complex trait association studies](https://www.biorxiv.org/content/early/2017/07/28/169789), bioRxiv (2017) doi: https://doi.org/10.1101/169789 )
+
 <!-- [![](images/normalization_mod.png)](https://github.com/gmelloni/transformPhenotype) -->
 
 
