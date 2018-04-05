@@ -2,7 +2,6 @@
 title: gmelloni - Home
 layout: home
 ---
-<br>
 
 <div style="text-align:center">
 <a href="https://gmelloni.github.io">
