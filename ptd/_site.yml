@@ -9,7 +9,7 @@ navbar:
   - text: Examples
     menu:
     - text: Vignette
-      href: PrecisionTrialDesigner.html
+      href: PrecisionTrialDrawer.html
     - text: Shiva Retrospective Analysis
       href: SHIVA_analysis.html
     - text: Panel Showcase

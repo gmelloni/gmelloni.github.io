@@ -20,7 +20,7 @@ library(DT)
 library(purrr)
 library(magrittr)
 library(dplyr)
-library(PrecisionTrialDesigner)
+library(PrecisionTrialDrawer)
 library(ggplot2)
 library(parallel)
 library(RColorBrewer)
@@ -48,7 +48,7 @@ The trial was aiming at compare convertional therapy with
 a genomic-driven therapy approach. However the results did not find 
 any difference in progression-free survival (PFS) between the treatment arms.
 **The goal** of this retrospective analysis is to verify 
-that the R package ```PrecisionTrialDesigner``` 
+that the R package ```PrecisionTrialDrawer``` 
 (here-hence refered as **PTD**) can be applied for predicting 
 population allocation in a genomic-driven clinical trial 
 design using alterations from the TCGA  repositories. 

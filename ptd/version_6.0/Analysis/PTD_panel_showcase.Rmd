@@ -211,7 +211,7 @@ First step is to create the panel design using an excel file according to the st
 library(DT)
 library(knitr)
 library(ggplot2)
-library(PrecisionTrialDesigner)
+library(PrecisionTrialDrawer)
 
 `%++%` <- function(a,b) paste0(c(a,b), collapse = " ")
 

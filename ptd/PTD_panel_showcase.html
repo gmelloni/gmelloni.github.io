@@ -24,15 +24,17 @@
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
-<script src="site_libs/htmlwidgets-1.0/htmlwidgets.js"></script>
+<script src="site_libs/htmlwidgets-1.2/htmlwidgets.js"></script>
 <link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
 <script src="site_libs/datatables-binding-0.4/datatables.js"></script>
 <link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
 <script src="site_libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
-<link href="site_libs/crosstalk-1.0.1/css/crosstalk.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.0.1/js/crosstalk.min.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -126,6 +128,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -332,7 +337,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="PrecisionTrialDesigner.html">Vignette</a>
+      <a href="PrecisionTrialDrawer.html">Vignette</a>
     </li>
     <li>
       <a href="SHIVA_analysis.html">Shiva Retrospective Analysis</a>
@@ -617,7 +622,7 @@ coadread_freq =<span class="st"> </span>coadread_tot<span class="op">/</span>all
 <span class="kw">library</span>(knitr)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(readxl)
-<span class="kw">library</span>(PrecisionTrialDesigner)
+<span class="kw">library</span>(PrecisionTrialDrawer)
 
 <span class="co"># Helper functions</span>
 <span class="st">`</span><span class="dt">%++%</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="cf">function</span>(a,b) <span class="kw">paste0</span>(<span class="kw">c</span>(a,b), <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)
@@ -690,7 +695,7 @@ PTD_panel &lt;-<span class="st"> </span><span class="kw">filterMutations</span>(
 <pre><code>## Subsetting mutations...</code></pre>
 <pre><code>## Subsetting copynumber...</code></pre>
 <ul>
-<li>Filtering out ** <code>33.5</code> % ** of the TCGA original SNVs.</li>
+<li>Filtering out ** <code>36.26</code> % ** of the TCGA original SNVs.</li>
 </ul>
 </div>
 <div id="exclude-predefined-genomic-regions-from-the-simulation" class="section level3">
@@ -928,7 +933,7 @@ PTD_panel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span
 <tbody>
 <tr class="odd">
 <td align="left">brca</td>
-<td align="right">976</td>
+<td align="right">1080</td>
 </tr>
 <tr class="even">
 <td align="left">coadread</td>
@@ -936,19 +941,19 @@ PTD_panel &lt;-<span class="st"> </span><span class="kw">subsetAlterations</span
 </tr>
 <tr class="odd">
 <td align="left">luad</td>
-<td align="right">230</td>
+<td align="right">516</td>
 </tr>
 <tr class="even">
 <td align="left">lusc</td>
-<td align="right">178</td>
+<td align="right">501</td>
 </tr>
 <tr class="odd">
 <td align="left">stad</td>
-<td align="right">393</td>
+<td align="right">441</td>
 </tr>
 <tr class="even">
 <td align="left">all_tumors</td>
-<td align="right">1997</td>
+<td align="right">2758</td>
 </tr>
 </tbody>
 </table>
@@ -1003,36 +1008,36 @@ population_df <span class="op">%&gt;%</span>
 <td>brca</td>
 <td><code>3049</code></td>
 <td><code>0.449111</code></td>
-<td><code>976</code></td>
-<td><code>0.4887331</code></td>
+<td><code>1080</code></td>
+<td><code>0.3915881</code></td>
 </tr>
 <tr class="even">
 <td>luad</td>
 <td><code>1154</code></td>
 <td><code>0.169961</code></td>
-<td><code>230</code></td>
-<td><code>0.1151728</code></td>
+<td><code>516</code></td>
+<td><code>0.1870921</code></td>
 </tr>
 <tr class="odd">
 <td>lusc</td>
 <td><code>590</code></td>
 <td><code>0.0868693</code></td>
-<td><code>178</code></td>
-<td><code>0.0891337</code></td>
+<td><code>501</code></td>
+<td><code>0.1816534</code></td>
 </tr>
 <tr class="even">
 <td>stad</td>
 <td><code>273</code></td>
 <td><code>0.0400791</code></td>
-<td><code>393</code></td>
-<td><code>0.1967952</code></td>
+<td><code>441</code></td>
+<td><code>0.1598985</code></td>
 </tr>
 <tr class="odd">
 <td>coadread</td>
 <td><code>1724</code></td>
 <td><code>0.2539795</code></td>
 <td><code>220</code></td>
-<td><code>0.1101652</code></td>
+<td><code>0.0797679</code></td>
 </tr>
 </tbody>
 </table>
@@ -1061,7 +1066,7 @@ population_df <span class="op">%&gt;%</span>
             )</code></pre></div>
 <p><img src="PTD_panel_showcase_files/figure-html/coverageplot%20all%20the%20population-1.png" width="960" /></p>
 <p>Simulate the panel performance with a weighted resampling simulation run 200 times.</p>
-<p>The previous plot shows the percentage of patients (<em>y-axis</em>) found to have at least one, two, three, etc, alterations (<em>x-axis</em>). The current design is capable of detecting <code>0.65</code>% of the population of reference.</p>
+<p>The previous plot shows the percentage of patients (<em>y-axis</em>) found to have at least one, two, three, etc, alterations (<em>x-axis</em>). The current design is capable of detecting <code>0.63</code>% of the population of reference.</p>
 <div id="panel-detection-power-in-a-tumor-type-specific-population-background" class="section level5">
 <h5>Panel detection-power in a tumor type specific population background</h5>
 <p>In the following plot we want to identify the performance of our panel for each single tumor types starting from out population of reference composed by the 3 cancers groups.</p>
@@ -1621,7 +1626,7 @@ alPatDrug <span class="op">%&gt;%</span>
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">92</td>
+<td align="right">94</td>
 <td align="right">59</td>
 <td align="right">0.4</td>
 <td align="right">0.6</td>
@@ -1629,7 +1634,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">115</td>
+<td align="right">118</td>
 <td align="right">74</td>
 <td align="right">0.3</td>
 <td align="right">0.7</td>
@@ -1637,7 +1642,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">148</td>
+<td align="right">151</td>
 <td align="right">95</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -1645,7 +1650,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">196</td>
+<td align="right">200</td>
 <td align="right">126</td>
 <td align="right">0.1</td>
 <td align="right">0.9</td>
@@ -1653,7 +1658,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">162</td>
+<td align="right">165</td>
 <td align="right">104</td>
 <td align="right">0.4</td>
 <td align="right">0.6</td>
@@ -1661,7 +1666,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">202</td>
+<td align="right">207</td>
 <td align="right">130</td>
 <td align="right">0.3</td>
 <td align="right">0.7</td>
@@ -1669,7 +1674,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">258</td>
+<td align="right">264</td>
 <td align="right">166</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -1677,7 +1682,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">344</td>
+<td align="right">352</td>
 <td align="right">222</td>
 <td align="right">0.1</td>
 <td align="right">0.9</td>
@@ -1685,7 +1690,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">317</td>
+<td align="right">324</td>
 <td align="right">204</td>
 <td align="right">0.4</td>
 <td align="right">0.6</td>
@@ -1693,7 +1698,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">399</td>
+<td align="right">408</td>
 <td align="right">257</td>
 <td align="right">0.3</td>
 <td align="right">0.7</td>
@@ -1701,7 +1706,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">507</td>
+<td align="right">519</td>
 <td align="right">327</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -1709,7 +1714,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">677</td>
+<td align="right">693</td>
 <td align="right">437</td>
 <td align="right">0.1</td>
 <td align="right">0.9</td>
@@ -1717,7 +1722,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">783</td>
+<td align="right">801</td>
 <td align="right">505</td>
 <td align="right">0.4</td>
 <td align="right">0.6</td>
@@ -1725,7 +1730,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">986</td>
+<td align="right">1009</td>
 <td align="right">636</td>
 <td align="right">0.3</td>
 <td align="right">0.7</td>
@@ -1733,7 +1738,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="right">1254</td>
+<td align="right">1283</td>
 <td align="right">809</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -1741,7 +1746,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">1677</td>
+<td align="right">1716</td>
 <td align="right">1082</td>
 <td align="right">0.1</td>
 <td align="right">0.9</td>
@@ -1848,68 +1853,68 @@ alPatDrug <span class="op">%&gt;%</span>
 <tr class="odd">
 <td align="left">AKT.inhibitor</td>
 <td align="right">0</td>
-<td align="right">3940</td>
+<td align="right">5120</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">ALK.inhibitor</td>
 <td align="right">0</td>
-<td align="right">428</td>
+<td align="right">404</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">BRAF.inhibitor</td>
 <td align="right">0</td>
-<td align="right">404</td>
+<td align="right">431</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">EGFR.inhibitor</td>
 <td align="right">0</td>
-<td align="right">411</td>
+<td align="right">467</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">FGFR.inhibitor</td>
 <td align="right">0</td>
-<td align="right">1543</td>
+<td align="right">1782</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">HER2.inhibitor</td>
-<td align="right">15601</td>
-<td align="right">178</td>
-<td align="right">6403</td>
+<td align="right">0</td>
+<td align="right">297</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">Immune.Checkpoint.Inhibitor</td>
-<td align="right">1200</td>
+<td align="right">21504</td>
 <td align="right">166</td>
-<td align="right">493</td>
+<td align="right">9606</td>
 </tr>
 <tr class="even">
 <td align="left">MET.inhibitor</td>
 <td align="right">0</td>
-<td align="right">225</td>
+<td align="right">256</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">NOTCH.inhibitor</td>
 <td align="right">0</td>
-<td align="right">1147</td>
+<td align="right">1216</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">PARP.inhibitor</td>
 <td align="right">0</td>
-<td align="right">1469</td>
+<td align="right">1764</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="left">Total</td>
-<td align="right">16801</td>
-<td align="right">9906</td>
-<td align="right">6895</td>
+<td align="right">21504</td>
+<td align="right">11899</td>
+<td align="right">9606</td>
 </tr>
 </tbody>
 </table>
@@ -1946,59 +1951,59 @@ alPatDrug <span class="op">%&gt;%</span>
 <pre><code>## $`pCase:0.3 | pControl:0.1 | Power:0.8`
 ## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Summary
 ##              Immune Checkpoint Inhibitor MET inhibitor HER2 inhibitor
-## Screened                            4636             0              0
-## Eligible                              65            70             84
-## Not.Eligible                        2097             0              0
-##              EGFR inhibitor BRAF inhibitor ALK inhibitor NOTCH inhibitor
-## Screened                  0              0             0               0
-## Eligible                 86            119           105             254
-## Not.Eligible              0              0             0               0
+## Screened                            5976             0              0
+## Eligible                              65            89             89
+## Not.Eligible                        2967             0              0
+##              EGFR inhibitor ALK inhibitor BRAF inhibitor NOTCH inhibitor
+## Screened                  0             0              0               0
+## Eligible                133           113            144             293
+## Not.Eligible              0             0              0               0
 ##              PARP inhibitor FGFR inhibitor AKT inhibitor Total
-## Screened                  0              0             0  4636
-## Eligible                409            351          1001  2540
-## Not.Eligible              0              0             0  2097
+## Screened                  0              0             0  5976
+## Eligible                449            466          1173  3010
+## Not.Eligible              0              0             0  2967
 ## 
 ## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Screening.scheme
 ##                             Immune Checkpoint Inhibitor MET inhibitor
-## Immune Checkpoint Inhibitor                        4636          4571
+## Immune Checkpoint Inhibitor                        5976          5911
 ## MET inhibitor                                         0             0
 ## HER2 inhibitor                                        0             0
 ## EGFR inhibitor                                        0             0
-## BRAF inhibitor                                        0             0
 ## ALK inhibitor                                         0             0
+## BRAF inhibitor                                        0             0
 ## NOTCH inhibitor                                       0             0
 ## PARP inhibitor                                        0             0
 ## FGFR inhibitor                                        0             0
 ## AKT inhibitor                                         0             0
-##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
-## Immune Checkpoint Inhibitor           4502           4418           4332
-## MET inhibitor                            0              0              0
-## HER2 inhibitor                           0              0              0
-## EGFR inhibitor                           0              0              0
-## BRAF inhibitor                           0              0              0
-## ALK inhibitor                            0              0              0
-## NOTCH inhibitor                          0              0              0
-## PARP inhibitor                           0              0              0
-## FGFR inhibitor                           0              0              0
-## AKT inhibitor                            0              0              0
-##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
-## Immune Checkpoint Inhibitor          4214            4110           3856
-## MET inhibitor                           0               0              0
-## HER2 inhibitor                          0               0              0
-## EGFR inhibitor                          0               0              0
-## BRAF inhibitor                          0               0              0
-## ALK inhibitor                           0               0              0
-## NOTCH inhibitor                         0               0              0
-## PARP inhibitor                          0               0              0
-## FGFR inhibitor                          0               0              0
-## AKT inhibitor                           0               0              0
+##                             HER2 inhibitor EGFR inhibitor ALK inhibitor
+## Immune Checkpoint Inhibitor           5823           5734          5602
+## MET inhibitor                            0              0             0
+## HER2 inhibitor                           0              0             0
+## EGFR inhibitor                           0              0             0
+## ALK inhibitor                            0              0             0
+## BRAF inhibitor                           0              0             0
+## NOTCH inhibitor                          0              0             0
+## PARP inhibitor                           0              0             0
+## FGFR inhibitor                           0              0             0
+## AKT inhibitor                            0              0             0
+##                             BRAF inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor           5489            5346           5053
+## MET inhibitor                            0               0              0
+## HER2 inhibitor                           0               0              0
+## EGFR inhibitor                           0               0              0
+## ALK inhibitor                            0               0              0
+## BRAF inhibitor                           0               0              0
+## NOTCH inhibitor                          0               0              0
+## PARP inhibitor                           0               0              0
+## FGFR inhibitor                           0               0              0
+## AKT inhibitor                            0               0              0
 ##                             FGFR inhibitor AKT inhibitor
-## Immune Checkpoint Inhibitor           3448          3097
+## Immune Checkpoint Inhibitor           4605          4139
 ## MET inhibitor                            0             0
 ## HER2 inhibitor                           0             0
 ## EGFR inhibitor                           0             0
-## BRAF inhibitor                           0             0
 ## ALK inhibitor                            0             0
+## BRAF inhibitor                           0             0
 ## NOTCH inhibitor                          0             0
 ## PARP inhibitor                           0             0
 ## FGFR inhibitor                           0             0
@@ -2006,95 +2011,95 @@ alPatDrug <span class="op">%&gt;%</span>
 ## 
 ## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Allocation.scheme
 ##                             Immune Checkpoint Inhibitor MET inhibitor
-## Immune Checkpoint Inhibitor                          65            70
+## Immune Checkpoint Inhibitor                          65            89
 ## MET inhibitor                                         0             0
 ## HER2 inhibitor                                        0             0
 ## EGFR inhibitor                                        0             0
-## BRAF inhibitor                                        0             0
 ## ALK inhibitor                                         0             0
+## BRAF inhibitor                                        0             0
 ## NOTCH inhibitor                                       0             0
 ## PARP inhibitor                                        0             0
 ## FGFR inhibitor                                        0             0
 ## AKT inhibitor                                         0             0
-## Total                                                65            70
-##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
-## Immune Checkpoint Inhibitor             84             86            119
-## MET inhibitor                            0              0              0
-## HER2 inhibitor                           0              0              0
-## EGFR inhibitor                           0              0              0
-## BRAF inhibitor                           0              0              0
-## ALK inhibitor                            0              0              0
-## NOTCH inhibitor                          0              0              0
-## PARP inhibitor                           0              0              0
-## FGFR inhibitor                           0              0              0
-## AKT inhibitor                            0              0              0
-## Total                                   84             86            119
-##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
-## Immune Checkpoint Inhibitor           105             254            409
-## MET inhibitor                           0               0              0
-## HER2 inhibitor                          0               0              0
-## EGFR inhibitor                          0               0              0
-## BRAF inhibitor                          0               0              0
-## ALK inhibitor                           0               0              0
-## NOTCH inhibitor                         0               0              0
-## PARP inhibitor                          0               0              0
-## FGFR inhibitor                          0               0              0
-## AKT inhibitor                           0               0              0
-## Total                                 105             254            409
+## Total                                                65            89
+##                             HER2 inhibitor EGFR inhibitor ALK inhibitor
+## Immune Checkpoint Inhibitor             89            133           113
+## MET inhibitor                            0              0             0
+## HER2 inhibitor                           0              0             0
+## EGFR inhibitor                           0              0             0
+## ALK inhibitor                            0              0             0
+## BRAF inhibitor                           0              0             0
+## NOTCH inhibitor                          0              0             0
+## PARP inhibitor                           0              0             0
+## FGFR inhibitor                           0              0             0
+## AKT inhibitor                            0              0             0
+## Total                                   89            133           113
+##                             BRAF inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor            144             293            449
+## MET inhibitor                            0               0              0
+## HER2 inhibitor                           0               0              0
+## EGFR inhibitor                           0               0              0
+## ALK inhibitor                            0               0              0
+## BRAF inhibitor                           0               0              0
+## NOTCH inhibitor                          0               0              0
+## PARP inhibitor                           0               0              0
+## FGFR inhibitor                           0               0              0
+## AKT inhibitor                            0               0              0
+## Total                                  144             293            449
 ##                             FGFR inhibitor AKT inhibitor
-## Immune Checkpoint Inhibitor            351          1001
+## Immune Checkpoint Inhibitor            466          1173
 ## MET inhibitor                            0             0
 ## HER2 inhibitor                           0             0
 ## EGFR inhibitor                           0             0
-## BRAF inhibitor                           0             0
 ## ALK inhibitor                            0             0
+## BRAF inhibitor                           0             0
 ## NOTCH inhibitor                          0             0
 ## PARP inhibitor                           0             0
 ## FGFR inhibitor                           0             0
 ## AKT inhibitor                            0             0
-## Total                                  351          1001
+## Total                                  466          1173
 ## 
 ## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Probability.scheme
 ##                             Immune Checkpoint Inhibitor MET inhibitor
-## Immune Checkpoint Inhibitor                  0.01402103    0.01523616
+## Immune Checkpoint Inhibitor                  0.01087745    0.01502933
 ## MET inhibitor                                0.00000000    0.00000000
 ## HER2 inhibitor                               0.00000000    0.00000000
 ## EGFR inhibitor                               0.00000000    0.00000000
-## BRAF inhibitor                               0.00000000    0.00000000
 ## ALK inhibitor                                0.00000000    0.00000000
+## BRAF inhibitor                               0.00000000    0.00000000
 ## NOTCH inhibitor                              0.00000000    0.00000000
 ## PARP inhibitor                               0.00000000    0.00000000
 ## FGFR inhibitor                               0.00000000    0.00000000
 ## AKT inhibitor                                0.00000000    0.00000000
-##                             HER2 inhibitor EGFR inhibitor BRAF inhibitor
-## Immune Checkpoint Inhibitor     0.01856627     0.01944298     0.02733119
-## MET inhibitor                   0.00000000     0.00000000     0.00000000
-## HER2 inhibitor                  0.00000000     0.00000000     0.00000000
-## EGFR inhibitor                  0.00000000     0.00000000     0.00000000
-## BRAF inhibitor                  0.00000000     0.00000000     0.00000000
-## ALK inhibitor                   0.00000000     0.00000000     0.00000000
-## NOTCH inhibitor                 0.00000000     0.00000000     0.00000000
-## PARP inhibitor                  0.00000000     0.00000000     0.00000000
-## FGFR inhibitor                  0.00000000     0.00000000     0.00000000
-## AKT inhibitor                   0.00000000     0.00000000     0.00000000
-##                             ALK inhibitor NOTCH inhibitor PARP inhibitor
-## Immune Checkpoint Inhibitor    0.02479339      0.06158192      0.1059603
-## MET inhibitor                  0.00000000      0.00000000      0.0000000
-## HER2 inhibitor                 0.00000000      0.00000000      0.0000000
-## EGFR inhibitor                 0.00000000      0.00000000      0.0000000
-## BRAF inhibitor                 0.00000000      0.00000000      0.0000000
-## ALK inhibitor                  0.00000000      0.00000000      0.0000000
-## NOTCH inhibitor                0.00000000      0.00000000      0.0000000
-## PARP inhibitor                 0.00000000      0.00000000      0.0000000
-## FGFR inhibitor                 0.00000000      0.00000000      0.0000000
-## AKT inhibitor                  0.00000000      0.00000000      0.0000000
+##                             HER2 inhibitor EGFR inhibitor ALK inhibitor
+## Immune Checkpoint Inhibitor     0.01525865     0.02305367    0.02011605
+## MET inhibitor                   0.00000000     0.00000000    0.00000000
+## HER2 inhibitor                  0.00000000     0.00000000    0.00000000
+## EGFR inhibitor                  0.00000000     0.00000000    0.00000000
+## ALK inhibitor                   0.00000000     0.00000000    0.00000000
+## BRAF inhibitor                  0.00000000     0.00000000    0.00000000
+## NOTCH inhibitor                 0.00000000     0.00000000    0.00000000
+## PARP inhibitor                  0.00000000     0.00000000    0.00000000
+## FGFR inhibitor                  0.00000000     0.00000000    0.00000000
+## AKT inhibitor                   0.00000000     0.00000000    0.00000000
+##                             BRAF inhibitor NOTCH inhibitor PARP inhibitor
+## Immune Checkpoint Inhibitor     0.02605606      0.05472233     0.08876501
+## MET inhibitor                   0.00000000      0.00000000     0.00000000
+## HER2 inhibitor                  0.00000000      0.00000000     0.00000000
+## EGFR inhibitor                  0.00000000      0.00000000     0.00000000
+## ALK inhibitor                   0.00000000      0.00000000     0.00000000
+## BRAF inhibitor                  0.00000000      0.00000000     0.00000000
+## NOTCH inhibitor                 0.00000000      0.00000000     0.00000000
+## PARP inhibitor                  0.00000000      0.00000000     0.00000000
+## FGFR inhibitor                  0.00000000      0.00000000     0.00000000
+## AKT inhibitor                   0.00000000      0.00000000     0.00000000
 ##                             FGFR inhibitor AKT inhibitor
-## Immune Checkpoint Inhibitor      0.1016835     0.3230885
+## Immune Checkpoint Inhibitor      0.1011765     0.2832461
 ## MET inhibitor                    0.0000000     0.0000000
 ## HER2 inhibitor                   0.0000000     0.0000000
 ## EGFR inhibitor                   0.0000000     0.0000000
-## BRAF inhibitor                   0.0000000     0.0000000
 ## ALK inhibitor                    0.0000000     0.0000000
+## BRAF inhibitor                   0.0000000     0.0000000
 ## NOTCH inhibitor                  0.0000000     0.0000000
 ## PARP inhibitor                   0.0000000     0.0000000
 ## FGFR inhibitor                   0.0000000     0.0000000
@@ -2102,15 +2107,15 @@ alPatDrug <span class="op">%&gt;%</span>
 ## 
 ## $`pCase:0.3 | pControl:0.1 | Power:0.8`$Base.probabilities
 ## Immune Checkpoint Inhibitor               MET inhibitor 
-##                  0.01402103                  0.01602404 
+##                  0.01087745                  0.01559101 
 ##              HER2 inhibitor              EGFR inhibitor 
-##                  0.02003005                  0.02153230 
-##              BRAF inhibitor               ALK inhibitor 
-##                  0.03054582                  0.03254882 
+##                  0.01631617                  0.02429297 
+##               ALK inhibitor              BRAF inhibitor 
+##                  0.02501813                  0.02900653 
 ##             NOTCH inhibitor              PARP inhibitor 
-##                  0.06659990                  0.10916375 
+##                  0.05873822                  0.09209572 
 ##              FGFR inhibitor               AKT inhibitor 
-##                  0.11417126                  0.31347021</code></pre>
+##                  0.11131255                  0.27846265</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">surv2 &lt;-<span class="st"> </span><span class="kw">survPowerSampleSize</span>(PTD_panel
    , <span class="dt">alterationType =</span> <span class="kw">c</span>(<span class="st">&quot;mutations&quot;</span>, <span class="st">&quot;copynumber&quot;</span>)
    , <span class="dt">HR =</span> <span class="fl">0.66</span>
@@ -2138,7 +2143,7 @@ alPatDrug <span class="op">%&gt;%</span>
 <tbody>
 <tr class="odd">
 <td align="left">AKT inhibitor</td>
-<td align="right">801</td>
+<td align="right">902</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2146,7 +2151,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">ALK inhibitor</td>
-<td align="right">7712</td>
+<td align="right">10033</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2154,7 +2159,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">BRAF inhibitor</td>
-<td align="right">8218</td>
+<td align="right">8654</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2162,7 +2167,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">EGFR inhibitor</td>
-<td align="right">11657</td>
+<td align="right">10333</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2170,7 +2175,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">FGFR inhibitor</td>
-<td align="right">2199</td>
+<td align="right">2255</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2178,7 +2183,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="right">12532</td>
+<td align="right">15384</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2186,7 +2191,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="right">17902</td>
+<td align="right">23076</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2194,7 +2199,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">MET inhibitor</td>
-<td align="right">15664</td>
+<td align="right">16100</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2202,7 +2207,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">no_drug</td>
-<td align="right">1700</td>
+<td align="right">1588</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2210,7 +2215,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="right">3769</td>
+<td align="right">4274</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2218,7 +2223,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="right">2300</td>
+<td align="right">2726</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2226,7 +2231,7 @@ alPatDrug <span class="op">%&gt;%</span>
 </tr>
 <tr class="even">
 <td align="left">Full Design</td>
-<td align="right">398</td>
+<td align="right">417</td>
 <td align="right">251</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2308,7 +2313,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="left">241 (237-245)</td>
+<td align="left">249 (244-253)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2316,7 +2321,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">8997 (7275.75-11292.95)</td>
+<td align="left">9352 (7809.075-11480.825)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2324,7 +2329,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">1761.5 (1644.425-1908.025)</td>
+<td align="left">1849.5 (1732.425-2023.2)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2332,7 +2337,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">530 (510.475-550.675)</td>
+<td align="left">539.5 (526-556.525)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2340,7 +2345,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">6308 (5452.3-7304.5)</td>
+<td align="left">6461 (5625.25-7482.825)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2348,7 +2353,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">1596.5 (1511.125-1725.925)</td>
+<td align="left">1720 (1615.125-1833.575)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2356,7 +2361,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">4625 (4156.075-5227.775)</td>
+<td align="left">5384 (4913-6006.85)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2364,7 +2369,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">3734.5 (3325.725-4132)</td>
+<td align="left">4023 (3524.225-4548.45)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2372,7 +2377,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">9604 (8230.925-12338.7)</td>
+<td align="left">10452 (8770.075-13161)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2380,7 +2385,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">2836 (2632.175-3187.825)</td>
+<td align="left">3276 (2995-3526.45)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2388,7 +2393,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">11978 (9559.375-14915.725)</td>
+<td align="left">13326 (10878-16535.4)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2396,7 +2401,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">730.5 (701.95-755.2)</td>
+<td align="left">735 (704.475-761.525)</td>
 <td align="right">157</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2405,7 +2410,7 @@ surv2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 52246 (48387.62-57198.95)</li>
+<li>Median Number of patients necessary with CI: 56718 (52651.95-60975.85)</li>
 </ul>
 </div>
 <div id="priority-optimal" class="section level4">
@@ -2453,8 +2458,8 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <tr class="header">
 <th></th>
 <th align="left">Immune Checkpoint Inhibitor</th>
-<th align="left">HER2 inhibitor</th>
 <th align="left">MET inhibitor</th>
+<th align="left">HER2 inhibitor</th>
 <th align="left">EGFR inhibitor</th>
 <th align="left">ALK inhibitor</th>
 <th align="left">BRAF inhibitor</th>
@@ -2468,9 +2473,9 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">11651.5 (357.35-14314.8)</td>
-<td align="left">0 (0-839.149999999999)</td>
-<td align="left">0 (0-10825.75)</td>
+<td align="left">13161 (351.3-15911)</td>
+<td align="left">0 (0-12563.75)</td>
+<td align="left">0 (0-405.299999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2478,27 +2483,27 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">11978 (10624.35-14314.8)</td>
+<td align="left">13495 (11198.9-15911)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">157 (157-173.525)</td>
-<td align="left">186 (157-256.725)</td>
-<td align="left">174.5 (157-244.525)</td>
-<td align="left">280.5 (224-364.15)</td>
-<td align="left">309 (253-381.525)</td>
-<td align="left">410.5 (349.95-503.675)</td>
-<td align="left">553.5 (467.9-705.525)</td>
-<td align="left">842 (733.425-1059.5)</td>
-<td align="left">810.5 (668-1011.6)</td>
-<td align="left">2515.5 (2213.8-3066.975)</td>
-<td align="left">6267.5 (5531.425-7504.9)</td>
+<td align="left">157 (157-166.05)</td>
+<td align="left">186 (157-241.3)</td>
+<td align="left">202 (158.475-261.825)</td>
+<td align="left">297.5 (222.9-390.825)</td>
+<td align="left">282.5 (223.375-368.925)</td>
+<td align="left">419 (338.75-538.825)</td>
+<td align="left">515 (404.325-652.925)</td>
+<td align="left">906.5 (758.65-1119.525)</td>
+<td align="left">863 (712.9-1071.25)</td>
+<td align="left">2789 (2330.8-3396.35)</td>
+<td align="left">6620 (5533.25-7876.7)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">5601 (172.8-6879)</td>
-<td align="left">0 (0-399.15)</td>
-<td align="left">0 (0-5241.775)</td>
+<td align="left">6676 (177.7-8052.1)</td>
+<td align="left">0 (0-6299.925)</td>
+<td align="left">0 (0-204.649999999999)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2506,13 +2511,13 @@ summaryMat2 &lt;-<span class="st"> </span>simulSurv2[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">5749.5 (5061.125-6879)</td>
+<td align="left">6783 (5668.675-8069.75)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value with CI): 11978 (10624.35-14314.8)</p>
+<p>Number of patients necessary under optimal design (median value with CI): 13495 (11198.9-15911)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 77.07%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 76.21%</p>
 </div>
 <div id="priority-non-optimal" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -2590,49 +2595,49 @@ summaryMat2_NO &lt;-<span class="st"> </span>simulSurv2_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">528.5 (512.475-545)</td>
-<td align="left">1214.5 (1128.275-1306.575)</td>
-<td align="left">662 (508.9-823.675)</td>
-<td align="left">1746 (1480.575-1999.3)</td>
-<td align="left">1020.5 (570.325-1567.725)</td>
-<td align="left">2484.5 (1907.425-3116.6)</td>
-<td align="left">2400 (1455.4-3669.7)</td>
-<td align="left">5926.5 (4650.85-7408.275)</td>
-<td align="left">2525.5 (104.975-4778.025)</td>
-<td align="left">6173 (2813.9-9465.45)</td>
-<td align="left">24725 (21783.875-28552.975)</td>
+<td align="left">541 (522.95-557)</td>
+<td align="left">1334 (1206.025-1474.575)</td>
+<td align="left">648 (515.35-824.125)</td>
+<td align="left">2183.5 (1790.925-2585.175)</td>
+<td align="left">849.5 (265.825-1552.425)</td>
+<td align="left">3376 (2693.125-4211.8)</td>
+<td align="left">1442 (261.475-2874.375)</td>
+<td align="left">5739.5 (3686.925-7532.775)</td>
+<td align="left">4033.5 (1548.35-6700.425)</td>
+<td align="left">7713 (4890.225-11514)</td>
+<td align="left">28259 (25198.8-32172.175)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">7118.5 (6166.6-8283.775)</td>
-<td align="left">1731 (1513.375-2018.525)</td>
-<td align="left">1366 (1148.8-1624.05)</td>
-<td align="left">669 (569.225-828.65)</td>
-<td align="left">681 (569.7-818.875)</td>
-<td align="left">391 (326.95-465.575)</td>
-<td align="left">342.5 (295.475-414.775)</td>
-<td align="left">200 (184.475-233.525)</td>
-<td align="left">204 (175-238.1)</td>
+<td align="left">8030 (7042.475-9051.775)</td>
+<td align="left">1862.5 (1592.55-2148.15)</td>
+<td align="left">1503.5 (1275.95-1795.575)</td>
+<td align="left">634 (538.325-783.025)</td>
+<td align="left">726.5 (605.5-878.675)</td>
+<td align="left">364 (305.8-448.05)</td>
+<td align="left">395.5 (326.85-477.975)</td>
+<td align="left">225 (203-266.575)</td>
+<td align="left">204 (183-238.2)</td>
 <td align="left">157 (157-157)</td>
-<td align="left">12886.5 (11329-14770.95)</td>
+<td align="left">13982 (12498.35-16005.2)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">253 (242.475-267.525)</td>
-<td align="left">582 (540-633.575)</td>
-<td align="left">315.5 (239.95-397.525)</td>
-<td align="left">837.5 (698.275-965.975)</td>
-<td align="left">490.5 (270.475-750.975)</td>
-<td align="left">1196 (918.85-1508)</td>
-<td align="left">1159 (699.55-1750.225)</td>
-<td align="left">2846.5 (2203.55-3564.325)</td>
-<td align="left">1213.5 (50.825-2284.525)</td>
-<td align="left">6086.5 (2771.525-9362.175)</td>
-<td align="left">14969.5 (12210.3-18324.6)</td>
+<td align="left">273 (260.425-285)</td>
+<td align="left">673 (605.85-752.625)</td>
+<td align="left">329 (259.275-411.1)</td>
+<td align="left">1108.5 (905.85-1307.875)</td>
+<td align="left">422 (135.175-784.849999999999)</td>
+<td align="left">1686 (1350.8-2133.175)</td>
+<td align="left">725 (131.95-1440.15)</td>
+<td align="left">2903 (1834.875-3848.275)</td>
+<td align="left">2018.5 (773.35-3422.45)</td>
+<td align="left">7622 (4823.125-11406.775)</td>
+<td align="left">18003.5 (15495.9-21489.85)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 24725 (21783.875-28552.975)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 28259 (25198.8-32172.175)</p>
 </div>
 <div id="full-summary-of-the-three-methods" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -2730,7 +2735,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="left">62 (61-63)</td>
+<td align="left">64 (63-65)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2738,7 +2743,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">2283 (1906-2758.7)</td>
+<td align="left">2322 (2026.725-2815.75)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2746,7 +2751,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">447.5 (415-487.575)</td>
+<td align="left">477.5 (443-517.575)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2754,7 +2759,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">134 (131-139)</td>
+<td align="left">138 (134-143)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2762,7 +2767,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">1580 (1422-1862.775)</td>
+<td align="left">1637 (1456.8-1999.45)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2770,7 +2775,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">403.5 (376.95-435.525)</td>
+<td align="left">442.5 (412.9-472.05)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2778,7 +2783,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">1176 (1009.25-1312.825)</td>
+<td align="left">1393 (1243.375-1580)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2786,7 +2791,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">951.5 (830.75-1047.1)</td>
+<td align="left">1022 (911.85-1146.725)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2794,7 +2799,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">2470 (2139-3020.175)</td>
+<td align="left">2703 (2311.025-3196)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2802,7 +2807,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">725 (665-787.625)</td>
+<td align="left">839 (764.425-945.4)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2810,7 +2815,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">3052 (2525.725-3800.825)</td>
+<td align="left">3438 (2814.25-4348.225)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2818,7 +2823,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">187 (181-193.525)</td>
+<td align="left">187 (180.475-194)</td>
 <td align="right">40</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -2827,7 +2832,7 @@ surv3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 13336 (12555.42-14065.77)</li>
+<li>Median Number of patients necessary with CI: 14460 (13541.42-15790.52)</li>
 </ul>
 </div>
 <div id="optimal" class="section level4">
@@ -2888,9 +2893,9 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">3052 (204.95-3800.825)</td>
-<td align="left">0 (0-2875.275)</td>
-<td align="left">0 (0-166.324999999999)</td>
+<td align="left">3354 (1534.225-4149.075)</td>
+<td align="left">0 (0-1611.17499999998)</td>
+<td align="left">0 (0-19.4249999999997)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2898,27 +2903,27 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">3096 (2610.75-3800.825)</td>
+<td align="left">3374.5 (2962.95-4149.075)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">40 (40-44)</td>
-<td align="left">44 (40-60)</td>
-<td align="left">48 (40-64.05)</td>
-<td align="left">72 (57.475-93.525)</td>
-<td align="left">80 (62.425-101.15)</td>
-<td align="left">107.5 (84.95-134.15)</td>
-<td align="left">143.5 (122-179.725)</td>
-<td align="left">223 (180.475-277.675)</td>
-<td align="left">208 (168.475-251.575)</td>
-<td align="left">651.5 (540.8-801.1)</td>
-<td align="left">1621 (1356.925-1965.525)</td>
+<td align="left">40 (40-43)</td>
+<td align="left">48.5 (40-65)</td>
+<td align="left">53 (40.95-66.575)</td>
+<td align="left">77.5 (60-99.05)</td>
+<td align="left">73 (57.95-91.05)</td>
+<td align="left">105.5 (87.475-135.575)</td>
+<td align="left">133.5 (111.475-163.575)</td>
+<td align="left">229.5 (190.95-291.575)</td>
+<td align="left">220 (181.95-272.575)</td>
+<td align="left">707 (622.425-872.975)</td>
+<td align="left">1684.5 (1476.475-2050.475)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">1454 (99.5-1837.7)</td>
-<td align="left">0 (0-1375.625)</td>
-<td align="left">0 (0-80.8999999999997)</td>
+<td align="left">1697 (770-2108.675)</td>
+<td align="left">0 (0-804.649999999989)</td>
+<td align="left">0 (0-9.97499999999984)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -2926,13 +2931,13 @@ summaryMat3 &lt;-<span class="st"> </span>simulSurv3[[<span class="dv">1</span>]
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">1489 (1235.175-1837.7)</td>
+<td align="left">1708 (1471.8-2108.675)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value with CI): 3096 (2610.75-3800.825)</p>
+<p>Number of patients necessary under optimal design (median value with CI): 3374.5 (2962.95-4149.075)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 76.78%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 76.66%</p>
 </div>
 <div id="priority-non-optimal-1" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -2992,49 +2997,49 @@ summaryMat3_NO &lt;-<span class="st"> </span>simulSurv3_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">135 (130.475-139)</td>
-<td align="left">309 (283.95-340.05)</td>
-<td align="left">165.5 (130.7-212.525)</td>
-<td align="left">441 (360.95-517.05)</td>
-<td align="left">245 (109.75-394.575)</td>
-<td align="left">655 (472.3-848.2)</td>
-<td align="left">537 (306.75-874)</td>
-<td align="left">1524.5 (1121.075-2019.225)</td>
-<td align="left">652.5 (88.525-1307.7)</td>
-<td align="left">1614 (813.375-2612.55)</td>
-<td align="left">6348 (5582.675-7427.15)</td>
+<td align="left">138 (134-143.525)</td>
+<td align="left">340 (309.475-374.675)</td>
+<td align="left">170 (128.85-221)</td>
+<td align="left">556 (457.475-657.825)</td>
+<td align="left">242 (90.45-371)</td>
+<td align="left">866.5 (647.775-1069.025)</td>
+<td align="left">395.5 (98.25-676)</td>
+<td align="left">1474.5 (1110.325-1893.775)</td>
+<td align="left">978.5 (370.475-1761.675)</td>
+<td align="left">2060.5 (1274.95-3186.1)</td>
+<td align="left">7190.5 (6298-8532.275)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">1827 (1582.7-2136.525)</td>
-<td align="left">443 (384.95-519.625)</td>
-<td align="left">354 (304.375-424.05)</td>
-<td align="left">172 (150-203)</td>
-<td align="left">177 (149.475-210.575)</td>
-<td align="left">98 (84.425-125.15)</td>
-<td align="left">91 (76.475-107)</td>
-<td align="left">52 (48-62)</td>
-<td align="left">52 (45-61.525)</td>
+<td align="left">2024 (1745.475-2386.65)</td>
+<td align="left">477 (408-568)</td>
+<td align="left">383.5 (338.375-465.35)</td>
+<td align="left">167.5 (138.375-190.1)</td>
+<td align="left">185 (154-226.15)</td>
+<td align="left">92.5 (77-115.525)</td>
+<td align="left">101 (82.95-129.675)</td>
+<td align="left">58 (52-66)</td>
+<td align="left">53 (47-62)</td>
 <td align="left">40 (40-40)</td>
-<td align="left">3306 (2908.9-3784.25)</td>
+<td align="left">3567 (3132.75-4229.2)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">65 (61-68)</td>
-<td align="left">148 (134.95-165.525)</td>
-<td align="left">79 (62.375-103.525)</td>
-<td align="left">212 (171.475-249.05)</td>
-<td align="left">119 (51.9-190.525)</td>
-<td align="left">313 (224.075-409.525)</td>
-<td align="left">257 (144.425-421.4)</td>
-<td align="left">727.5 (538.475-959.924999999999)</td>
-<td align="left">313 (42.575-621.375)</td>
-<td align="left">1592.5 (802.425-2584.075)</td>
-<td align="left">3864.5 (3216.15-4890.45)</td>
+<td align="left">70 (67-74)</td>
+<td align="left">172 (155-188.525)</td>
+<td align="left">86 (65.475-112.575)</td>
+<td align="left">278 (229.95-334.675)</td>
+<td align="left">121 (45.75-190.05)</td>
+<td align="left">439 (326.025-537.875)</td>
+<td align="left">199 (50.575-338.575)</td>
+<td align="left">744.5 (555.95-966.25)</td>
+<td align="left">500.5 (187.05-882.575)</td>
+<td align="left">2036 (1257.95-3155.05)</td>
+<td align="left">4596.5 (3902.35-5812.125)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 6348 (5582.675-7427.15)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 7190.5 (6298-8532.275)</p>
 </div>
 <div id="full-summary-of-the-three-methods-1" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3062,21 +3067,21 @@ summaryMat3_NO &lt;-<span class="st"> </span>simulSurv3_NO[[<span class="dv">1</
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">13336</td>
-<td align="right">12555.425</td>
-<td align="right">14065.775</td>
+<td align="right">14459.5</td>
+<td align="right">13541.42</td>
+<td align="right">15790.525</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">6348</td>
-<td align="right">5582.675</td>
-<td align="right">7427.150</td>
+<td align="right">7190.5</td>
+<td align="right">6298.00</td>
+<td align="right">8532.275</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">3096</td>
-<td align="right">2610.750</td>
-<td align="right">3800.825</td>
+<td align="right">3374.5</td>
+<td align="right">2962.95</td>
+<td align="right">4149.075</td>
 </tr>
 </tbody>
 </table>
@@ -3163,7 +3168,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="left">71 (70-72)</td>
+<td align="left">73 (72-75)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3171,7 +3176,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">2625 (2214.725-3290.225)</td>
+<td align="left">2670 (2314-3157.6)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3179,7 +3184,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">512.5 (479.475-548.575)</td>
+<td align="left">550.5 (506.85-594.525)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3187,7 +3192,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">155 (151-159.525)</td>
+<td align="left">159 (153-165)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3195,7 +3200,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">1871 (1602-2185)</td>
+<td align="left">1899 (1684.275-2192.875)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3203,7 +3208,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">469 (437.95-499.525)</td>
+<td align="left">499 (478.425-542.775)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3211,7 +3216,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">1332.5 (1196.825-1528.2)</td>
+<td align="left">1610 (1427-1861.1)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3219,7 +3224,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">1076 (982.85-1226.475)</td>
+<td align="left">1170 (1029.425-1297)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3227,7 +3232,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">2789 (2460-3359)</td>
+<td align="left">3063 (2613.45-3635.1)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3235,7 +3240,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">827 (761.375-899.575)</td>
+<td align="left">971 (868.375-1060.025)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3243,7 +3248,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">3433 (2800.875-4251.45)</td>
+<td align="left">3857 (3219.35-5000)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3251,7 +3256,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">214 (207-223)</td>
+<td align="left">216 (209.475-224)</td>
 <td align="right">46</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3260,7 +3265,7 @@ prop2DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 15236 (14025.83-16590.28)</li>
+<li>Median Number of patients necessary with CI: 16476 (15482.2-18165.57)</li>
 </ul>
 </div>
 <div id="optimal-1" class="section level4">
@@ -3307,8 +3312,8 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <th align="left">Immune Checkpoint Inhibitor</th>
 <th align="left">MET inhibitor</th>
 <th align="left">HER2 inhibitor</th>
-<th align="left">EGFR inhibitor</th>
 <th align="left">ALK inhibitor</th>
+<th align="left">EGFR inhibitor</th>
 <th align="left">BRAF inhibitor</th>
 <th align="left">NOTCH inhibitor</th>
 <th align="left">PARP inhibitor</th>
@@ -3320,9 +3325,8 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">4376 (163.725-5510.425)</td>
-<td align="left">0 (0-4043.625)</td>
-<td align="left">0 (0-356.1)</td>
+<td align="left">5216.5 (339.4-6205.45)</td>
+<td align="left">0 (0-4444.475)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3330,27 +3334,27 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">4476 (3861-5510.425)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">5251 (4425-6205.45)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">58 (58-63.525)</td>
-<td align="left">65 (58-87.525)</td>
-<td align="left">70 (58-89.05)</td>
-<td align="left">102.5 (85.475-136.525)</td>
-<td align="left">117 (94.475-143.05)</td>
-<td align="left">153.5 (127.475-199.05)</td>
-<td align="left">206 (172-262.15)</td>
-<td align="left">318 (262.475-396.1)</td>
-<td align="left">304 (254-381.775)</td>
-<td align="left">934.5 (796.425-1155.825)</td>
-<td align="left">2324 (2009.425-2862.625)</td>
+<td align="left">58 (58-60.525)</td>
+<td align="left">72 (58-97.2499999999999)</td>
+<td align="left">81 (63.475-108.575)</td>
+<td align="left">110 (86-135.05)</td>
+<td align="left">117 (99-145.1)</td>
+<td align="left">161.5 (132.95-208.2)</td>
+<td align="left">204 (167.95-250.575)</td>
+<td align="left">353.5 (302.95-431.625)</td>
+<td align="left">335 (276.475-409.15)</td>
+<td align="left">1098 (917.775-1321.025)</td>
+<td align="left">2598.5 (2199.4-3083.525)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">2073 (77.725-2667.325)</td>
-<td align="left">0 (0-1931.45)</td>
-<td align="left">0 (0-172.075)</td>
+<td align="left">2604 (171.125-3148.575)</td>
+<td align="left">0 (0-2229.75)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3358,13 +3362,14 @@ prop2summaryMat2 &lt;-<span class="st"> </span>simulprop2[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">2142.5 (1829.475-2667.325)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">2641.5 (2225.4-3148.575)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value): 4476 (3861-5510.425)</p>
+<p>Number of patients necessary under optimal design (median value): 5251 (4425-6205.45)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 70.62%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 68.13%</p>
 </div>
 <div id="priority-non-optimal-2" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -3423,49 +3428,49 @@ prop2summaryMat2_NO &lt;-<span class="st"> </span>simulprop2_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">195.5 (189.475-202)</td>
-<td align="left">444 (409-493.3)</td>
-<td align="left">239.5 (201.95-299.05)</td>
-<td align="left">652.5 (573.95-744.675)</td>
-<td align="left">371 (196.825-576.4)</td>
-<td align="left">923 (682.55-1192.4)</td>
-<td align="left">867.5 (442.875-1362.675)</td>
-<td align="left">2191.5 (1529.225-3122.825)</td>
-<td align="left">1025 (146.3-1833.775)</td>
-<td align="left">2320.5 (1327.225-3449.55)</td>
-<td align="left">9269 (7875.525-10628.3)</td>
+<td align="left">200 (193.95-206)</td>
+<td align="left">491 (444.225-530.525)</td>
+<td align="left">251 (171.325-308.25)</td>
+<td align="left">804.5 (662.025-986.175)</td>
+<td align="left">340.5 (112.85-546)</td>
+<td align="left">1232 (950.775-1628.025)</td>
+<td align="left">583.5 (149.225-1170.5)</td>
+<td align="left">2053.5 (1484.45-2710.15)</td>
+<td align="left">1510 (616.9-2254.8)</td>
+<td align="left">2974 (1865.025-4383.975)</td>
+<td align="left">10430 (9256.7-12465.325)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">2662.5 (2281.225-3056.55)</td>
-<td align="left">655.5 (553.375-756.4)</td>
-<td align="left">521.5 (428.95-605.525)</td>
-<td align="left">245.5 (208.475-286.575)</td>
-<td align="left">253 (211.275-313)</td>
-<td align="left">148 (120.475-177.525)</td>
-<td align="left">132 (108.9-159.525)</td>
-<td align="left">76.5 (67-88.525)</td>
-<td align="left">75 (66.475-86)</td>
-<td align="left">58 (58-58.525)</td>
-<td align="left">4822 (4135.275-5472.925)</td>
+<td align="left">2934 (2583.375-3480.975)</td>
+<td align="left">698 (589.225-824.525)</td>
+<td align="left">563 (476.9-662.575)</td>
+<td align="left">240 (202.475-285.675)</td>
+<td align="left">267.5 (225.95-326)</td>
+<td align="left">135 (114-161.625)</td>
+<td align="left">146 (119.475-180.05)</td>
+<td align="left">84 (74.95-99)</td>
+<td align="left">76 (68.475-90.625)</td>
+<td align="left">58 (58-59)</td>
+<td align="left">5182.5 (4577.85-6101.3)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">95 (90-99)</td>
-<td align="left">212.5 (196.475-237.525)</td>
-<td align="left">115 (96.475-145.525)</td>
-<td align="left">312.5 (275.475-356.575)</td>
-<td align="left">178 (93.65-277.725)</td>
-<td align="left">443 (325.8-570.975)</td>
-<td align="left">421.5 (210.85-664.525)</td>
-<td align="left">1053 (737.75-1495.35)</td>
-<td align="left">492.5 (70.7-883.525)</td>
-<td align="left">2287 (1305.9-3410.175)</td>
-<td align="left">5578 (4486.425-6855.65)</td>
+<td align="left">101 (96.475-106)</td>
+<td align="left">246.5 (220.9-268.525)</td>
+<td align="left">126.5 (87.425-155.625)</td>
+<td align="left">405.5 (331.475-500.775)</td>
+<td align="left">170.5 (57.425-277)</td>
+<td align="left">616.5 (470.7-824.025)</td>
+<td align="left">291.5 (75.825-584.625)</td>
+<td align="left">1037 (746.5-1362.175)</td>
+<td align="left">753.5 (313.35-1146.525)</td>
+<td align="left">2939 (1840.55-4341.925)</td>
+<td align="left">6619 (5584.175-8361.175)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 6348 (5582.675-7427.15)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 7190.5 (6298-8532.275)</p>
 </div>
 <div id="full-summary-of-the-three-methods-2" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3493,21 +3498,21 @@ prop2summaryMat2_NO &lt;-<span class="st"> </span>simulprop2_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">15235.5</td>
-<td align="right">14025.825</td>
-<td align="right">16590.275</td>
+<td align="right">16475.5</td>
+<td align="right">15482.2</td>
+<td align="right">18165.58</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">9269.0</td>
-<td align="right">7875.525</td>
-<td align="right">10628.300</td>
+<td align="right">10430.0</td>
+<td align="right">9256.7</td>
+<td align="right">12465.33</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">4476.0</td>
-<td align="right">3861.000</td>
-<td align="right">5510.425</td>
+<td align="right">5251.0</td>
+<td align="right">4425.0</td>
+<td align="right">6205.45</td>
 </tr>
 </tbody>
 </table>
@@ -3592,7 +3597,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 <tbody>
 <tr class="odd">
 <td align="left">Full Design</td>
-<td align="left">20 (20-21)</td>
+<td align="left">21 (21-21)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3600,7 +3605,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">HER2 inhibitor</td>
-<td align="left">742 (633.375-915.25)</td>
+<td align="left">775 (654.275-901)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3608,7 +3613,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">PARP inhibitor</td>
-<td align="left">145.5 (135-154)</td>
+<td align="left">155 (146-166.525)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3616,7 +3621,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">AKT inhibitor</td>
-<td align="left">44 (43-46)</td>
+<td align="left">45 (44-47)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3624,7 +3629,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">EGFR inhibitor</td>
-<td align="left">526 (458.8-654)</td>
+<td align="left">532 (475.125-618)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3632,7 +3637,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">FGFR inhibitor</td>
-<td align="left">133 (124.475-140)</td>
+<td align="left">144 (131-157.05)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3640,7 +3645,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">ALK inhibitor</td>
-<td align="left">383.5 (347.95-428.15)</td>
+<td align="left">455 (402-505.15)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3648,7 +3653,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">BRAF inhibitor</td>
-<td align="left">308 (273-344.525)</td>
+<td align="left">329.5 (294.8-377.2)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3656,7 +3661,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">MET inhibitor</td>
-<td align="left">789 (679.225-945.25)</td>
+<td align="left">866 (720.85-1098.525)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3664,7 +3669,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">NOTCH inhibitor</td>
-<td align="left">235 (210.95-259.675)</td>
+<td align="left">275 (249.475-301.575)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3672,7 +3677,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="odd">
 <td align="left">Immune Checkpoint Inhibitor</td>
-<td align="left">981 (798.975-1236.775)</td>
+<td align="left">1104 (924.75-1360.05)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3680,7 +3685,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tr>
 <tr class="even">
 <td align="left">no_drug</td>
-<td align="left">61 (58-63)</td>
+<td align="left">61 (59-63)</td>
 <td align="right">13</td>
 <td align="right">0.2</td>
 <td align="right">0.8</td>
@@ -3689,7 +3694,7 @@ prop3DF &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span c
 </tbody>
 </table>
 <ul>
-<li>Median Number of patients necessary with CI: 4288 (4026.325-4688.55)</li>
+<li>Median Number of patients necessary with CI: 4698 (4349.375-5085.925)</li>
 </ul>
 </div>
 <div id="optimal-2" class="section level4">
@@ -3748,9 +3753,8 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">1208 (62.425-1479.5)</td>
-<td align="left">0 (0-1163.425)</td>
-<td align="left">0 (0-65.3499999999999)</td>
+<td align="left">1376 (60.875-1712.175)</td>
+<td align="left">0 (0-1230.75)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3758,27 +3762,27 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">1232 (1057.85-1479.5)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">1396.5 (1146.375-1712.175)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">16 (16-18)</td>
-<td align="left">18 (16-24)</td>
-<td align="left">20 (16-26)</td>
-<td align="left">29 (22-36.05)</td>
-<td align="left">32 (26-39.525)</td>
-<td align="left">44 (35.475-54)</td>
-<td align="left">57.5 (48-69.525)</td>
-<td align="left">87 (73.475-105.05)</td>
-<td align="left">84 (70.95-105)</td>
-<td align="left">258.5 (224.375-315)</td>
-<td align="left">641.5 (554.475-769.775)</td>
+<td align="left">16 (16-17.525)</td>
+<td align="left">19 (16-27.525)</td>
+<td align="left">22 (17-28)</td>
+<td align="left">32 (25-40)</td>
+<td align="left">30 (23-37.525)</td>
+<td align="left">43.5 (35-55.525)</td>
+<td align="left">54 (43-69.525)</td>
+<td align="left">94 (79.475-120.05)</td>
+<td align="left">88.5 (73-113.725)</td>
+<td align="left">296.5 (239-364.05)</td>
+<td align="left">696 (572.95-856.25)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">579 (29.475-717.5)</td>
-<td align="left">0 (0-553.925)</td>
-<td align="left">0 (0-31.6749999999999)</td>
+<td align="left">695 (31.175-864.05)</td>
+<td align="left">0 (0-619.425)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
@@ -3786,13 +3790,14 @@ prop3summaryMat2 &lt;-<span class="st"> </span>simulprop3[[<span class="dv">1</s
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
 <td align="left">0 (0-0)</td>
-<td align="left">587.5 (507.475-717.5)</td>
+<td align="left">0 (0-0)</td>
+<td align="left">698.5 (572.9-864.05)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under optimal design (median value): 1232 (1057.85-1479.5)</p>
+<p>Number of patients necessary under optimal design (median value): 1396.5 (1146.375-1712.175)</p>
 <p>Basically the number of samples screened for Immune check inhibitor, that is targetable only in a very small number of patients, is sufficient to cover all the other drugs in most of the cases.</p>
-<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 71.27%</p>
+<p>The percentage of samples saved from passing from a non optimal (all drugs separated) to an optimal design (all drugs evaluated together) is 70.27%</p>
 </div>
 <div id="priority-non-optimal-3" class="section level4">
 <h4>PRIORITY NON OPTIMAL</h4>
@@ -3850,49 +3855,49 @@ prop3summaryMat2_NO &lt;-<span class="st"> </span>simulprop3_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td>Screened</td>
-<td align="left">54 (52-56)</td>
-<td align="left">123 (111.475-136.1)</td>
-<td align="left">67.5 (52.475-83.525)</td>
-<td align="left">179 (142.95-214.15)</td>
-<td align="left">110 (54.9-161.05)</td>
-<td align="left">262.5 (202.425-336.1)</td>
-<td align="left">233.5 (132.475-339.05)</td>
-<td align="left">588 (410.3-800.375)</td>
-<td align="left">283 (77.275-546.075)</td>
-<td align="left">623.5 (347.8-945.975)</td>
-<td align="left">2540.5 (2237.425-2885.975)</td>
+<td align="left">56 (53.475-58)</td>
+<td align="left">137 (122.475-154)</td>
+<td align="left">68.5 (48.475-82)</td>
+<td align="left">223.5 (189.425-262.525)</td>
+<td align="left">88.5 (21.425-148.05)</td>
+<td align="left">339 (245.375-420.525)</td>
+<td align="left">163.5 (28.325-316.725)</td>
+<td align="left">563.5 (398.375-791.625)</td>
+<td align="left">399 (211.425-657.1)</td>
+<td align="left">810 (498.45-1215.95)</td>
+<td align="left">2876 (2532.9-3428.65)</td>
 </tr>
 <tr class="even">
 <td>Eligible</td>
-<td align="left">734 (636.9-839.25)</td>
-<td align="left">179 (155.475-202.575)</td>
-<td align="left">141 (120.95-165.05)</td>
-<td align="left">69 (58.95-82.525)</td>
-<td align="left">70 (58.475-81.525)</td>
-<td align="left">40 (33.475-47)</td>
-<td align="left">36 (31-44.1)</td>
-<td align="left">22 (19-25)</td>
-<td align="left">21 (19-23.525)</td>
+<td align="left">807.5 (697-984.05)</td>
+<td align="left">187.5 (159-223.575)</td>
+<td align="left">152 (132-182.1)</td>
+<td align="left">67 (53.425-78)</td>
+<td align="left">76 (62.475-88.525)</td>
+<td align="left">38 (32-47.525)</td>
+<td align="left">41 (32.475-50)</td>
+<td align="left">24 (20-27)</td>
+<td align="left">21 (19-25)</td>
 <td align="left">16 (16-16)</td>
-<td align="left">1330 (1167.7-1511.075)</td>
+<td align="left">1423.5 (1254.375-1696.15)</td>
 </tr>
 <tr class="odd">
 <td>Not.Eligible</td>
-<td align="left">27 (25-28)</td>
-<td align="left">59.5 (53-65.525)</td>
-<td align="left">33 (25-40.525)</td>
-<td align="left">85.5 (68.475-102.1)</td>
-<td align="left">52 (26.95-77.575)</td>
-<td align="left">126.5 (97-161.05)</td>
-<td align="left">112 (63.475-163.525)</td>
-<td align="left">279.5 (194.275-388.125)</td>
-<td align="left">135.5 (37.375-258.625)</td>
-<td align="left">615.5 (342.275-934.45)</td>
-<td align="left">1522.5 (1292.75-1881.175)</td>
+<td align="left">29 (27-30)</td>
+<td align="left">70 (62-78)</td>
+<td align="left">35 (24.475-41)</td>
+<td align="left">113 (93.95-133.525)</td>
+<td align="left">45 (10.95-74.525)</td>
+<td align="left">171.5 (122.95-211.05)</td>
+<td align="left">83.5 (14.9-160.05)</td>
+<td align="left">286 (202.925-399.525)</td>
+<td align="left">202 (105.475-333.2)</td>
+<td align="left">800 (490.975-1204.9)</td>
+<td align="left">1830.5 (1525.85-2281.95)</td>
 </tr>
 </tbody>
 </table>
-<p>Number of patients necessary under non optimal priority design (median value with CI): 2540.5 (2237.425-2885.975)</p>
+<p>Number of patients necessary under non optimal priority design (median value with CI): 2876 (2532.9-3428.65)</p>
 </div>
 <div id="full-summary-of-the-three-methods-3" class="section level4">
 <h4>FULL SUMMARY OF THE THREE METHODS</h4>
@@ -3920,21 +3925,21 @@ prop3summaryMat2_NO &lt;-<span class="st"> </span>simulprop3_NO[[<span class="dv
 <tbody>
 <tr class="odd">
 <td align="left">Indipendent</td>
-<td align="right">4288.0</td>
-<td align="right">4026.325</td>
-<td align="right">4688.550</td>
+<td align="right">4697.5</td>
+<td align="right">4349.375</td>
+<td align="right">5085.925</td>
 </tr>
 <tr class="even">
 <td align="left">Priority Non Optimal</td>
-<td align="right">2540.5</td>
-<td align="right">2237.425</td>
-<td align="right">2885.975</td>
+<td align="right">2876.0</td>
+<td align="right">2532.900</td>
+<td align="right">3428.650</td>
 </tr>
 <tr class="odd">
 <td align="left">Priority Optimal</td>
-<td align="right">1232.0</td>
-<td align="right">1057.850</td>
-<td align="right">1479.500</td>
+<td align="right">1396.5</td>
+<td align="right">1146.375</td>
+<td align="right">1712.175</td>
 </tr>
 </tbody>
 </table>
@@ -3977,13 +3982,13 @@ gsampSizeMethods</code></pre></div>
 <h2>Session info</h2>
 <p>For reproducibility purpose:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.3 (2017-11-30)
+<pre><code>## R version 3.5.0 Patched (2018-06-01 r74839)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
-## Running under: macOS Sierra 10.12.6
+## Running under: macOS High Sierra 10.13.3
 ## 
 ## Matrix products: default
-## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -3993,55 +3998,56 @@ gsampSizeMethods</code></pre></div>
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] gdtools_0.1.7                 svglite_1.2.1                
-## [3] bindrcpp_0.2                  readxl_1.0.0                 
-## [5] ggplot2_2.2.1.9000            DT_0.4                       
-## [7] knitr_1.20                    PrecisionTrialDesigner_0.99.0
-## [9] BiocStyle_2.4.1              
+## [1] gdtools_0.1.7               svglite_1.2.1              
+## [3] bindrcpp_0.2.2              readxl_1.1.0               
+## [5] ggplot2_2.2.1               DT_0.4                     
+## [7] knitr_1.20                  PrecisionTrialDrawer_0.99.0
+## [9] BiocStyle_2.8.2            
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Biobase_2.36.2           httr_1.3.1              
-##  [3] tidyr_0.8.0              bit64_0.9-7             
-##  [5] jsonlite_1.5             shiny_1.0.5             
+##  [1] Biobase_2.40.0           httr_1.3.1              
+##  [3] tidyr_0.8.1              bit64_0.9-7             
+##  [5] jsonlite_1.5             shiny_1.1.0             
 ##  [7] assertthat_0.2.0         LowMACAAnnotation_0.99.3
-##  [9] highr_0.6                stats4_3.4.3            
-## [11] blob_1.1.0               GenomeInfoDbData_0.99.0 
-## [13] cellranger_1.1.0         yaml_2.1.17             
-## [15] progress_1.1.2           ggrepel_0.7.0           
-## [17] pillar_1.2.1             RSQLite_2.0             
+##  [9] highr_0.7                stats4_3.5.0            
+## [11] blob_1.1.1               GenomeInfoDbData_1.1.0  
+## [13] cellranger_1.1.0         yaml_2.1.19             
+## [15] progress_1.1.2           ggrepel_0.8.0           
+## [17] pillar_1.2.3             RSQLite_2.1.1           
 ## [19] backports_1.1.2          glue_1.2.0              
-## [21] digest_0.6.15            GenomicRanges_1.28.6    
-## [23] RColorBrewer_1.1-2       XVector_0.16.0          
-## [25] cgdsr_1.2.10             colorspace_1.3-2        
-## [27] htmltools_0.3.6          httpuv_1.3.6.1          
-## [29] R.oo_1.21.0              plyr_1.8.4              
-## [31] XML_3.98-1.10            pkgconfig_2.0.1         
-## [33] biomaRt_2.35.11          zlibbioc_1.22.0         
-## [35] purrr_0.2.4              xtable_1.8-2            
-## [37] scales_0.5.0.9000        brglm_0.6.1             
-## [39] BiocParallel_1.10.1      tibble_1.4.2            
-## [41] IRanges_2.10.5           BiocGenerics_0.22.1     
-## [43] lazyeval_0.2.1           magrittr_1.5            
-## [45] mime_0.5                 memoise_1.1.0           
-## [47] evaluate_0.10.1          R.methodsS3_1.7.1       
-## [49] tools_3.4.3              data.table_1.10.4-3     
-## [51] prettyunits_1.0.2        hms_0.4.1               
-## [53] stringr_1.3.0            googleVis_0.6.3         
-## [55] S4Vectors_0.14.7         munsell_0.4.3           
-## [57] AnnotationDbi_1.38.2     compiler_3.4.3          
-## [59] GenomeInfoDb_1.12.3      profileModel_0.5-9      
-## [61] rlang_0.2.0              grid_3.4.3              
-## [63] RCurl_1.95-4.10          htmlwidgets_1.0         
-## [65] crosstalk_1.0.1          bitops_1.0-6            
-## [67] shinyBS_0.61             labeling_0.3            
-## [69] rmarkdown_1.8            testthat_2.0.0          
-## [71] gtable_0.2.0             codetools_0.2-15        
-## [73] DBI_0.7                  curl_3.1                
-## [75] reshape2_1.4.3           R6_2.2.2                
-## [77] dplyr_0.7.4              bit_1.1-12              
-## [79] bindr_0.1                rprojroot_1.3-2         
-## [81] readr_1.1.1              stringi_1.1.6           
-## [83] Rcpp_0.12.15             tidyselect_0.2.4</code></pre>
+## [21] digest_0.6.15            GenomicRanges_1.32.3    
+## [23] RColorBrewer_1.1-2       promises_1.0.1          
+## [25] XVector_0.20.0           cgdsr_1.2.10            
+## [27] colorspace_1.3-2         htmltools_0.3.6         
+## [29] httpuv_1.4.3             R.oo_1.22.0             
+## [31] plyr_1.8.4               pkgconfig_2.0.1         
+## [33] XML_3.98-1.11            biomaRt_2.36.1          
+## [35] zlibbioc_1.26.0          purrr_0.2.5             
+## [37] xtable_1.8-2             scales_0.5.0            
+## [39] later_0.7.3              brglm_0.6.1             
+## [41] BiocParallel_1.14.1      tibble_1.4.2            
+## [43] IRanges_2.14.10          BiocGenerics_0.26.0     
+## [45] lazyeval_0.2.1           magrittr_1.5            
+## [47] mime_0.5                 memoise_1.1.0           
+## [49] evaluate_0.10.1          R.methodsS3_1.7.1       
+## [51] tools_3.5.0              data.table_1.11.4       
+## [53] prettyunits_1.0.2        hms_0.4.2               
+## [55] stringr_1.3.1            googleVis_0.6.2         
+## [57] S4Vectors_0.18.3         munsell_0.5.0           
+## [59] AnnotationDbi_1.42.1     compiler_3.5.0          
+## [61] GenomeInfoDb_1.16.0      profileModel_0.5-9      
+## [63] rlang_0.2.1              grid_3.5.0              
+## [65] RCurl_1.95-4.10          htmlwidgets_1.2         
+## [67] crosstalk_1.0.0          bitops_1.0-6            
+## [69] shinyBS_0.61             labeling_0.3            
+## [71] rmarkdown_1.10           testthat_2.0.0          
+## [73] gtable_0.2.0             codetools_0.2-15        
+## [75] DBI_1.0.0                curl_3.2                
+## [77] reshape2_1.4.3           R6_2.2.2                
+## [79] dplyr_0.7.5              bit_1.1-14              
+## [81] bindr_0.1.1              rprojroot_1.3-2         
+## [83] readr_1.1.1              stringi_1.2.2           
+## [85] Rcpp_0.12.17             tidyselect_0.2.4</code></pre>
 <!-- ```{r, eval=FALSE, echo=FALSE} -->
 <!-- ## DELETE THIS PART!!!!!!!!!!!! -->
 <!-- myPATH <- "~/Desktop/cosmic_18_maggio_2017" -->

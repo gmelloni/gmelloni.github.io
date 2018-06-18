@@ -13,3 +13,4 @@ RnwWeave: knitr
 LaTeX: pdfLaTeX
 
 BuildType: Website
+WebsitePath: ~/Dropbox/git_guida/PTDwebpage/gmelloni.github.io/ptd

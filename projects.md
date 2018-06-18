@@ -3,7 +3,7 @@ title: Projects
 layout: page
 ---
 
-### [Precision Trial Designer](https://gmelloni.github.io/ptd)
+### [Precision Trial Drawer](https://gmelloni.github.io/ptd)
 
 <div style="text-align:center">
 <a href="https://gmelloni.github.io/ptd">

@@ -197,7 +197,7 @@ library(DT)
 library(knitr)
 library(ggplot2)
 library(readxl)
-library(PrecisionTrialDesigner)
+library(PrecisionTrialDrawer)
 
 # Helper functions
 `%++%` <- function(a,b) paste0(c(a,b), collapse = " ")

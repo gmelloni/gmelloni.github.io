@@ -28,7 +28,7 @@ Riva L, Ronchini C, Bodini M, Lo-Coco F, Lavorgna S, Ottone T, Martinelli G, Iac
 
 # On the run
 
-**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Designer (PTD): a bioinformatic tool to aid in the design of genetic biomarker-driven clinical trials (under review in *JCO - Precision Oncology*)
+**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Drawer, a Computational Tool to Assist Planning of Genomics-Driven Trials in Oncology (accepted in *JCO - Precision Oncology*)
 
 Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, **Melloni G**, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E Very low depth whole genome sequencing in complex trait association studies, bioRxiv (2017) doi: https://doi.org/10.1101/169789 [](http://www.biorxiv.org/content/early/2017/07/28/169789) )
 
@@ -36,4 +36,4 @@ Dellino G, Palluzzi F, Piccioni R, Furia L, **Melloni GEM**, Guido D, Giacò L, 
 
 Santoro A, Vlachou T, Luzi L, Pasi C, Reavie L, **Melloni G**, Bonetti P, D'Elia E, Casoli L, Sabò A, Nicassio F, Moroni M, Dellino G, Amati, B, Pelicci PG. Loss of p53 in breast cancer leads to Myc activation and reprogramming of cancer stem cells (under review in *Cell Reports*)
 
-Gilly A, Suveges D, Kuchenbaecker K, Pollard M, Southam L, Hatzikotoulas K, Farmaki AE, Bjornland T, Waples R, Appel EVR, Casalone E, **Melloni G**, Killian B, Rayner NW, Ntallia I, Kundu K, Walter K, Danesh J, Butterworth A, Barroso I, Tsafantakis E, Dedoussis G, Moltke I, Zeggini E Insights into the allelic architecture of complex trait loci from cohort-wide whole genome sequencing (submitted)
+Gilly A, Suveges D, Kuchenbaecker K, Pollard M, Southam L, Hatzikotoulas K, Farmaki AE, Bjornland T, Waples R, Appel EVR, Casalone E, **Melloni G**, Killian B, Rayner NW, Ntallia I, Kundu K, Walter K, Danesh J, Butterworth A, Barroso I, Tsafantakis E, Dedoussis G, Moltke I, Zeggini E Cohort-wide deep whole genome sequencing and the allelic architecture of complex traits bioRxiv (2018) doi: https://doi.org/10.1101/283481

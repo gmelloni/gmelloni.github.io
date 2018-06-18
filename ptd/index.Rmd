@@ -1,5 +1,5 @@
 ---
-title: "Precision Trial Designer"
+title: "Precision Trial Drawer"
 ---
 
 <link rel="icon" type="image/ico" href="images/ptd2.png"/>
@@ -19,7 +19,7 @@ cases useless in the clinical practice and in addition
 too expensive. 
 
 To bridge the gap between cancer research 
-and clinical genomics, we propose **PrecisionTrialDesigner**, 
+and clinical genomics, we propose **PrecisionTrialDrawer**, 
 a suite of tools to explore the ability of cancer gene panels 
 to be used in clinical trials.
 
