@@ -5,6 +5,14 @@ layout: page
 
 # Out
 
+**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Drawer (PTD): a computational tool to assist planning of genomics-driven trials in oncology (accepted in *JCO – Precision Oncology*)
+
+**GEM Melloni**, G. Ukmar, L. Raddrizzani, P. Rossi, S. Di Bella, M. R. Pirchio, M. Vescovi, A. Leone, M. Callari, M. Cesarini, A. Somaschini, G. Della Vedova, MG Daidone, M. Pettenella, A. Isacchi, and R. Bosotti PATRI, a Genomics Data Integration Tool for Biomarker Discovery *BioMed Research International* (2018), Article ID 2012078 https://doi.org/10.1155/2018/2012078
+
+Gilly A, Suveges D, Kuchenbaecker K, Pollard M, Southam L, Hatzikotoulas K, Farmaki AE, Bjornland T, Waples R, Appel EVR, Casalone E, **Melloni G**, Killian B, Rayner NW, Ntallia I, Kundu K, Walter K, Danesh J, Butterworth A, Barroso I, Tsafantakis E, Dedoussis G, Moltke I, Zeggini E Cohort-wide deep whole genome sequencing and the allelic architecture of complex traits *bioRxiv* (2018) doi: https://doi.org/10.1101/283481
+
+Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, **Melloni G**, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E Very low depth whole genome sequencing in complex trait association studies, bioRxiv (2017) doi: https://doi.org/10.1101/169789 [](http://www.biorxiv.org/content/early/2017/07/28/169789) )
+
 Sanarico AG, Ronchini C, Croce A, Memmi E, Cammarata UA, De Antoni A, Larvogna S, Divona M, Giacò L, **Melloni GEM**, Lo Coco F, Melino G, Pelicci PG and Bernassola F The E3 ubiquitin ligase WWP1 sustains the growth of acute myeloid leukemia. *Leukemia* (2017) http://dx.doi.org/10.1038/leu.2017.342
 
 Richichi C, Fornasari L, **Melloni GEM**, Brescia P, Patanè M, Del Bene M, Mustafa DAM, Kros JM, Pollo B, Pruneri G, Sciandivasci A, Munzone E, DiMeco F, Pelicci PG, Riva L, Pelicci G. Mutations targeting the coagulation pathway are enriched in brain metastases *Scientific Reports* 7, Article number: 6573 (2017) doi:10.1038/s41598-017-06811-x
@@ -28,12 +36,6 @@ Riva L, Ronchini C, Bodini M, Lo-Coco F, Lavorgna S, Ottone T, Martinelli G, Iac
 
 # On the run
 
-**Melloni GEM**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Pelicci PG and Mazzarella L. Precision Trial Drawer, a Computational Tool to Assist Planning of Genomics-Driven Trials in Oncology (accepted in *JCO - Precision Oncology*)
-
-Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, **Melloni G**, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E Very low depth whole genome sequencing in complex trait association studies, bioRxiv (2017) doi: https://doi.org/10.1101/169789 [](http://www.biorxiv.org/content/early/2017/07/28/169789) )
-
 Dellino G, Palluzzi F, Piccioni R, Furia L, **Melloni GEM**, Guido D, Giacò L, Luzi L, Cittaro D, Faretta M, Crosetto N and Pelicci PG. Unresolved Double Strand Breaks in normal mammary cells are enriched at specific promoter regions and overlap with breakpoints of breast-cancer associated translocations (submitted)
 
 Santoro A, Vlachou T, Luzi L, Pasi C, Reavie L, **Melloni G**, Bonetti P, D'Elia E, Casoli L, Sabò A, Nicassio F, Moroni M, Dellino G, Amati, B, Pelicci PG. Loss of p53 in breast cancer leads to Myc activation and reprogramming of cancer stem cells (under review in *Cell Reports*)
-
-Gilly A, Suveges D, Kuchenbaecker K, Pollard M, Southam L, Hatzikotoulas K, Farmaki AE, Bjornland T, Waples R, Appel EVR, Casalone E, **Melloni G**, Killian B, Rayner NW, Ntallia I, Kundu K, Walter K, Danesh J, Butterworth A, Barroso I, Tsafantakis E, Dedoussis G, Moltke I, Zeggini E Cohort-wide deep whole genome sequencing and the allelic architecture of complex traits bioRxiv (2018) doi: https://doi.org/10.1101/283481
