@@ -6,6 +6,6 @@
 knitr::include_graphics("images/unlock.png")
 ```
 
-<iframe src="http://ec2-13-58-167-5.us-east-2.compute.amazonaws.com:3838/PTD_studio/" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:50px;left:0px;right:0px;bottom:0px;" height="100%" width="100%">
+<iframe src="https://shiny.bioinfo.ieo.it/app/ptd_studio" frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px;" height="100%" width="100%">
 <p> Sorry your browser does not support inline frames. </p>
 </iframe>
