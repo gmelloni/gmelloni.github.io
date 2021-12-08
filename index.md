@@ -5,11 +5,14 @@ layout: home
 
 <div style="text-align:center">
 <a href="https://gmelloni.github.io">
-<img src ="images/blueeyes_round.jpg" height="300"/>
+<img src ="images/blueeyes_paint.jpg" height="300"/>
 </a>
 </div>
 
 
 <div style="text-align:center">
-<i>Statistician, Bioinformatician, Curious about everything I don't know (yet) </i>
+<i>Statistician, 
+Bioinformatician, 
+Curious about everything I don't know (yet) 
+:)</i>
 </div>
