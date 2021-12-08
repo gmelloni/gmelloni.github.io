@@ -20,6 +20,8 @@ Confidence interval can be calculated via delta method or bootstrap.
 
 
 ----------------------
+----------------------
+
 
 ### [Precision Trial Drawer](https://gmelloni.github.io/ptd)
 
@@ -36,7 +38,7 @@ custom gene panels for cancer genomics clinical trials.
 ```
 
 
-
+----------------------
 ----------------------
 
 ### [LowMACA](http://cgsb.genomics.iit.it/wiki/projects/LowMACA)
@@ -55,10 +57,10 @@ mutational patterns of several genes that have a high level of sequence similari
 
 Available on [Bioconductor](http://www.bioconductor.org/packages/release/bioc/html/LowMACA.html)!
 
-**Melloni GE**, de Pretis S*, Riva L, Pelizzola M, Céol A, Costanza J, Müller H, Zammataro L 
-[LowMACA: exploiting protein family analysis for the identification of rare driver mutations in cancer.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7) 
-BMC Bioinformatics. 2016 Feb 9;17(1):80. doi: 10.1186/s12859-016-0935-7.
+**Melloni GE**, de Pretis S*, Riva L, Pelizzola M, Céol A, Costanza J, Müller H, Zammataro L [LowMACA: exploiting protein family analysis for the identification of rare driver mutations in cancer](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7) BMC Bioinformatics. 2016 Feb 9;17(1):80. doi: 10.1186/s12859-016-0935-7
 
+
+----------------------
 ----------------------
 
 ### [TransformPhenotype](https://github.com/gmelloni/transformPhenotype)
@@ -76,9 +78,8 @@ association studies
 
 Gilly A, Kuchenbaecker K, Southam L, Suveges D, Moore R, Melloni G, Hatzikotoulas K, Farmaki AE, Ritchie G, Schwartzentruber J, Danecek P, Kilian B, Pollard M, Ge X, Elding H, Astle W, Jiang T, Butterworth A, Soranzo N, Tsafantakis E, Karaleftheri M, Dedoussis G, Zeggini E [Very low depth whole genome sequencing in complex trait association studies](https://www.biorxiv.org/content/early/2017/07/28/169789), bioRxiv (2017) doi: https://doi.org/10.1101/169789 )
 
-<!-- [![](images/normalization_mod.png)](https://github.com/gmelloni/transformPhenotype) -->
 
-
+----------------------
 ----------------------
 
 ### [DOTS-Finder](http://cgsb.genomics.iit.it/wiki/projects/DOTS-Finder)
