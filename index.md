@@ -5,7 +5,7 @@ layout: home
 
 <div style="text-align:center">
 <a href="https://gmelloni.github.io">
-<img src ="images/blueeyes_round.png" height="300"/>
+<img src ="images/blueeyes_round.jpg" height="300"/>
 </a>
 </div>
 
