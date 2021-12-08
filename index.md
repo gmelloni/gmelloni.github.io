@@ -17,11 +17,11 @@ layout: home
 <br>
 
 <div style="text-align:center">
-<i>Statistician</i>
+<i>Data Scientist</i>
 <br>
 <i>Bioinformatician</i>
 <br>
 <i>Curious about everything I don't know (yet)</i> 
 <br>
-</i> :) </i>
+:)
 </div>
