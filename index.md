@@ -23,5 +23,6 @@ layout: home
 <br>
 <i>Curious about everything I don't know (yet)</i> 
 <br>
+<br>
 :)
 </div>
