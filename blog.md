@@ -14,7 +14,7 @@ layout: page
 </div>
 
 
-A tutorial on how to transform any interactive 
+For this first blog post, I'll show you a tutorial on how to transform any interactive 
 My Google Map into static printable maps with ggmap. 
 
 In this example, we will convert the 
@@ -23,11 +23,6 @@ into a simple, foldable map that any person without a smartphone can check.
 
 It was inspired by the amazing person 
 that created the map in the first place, so thank you Eva Rachel :)
-
-
-
-
-----------------------
 
 
 

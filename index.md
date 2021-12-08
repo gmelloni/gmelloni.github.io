@@ -24,5 +24,5 @@ layout: home
 <i>Curious about everything I don't know (yet)</i> 
 <br>
 <br>
-:)
+**<font size="+2"> :) </font>**
 </div>
