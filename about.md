@@ -3,7 +3,6 @@ title: About
 layout: page
 ---
 
-My name is Giorgio, currently postdoc and data scientist in [Park's Lab](https://compbio.hms.harvard.edu/) 
-at the [Department of Biomedical Informatics](https://dbmi.hms.harvard.edu/careers/postdoctoral-fellows/park-lab) at Harvard Medical School.
+My name is Giorgio, I am currently a Research Scientist at the [TIMI Study Group](https://timi.org/) at the Brigham and Women's Hospital in Boston and an Associate Scientist at the Broad Institute of Harvard and MIT for the [Ellinor Lab](https://www.ellinorlab.org/).
 
-I won't write that much here. Just posting my projects on github, gitlab or elsewhere!
+I started a blog, let's see how it goes :)

@@ -8,6 +8,7 @@ markdown: kramdown
 theme: minima
 
 header_pages:
+  - blog.md
   - projects.md
   - publications.md
   - about.md

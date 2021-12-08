@@ -3,6 +3,24 @@ title: Projects
 layout: page
 ---
 
+### [interactionHR](https://github.com/gmelloni/interactionHR)
+
+<div style="text-align:center">
+<a href="https://github.com/gmelloni/interactionHR">
+<img src="images/intHRplot.png" height="200" style="vertical-align:right" />
+</a>
+</div>
+
+```
+interactionHR is an R package to estimate hazard ratios 
+of a variable change when interacting with another variable.
+Simple interaction Cox models and restricted cubic spline are implemented.
+Confidence interval can be calculated via delta method or bootstrap.
+```
+
+
+----------------------
+
 ### [Precision Trial Drawer](https://gmelloni.github.io/ptd)
 
 <div style="text-align:center">
