@@ -31,6 +31,12 @@ Confidence interval can be calculated via delta method or bootstrap.
 </a>
 </div>
 
+Available on [Bioconductor](https://www.bioconductor.org/packages/devel/bioc/html/PrecisionTrialDrawer.html)!
+
+Full documentation and examples on the [PTD Official Page](https://gmelloni.github.io/ptd/)
+
+**Melloni GE**, Guida A, Curigliano G, Botteri E, Esposito A, Kamal M, Le Torneau C, Riva L, Magi A, de Maria R, Pelicci P, Mazzarella L (2018). [Precision Trial Drawer, a Computational Tool to Assist Planning of Genomics-Driven Trials in Oncology](https://ascopubs.org/doi/full/10.1200/PO.18.00015) JCO Precision Oncology. doi: 10.1200/PO.18.00015.
+
 ```
 PTD provides a series of tools that can help bioinformaticians, 
 clinicians and biostatisticians to design, analyze and finalize 
@@ -52,12 +58,13 @@ custom gene panels for cancer genomics clinical trials.
 ```
 LowMACA is a method able to assess specific characteristics of rarely 
 mutated genes that show patterns of positive selection by aggregating 
-mutational patterns of several genes that have a high level of sequence similarity 
+mutational patterns of several genes that have a 
+high level of sequence similarity 
 ```
 
 Available on [Bioconductor](http://www.bioconductor.org/packages/release/bioc/html/LowMACA.html)!
 
-**Melloni GE**, de Pretis S*, Riva L, Pelizzola M, Céol A, Costanza J, Müller H, Zammataro L [LowMACA: exploiting protein family analysis for the identification of rare driver mutations in cancer](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7) BMC Bioinformatics. 2016 Feb 9;17(1):80. doi: 10.1186/s12859-016-0935-7
+**Melloni GE**, de Pretis S, Riva L, Pelizzola M, Céol A, Costanza J, Müller H, Zammataro L [LowMACA: exploiting protein family analysis for the identification of rare driver mutations in cancer](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0935-7) BMC Bioinformatics. 2016 Feb 9;17(1):80. doi: 10.1186/s12859-016-0935-7
 
 
 ----------------------

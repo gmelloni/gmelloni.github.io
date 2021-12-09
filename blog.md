@@ -17,7 +17,7 @@ layout: page
 For this first blog post, I'll show you a tutorial on how to transform any interactive 
 My Google Map into static printable maps with ggmap. 
 
-In this example, we will convert the 
+We will convert the 
 [Cambridge Resources for People Experiencing Homelessness](https://www.google.com/maps/d/u/0/viewer?mid=1IqJfrCiNpjzX4qajcFOExhN3nRm_ZSeq&ll=42.37703477815819%2C-71.15098675&z=12) 
 into a simple, foldable map that any person without a smartphone can check.
 
