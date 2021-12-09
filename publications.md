@@ -11,7 +11,7 @@ layout: page
 
 ## 2021
 
-Cortés-Ciriano, I., Gulhan, D.C., Lee, J.JK., Melloni, G.E.M. & Park PJ [Computational analysis of cancer genome sequencing data](https://www.nature.com/articles/s41576-021-00431-y). *Nat Rev Genet* (2021). https://doi.org/10.1038/s41576-021-00431-y
+Cortés-Ciriano, I., Gulhan, D.C., Lee, J.JK., **Melloni, G.E.M**. & Park PJ [Computational analysis of cancer genome sequencing data](https://www.nature.com/articles/s41576-021-00431-y). *Nat Rev Genet* (2021). https://doi.org/10.1038/s41576-021-00431-y
 
 Nicholas A. Marston, Robert P. Giugliano, MD, **Giorgio E. M. Melloni, PhD** et al. [Association of Apolipoprotein B–Containing Lipoproteins and Risk of Myocardial Infarction in Individuals With and Without Atherosclerosis Distinguishing Between Particle Concentration, Type, and Content](https://jamanetwork.com/journals/jamacardiology/fullarticle/2786333) *JAMA Cardiol* (2021), doi:10.1001/jamacardio.2021.5083
 
