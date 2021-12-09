@@ -3,6 +3,11 @@ title: Blog
 layout: page
 ---
 
+*Sometimes I am bored of doing science...*
+
+<br>
+<br>
+
 ## December 2021
 
 ### [Create Static Maps with R](https://gmelloni.github.io/blog/cambridge_homelessness.html)
