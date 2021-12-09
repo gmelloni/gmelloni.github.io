@@ -3,6 +3,11 @@ title: Projects
 layout: page
 ---
 
+*Sometimes I code and I like it and sometimes I try to publish it too...*
+
+<br>
+<br>
+
 ### [interactionHR](https://github.com/gmelloni/interactionHR)
 
 <div style="text-align:center">
