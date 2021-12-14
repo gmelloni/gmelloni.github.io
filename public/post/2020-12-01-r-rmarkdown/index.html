@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    
+    <title>Hello R Markdown · Home</title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+    <link rel="stylesheet" href="http://gmelloni.github.io/style.main.min.c34e6915a95f1027dad7b48e5d1ff6e2bbf58b4e72c69d7ec6ac8e7352e961dc.css" />
+
+</head>
+<body class=" post-template ">
+
+    <div class="site-wrapper">
+
+<header class="site-header"><div class="outer site-nav-main">
+    <div class="inner"><nav class="site-nav">
+    <div class="site-nav-left">
+        
+            <a class="site-nav-logo" href="http://gmelloni.github.io">Home</a>
+        
+        
+        <div class="site-nav-content">
+            <ul class="nav" role="menu">
+                
+            </ul>
+        </div>
+        
+    </div>
+</nav>
+
+</div>
+</div></header>
+
+<main id="site-main" class="site-main outer">
+    <div class="inner">
+
+        <article class="post-full post  no-image ">
+
+            <header class="post-full-header">
+
+                
+                    
+                    <section class="post-full-tags">
+                        <a href="/tags/r-markdown">R Markdown</a>
+                    </section>
+                
+
+                <h1 class="post-full-title">Hello R Markdown</h1>
+
+                
+
+                <div class="post-full-byline">
+                    <section class="post-full-byline-content">
+
+                        <ul class="author-list">
+    <li class="author-list-item">
+        <div class="author-card">
+            <div class="author-profile-image"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg></div>
+            <div class="author-info">
+                <div class="author-info">
+                    <h2>Frida Gomam</h2>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="author-avatar author-profile-image"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg></a>
+    </li>
+</ul>
+
+                        <section class="post-full-byline-meta">
+                            
+                                <h4 class="author-name">Frida Gomam</h4>
+                            
+                            <div class="byline-meta-content">
+                                <time class="byline-meta-date" datetime="2020-912-12">1 December 2020</time>
+                                <span class="byline-reading-time"><span class="bull">&bull;</span> 1 min read</span>
+                            </div>
+                        </section>
+
+                    </section>
+
+
+                </div>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="post-content">
+                    
+<script src="http://gmelloni.github.io/post/2020-12-01-r-rmarkdown/index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="r-markdown" class="section level1">
+<h1>R Markdown</h1>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>You can embed an R code chunk like this:</p>
+<pre class="r"><code>summary(cars)
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+fit &lt;- lm(dist ~ speed, data = cars)
+fit
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932</code></pre>
+</div>
+<div id="including-plots" class="section level1">
+<h1>Including Plots</h1>
+<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
+<pre class="r"><code>par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
+  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
+  init.angle = -50, border = NA
+)</code></pre>
+<div class="figure"><span id="fig:pie"></span>
+<img src="http://gmelloni.github.io/post/2020-12-01-r-rmarkdown/index_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<p class="caption">
+Figure 1: A fancy pie chart.
+</p>
+</div>
+</div>
+
+                </div>
+            </section>
+
+        </article>
+
+    </div>
+</main>
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+    
+    <article class="read-next-card">
+        <header class="read-next-card-header">
+            <h3><span>More in</span> <a href="/tags/r-markdown">R Markdown</a></h3>
+        </header>
+        <div class="read-next-card-content">
+            <ul>
+                
+            </ul>
+        </div>
+    </article>
+
+
+            <article class="post-card post
+ no-image
+ ">
+
+        
+    
+        <div class="post-card-content">
+    
+            <a class="post-card-content-link" href="http://gmelloni.github.io/post/2021-12-10-cambridgemap/cambridge_homelessness/">
+    
+                <header class="post-card-header">
+                    
+
+                    <h2 class="post-card-title">Static Maps with R</h2>
+                </header>
+    
+                <section class="post-card-excerpt">
+                    <p>Intro In September 2021, Eva started an internship to help people experiencing homelessness in Cambridge, Massachusetts, the town where we live.
+She could have had an easy internship, taking care of a couple of clients in the area waiting to be housed but she decided instead to take it seriously, very very seriously. I was taken away by her enthusiasm to not just help, but in her own words end homelessness.</p>
+                </section>
+    
+            </a>
+
+            <footer class="post-card-meta">
+                    <ul class="author-list">
+                        <li class="author-list-item">
+                            <div class="author-name-tooltip">Giorgio Melloni</div>
+                            <a href="#" class="static-avatar author-profile-image"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M3.513 18.998C4.749 15.504 8.082 13 12 13s7.251 2.504 8.487 5.998C18.47 21.442 15.417 23 12 23s-6.47-1.558-8.487-4.002zM12 12c2.21 0 4-2.79 4-5s-1.79-4-4-4-4 1.79-4 4 1.79 5 4 5z" fill="#FFF"/></g></svg></a>
+                        </li>
+                    </ul>
+                    <div class="post-card-byline-content">
+                        <span>Giorgio Melloni</span>
+                        <span class="post-card-byline-date"><time datetime="2021-1212-12">10 December 2021</time>
+                            <span class="bull">&bull;</span> 81 min read</span>
+                    </div>
+                </footer>
+    
+        </div>
+
+</article>
+    
+        </div>
+    </div>
+</aside>
+
+
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://gmelloni.github.io">Home</a> &copy; 2020</section>
+                <nav class="site-footer-nav">
+                    <a href="http://gmelloni.github.io">Latest Posts</a>
+                    
+                    
+                    
+                    <a href="https://jonathanjanssens.com" target="_blank" rel="noopener" style="opacity: 0.5;">Hugo Casper3 by Jonathan Janssens</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>

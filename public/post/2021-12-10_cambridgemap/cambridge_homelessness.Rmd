@@ -1,0 +1,657 @@
+---
+title: "Static Maps with R"
+subtitle: "Create a printable version of Cambridge Resources for People Experiencing Homelessness"
+author: "Giorgio Melloni"
+output:
+  prettydoc::html_pretty:
+    df_print: paged
+    toc: true
+    # toc_float: true
+    toc_depth: 2  # upto three depths of headings (specified by #, ## and ###)
+    # number_sections: false  ## if you want number sections at each table header
+    theme: cayman  # many options for theme, this one is my favorite.
+    highlight: pygments
+    # code_folding: hide
+date: '`r format(Sys.Date(), format="%B %d, %Y")`'
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r , message=FALSE,echo = FALSE,eval=TRUE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+myRoot <- "/Users/gem37/Dropbox/NonIEO-IIT/gmap"
+```
+
+## Intro
+
+In September 2021, Eva started an internship to help people experiencing homelessness 
+in **Cambridge, Massachusetts**, the town where we live.
+
+She could have had an easy internship, taking care of a couple of clients in the area 
+waiting to be housed but she decided instead to take it seriously, very very seriously. 
+I was taken away by her enthusiasm to not just help, but in her own words **end homelessness**.
+
+She collected clothes, toiletry, sleeping bags and all sort of useful things from the **housed people** of Cambridge and every Wednesday she would give them away to the **unhoused neighbors** of Cambridge. She joined and created advocacy groups that tackle the issues of the unhoused, organized events, wrote letters, protest and made her voice heard.
+A volcano of ideas and solutions. And a kindness of a species that doesn't exist anymore. 
+
+Among her ideas, one in particular caught my attention because I thought I could actually give 
+a significant and unique contribution. Using personal knowledge and old lists of addresses, 
+she created a **Google My Maps** of resources for the unhoused people, including shelter, 
+food, free internet access, housing resources, healthcare and much more. 
+It's fantastic and you can find it here: [Cambridge Resources for People Experiencing Homelessness](https://www.google.com/maps/d/u/0/viewer?mid=1IqJfrCiNpjzX4qajcFOExhN3nRm_ZSeq&ll=42.37703477815819%2C-71.15098675&z=12)
+
+But of course, unhoused people often **don't have a smartphone** and that's why I put together 
+this **little R code to create static maps ready to be printed** that can be easily stored in a pocket. Ok, maybe the final result needs a final touch on a vector graphics editor but this code is going to save hours of painful and error-prone manual design.
+
+I encourage everyone to create their own map for their community, modify and improve the code, print it and share it to every unhoused person in need. **They deserve it**.
+
+### Note about the map
+
+This first iteration of the map contains a lot of information 
+that can't be easily put together in a single map.
+
+**Some of the places didn't have a physical address**, for example, and they 
+were put all together along the Charles River. In this case, Google provides 
+an address that is useful to point the resource on the map but it's simply wrong. 
+The description provides the real address/information in this case.
+
+Another issue is that **some resources provide multiple services** and are therefore 
+reported twice. In that case we simply kept the row with the longest 
+description.
+
+We won't provide specific adjustments to the map to account for 
+these imprecisions, but instead just try to provide 
+a general code that can be easily adapted for a different map.
+
+## Step 0: libraries setup
+
+We are going to use a lot of different libraries in this session, 
+here reported divided by category
+
+Geomapping packages:
+
+- rgdal
+- ggmap
+
+String manipulation and data wrangling:
+
+- magrittr
+
+Plotting tools:
+
+- ggmap
+- ggplot2 (called by ggmap)
+- grid
+- ggrepel
+- RColorBrewer
+
+Table drawing:
+
+- kableExtra
+- flextable
+- qpdf
+- knitr
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+library(rgdal)
+library(ggmap)
+library(magrittr)
+library(grid)
+library(ggrepel)
+library(RColorBrewer)
+library(kableExtra)
+library(flextable)
+library(qpdf)
+library(knitr)
+
+# This is a wrapper around flextable that I often use in my reports
+flextableize <- function(df , merge=NULL , footnote=NULL 
+                         , lines = NULL , theme = "zebra" ){
+	dfFlex <- flextable::flextable(df)
+	if(length(theme)==1 && theme == "zebra"){
+		dfFlex <- flextable::theme_zebra(dfFlex)
+  }
+	dfFlex <- flextable::bg(dfFlex, bg = "lightblue3", part = "header")
+	dfFlex <- flextable::color(dfFlex, color = "white", part = "header")
+	dfFlex <- flextable::color(dfFlex, color = "white", part = "header")
+	if(!is.null(merge)){
+		dfFlex <- flextable::merge_v(dfFlex , j = merge)
+	}
+	if( !is.null(lines) ){
+		for(i in lines){
+			myvar <- df[ , i]
+			blackMultip <- c(FALSE , ! sapply( 2:nrow(df) , function(x) {
+				myI <- myvar[x] == myvar[x-1]
+			}))
+			blackMultip <- (1:nrow(df))[ blackMultip ]
+			dfFlex <- flextable::hline(dfFlex
+				, i = blackMultip - 1
+				, j = NULL
+				, border = officer::fp_border(color="black", style="solid", width=2)
+				, part = "body")
+		}
+	}
+	if(!is.null(footnote)){
+		dfFlex <- flextable::footnote( dfFlex, i = 1, j = 1:2,
+               value = flextable::as_paragraph(footnote),
+               ref_symbols = "*",
+               part = "header")
+	}
+	# dfFlex <- flextable::autofit(dfFlex)
+	dfFlex
+}
+```
+
+## Step 1: Find where we are
+
+The first step is locating the boundaries of interest. 
+To get access to the Cambridge map we will use the `ggmap` library. 
+To access Google Maps, you will need an API key from https://console.cloud.google.com/ and
+enable Java maps and static maps.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+mylocation <- "9VJG+F4 Cambridge, Massachusetts"
+# Get the map of Cambridge
+# Zoom 13, see details in get_googlemap and play around with this number
+# Turn off human made locations and points of interest
+myMap0 <- get_googlemap(mylocation , zoom = 13
+    , style = list( c(feature="landscape",element="labels",visibility="off") 
+                    , c(feature="poi",element="labels",visibility="off")))
+ggmap(myMap0)
+```
+
+This map of Cambridge is the right level of zoom but it's not centered very well. 
+We need a map that matches our resource locations better. Let's see the map!
+
+## Step 2: Get My Google Map
+
+Step 2 is downloading the kml file containing the resources information
+
+Go to the online [map](https://www.google.com/maps/d/u/0/viewer?mid=1IqJfrCiNpjzX4qajcFOExhN3nRm_ZSeq&ll=42.37703477815819%2C-71.15098675&z=12), look in the options and select Download KML and then check the box 
+that says "Export as KML instead of KMZ. Does not support all icons." Click download.
+
+For simplicity, the file is available at this dropbox [link](https://www.dropbox.com/s/gmtapt2mal75tvn/Cambridge%20Resources%20for%20People%20Experiencing%20Homelessness.kml?dl=0)
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+# Change the dl=0 to dl=1
+url <- "https://www.dropbox.com/s/gmtapt2mal75tvn/Cambridge%20Resources%20for%20People%20Experiencing%20Homelessness.kml?dl=1"
+kml <- tempfile(fileext = ".kml")
+download.file(url , destfile = kml)
+```
+
+### Find layers
+
+To find the layers of this map, we are going to use ogrinfo through its `rgdal` wrapper `ogrInfo`. 
+You need ogrinfo in your PATH, which is part of the [GDAL library](https://gdal.org/download.html). 
+There are many ways to obtain GDAL listed in the resources but for Mac users like me, 
+homebrew was the easiest solution (not listed in the download page)
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+mylayers <- ogrListLayers(kml)
+cat(mylayers , sep="\n")
+```
+
+### Open each layer separately
+
+To open the KML file we need `readOGR` from the `rgdal` package. 
+It requires 2 arguments, the kml file path and the layer name.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+# Loop over the layers and open all of them
+mydoc <- lapply( mylayers , function(x) {
+  readOGR(kml , x , verbose = FALSE)
+}) %>% setNames(mylayers)
+# Show number of resources per layer and add Total
+resourceNum <- sapply(mydoc , function(x) nrow(x@data)) %>% c(. , Total = sum(.))
+kableExtra::kable(data.frame( Resource = resourceNum))
+```
+
+<br>
+
+We have a total of `r resourceNum["Total"]` resources. 
+The map might be crowded so it's better to create only one layer for now. 
+
+For each layer, we are interested in 2 slots, *data* and *coords*.
+
+The *data* slot Contains the info manually entered in the Google Map. It's made of 
+two columns, Name and Description. 
+The first one is the name of the place that was added to the Google Map, while the other is free text separated by html tags.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+kableExtra::kable( head(mydoc[["Food"]]@data , 5) )
+```
+
+<br>
+
+Coordinates to find these points can be found in the *coords* slot
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+head(mydoc[["Food"]]@coords , 3)
+```
+
+### Parse the kml file
+
+Let's try to parse everything together inside an lapply 
+layer by layer and then recombine in one single dataframe
+
+```{r , message=FALSE,echo = TRUE,eval=FALSE,warning=FALSE}
+# Loop through the layer names
+mydocParse <- lapply(names(mydoc) , function(x) {
+    doc2 <- mydoc[[x]]
+    # Extract the data slot and turn it into a dataframe without factors
+    mydata <- as.data.frame(doc2@data , stringsAsFactors = FALSE)
+    # Remove html tags from the description and collapse the lines by \n
+    # Remove multiple spaces and substitute them with single spaces
+    mydata$description <- unlist(lapply( 
+      strsplit( gsub("\\s{2,}" , " " , as.character(mydata$Description)) , "<.*?>") 
+      , function(x) {
+        x <- x[ x!= ""]
+        paste(x , collapse = "\n")
+    }))
+    # Add Coordinates
+    mydata <- cbind(mydata , doc2@coords)
+    # Remove original columns
+    mydata$Description <- NULL
+    # Create a more compact text for very long names and descriptions
+    # Every line should not be longer than 50 characters
+    # The base function strwrap is meant exactly for this purpose
+    # We split first and put together by \n
+    mydata$Info <- sapply( lapply(mydata$Name , function(k) {
+        strwrap(k , width = 30 , simplify = TRUE)
+      }) , function(z) paste(z , collapse = "\n"))
+ 
+    mydata$Name <- NULL
+    mydata$description2 <- sapply( 
+      lapply(mydata$description , function(k) {
+        strwrap(k , width = 1000 , simplify = TRUE)
+      }) , function(z) paste(z , collapse = "\n"))
+    # Find Addresses
+    # To do that, we need to run a reversed geolocalization 
+    # with revgeocode from package ggmap
+    # The default result is not always correct, 
+    # so we ask for all addresses and keep the first complete one
+    # Might need a manual inspection!
+    addresses <- apply( mydata , 1 , function(x) {
+        out <- revgeocode(location = as.numeric( x[c("coords.x1","coords.x2")])
+                          , output = "all")
+        outAddress <- sapply(out$results , function(x) x$formatted_address)
+        # Take the first result with 4 component, Address, City, Zipcode, Country
+        components <- str_count(string=outAddress , pattern=",")+1
+        return( outAddress[ which(components %in% 4)[1]])
+    })
+    addressesSplit <- strsplit(addresses , ", ") %>% 
+      do.call("rbind" , .) %>% 
+      as.data.frame(stringsAsFactors=FALSE) %>% 
+      setNames(c("Address" , "City" , "Zipcode" , "Country"))
+    mydata <- cbind(mydata , addressesSplit)
+    # Combine name of the place and Address
+    mydata$Info2 <- paste0( "\n" 
+                      , paste(mydata$Info , mydata$Address , sep = "\n") 
+                      , "\n")
+    mydata$Resource <- x
+    mydata
+}) %>% do.call("rbind" , .) %>% as.data.frame(stringsAsFactors=FALSE)
+# Remove duplicate addresses
+# One resource is in 2 categories and we choose the one with the longer description
+mydocParse <- mydocParse[ !duplicated(mydocParse$Info2) , ]
+# Add a number, it will change when we reorder the resources for the plot
+mydocParse$Num <- 1:nrow(mydocParse)
+```
+
+```{r , message=FALSE,echo = FALSE,eval=TRUE,warning=FALSE}
+# saveRDS(mydocParse , file.path(myRoot , "homelessness_cambridge.rds"))
+mydocParse <- readRDS(file.path(myRoot , "homelessness_cambridge.rds"))
+```
+
+After parsing and duplicate removal, we are left with `r nrow(mydocParse)` resources.
+
+### Get a map centered around our resources
+
+The original map of Cambridge is **not properly centered for our resources**. 
+To get a better map, we need to center it around the mean coordinates of our resources.
+
+We are going to feed the center of the map directly to `get_googlemap` using a mean of the two coordinates in our kml file.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+myMap <- get_googlemap(
+  center = c(lon = mean(mydocParse$coords.x1), lat = mean(mydocParse$coords.x2)) 
+  , zoom = 13
+  , style = list( c(feature="landscape",element="labels",visibility="off") 
+                    , c(feature="poi",element="labels",visibility="off")))
+ggmap(myMap)
+```
+
+This one looks definitely better!
+
+
+```{r , message=FALSE,echo = FALSE,eval=TRUE,warning=FALSE}
+save.image("homelessness_parse.RData")
+load("homelessness_parse.RData")
+```
+
+## Step 3: Plot a layer
+
+Let's start with one layer, Food, containing `r nrow(mydocParse[ mydocParse$Resource == "Food" , ])` resources.
+
+First, adjust the data. Remove resources outside of the boundaries of the map, 
+reorder by coordinates.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE, fig.width=10 , fig.height=10 , fig.align='left'}
+# Find the map boundaries
+bound <- unlist(attributes(myMap)$bb)
+# Let's start with one layer
+mydataCamb <- mydocParse[ mydocParse$Resource == "Food" , ]
+# Check that coordinates are within the map boundaries
+goodCoo <- with(mydataCamb 
+                , coords.x1 > bound["ll.lon"] & coords.x1 < bound["ur.lon"] & 
+                  coords.x2 > bound["ll.lat"] & coords.x2 < bound["ur.lat"])
+mydataCamb <- mydataCamb[ goodCoo , ]
+# Order by coordinates, West to East and North to South
+mydataCamb <- mydataCamb[ order(-mydataCamb$coords.x2 , -mydataCamb$coords.x1) ,]
+# New numbers that follow the coordinates order
+mydataCamb$Num <- 1:nrow(mydataCamb)
+```
+
+Now let's plot the map, the points of interest and a legend with Name and Address
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE, fig.width=10 , fig.height=10 , fig.align='left'}
+# Draw the map
+myplot <- ggmap(myMap , extent = "device") + 
+  geom_point(data = mydataCamb , aes(x = coords.x1 , y = coords.x2) 
+             , color = "lightblue" , size = 3.5)+
+  geom_text(data = mydataCamb 
+            , aes(x = coords.x1 , y = coords.x2, label=Num , color = Info2)
+            , size = 4)+
+  # This creates a legend for geom_text that is a 
+  # series of 'a' that we have to substitute manually
+  scale_color_manual(values=rep("black",nrow(mydataCamb)))+
+  theme(
+    legend.key = element_blank(),
+        legend.title = element_text(size = 8),
+        # legend.key.size = unit(3,"line"),
+        legend.text=element_text(size = 5),
+         panel.background = element_blank(),
+         plot.background = element_rect(fill='transparent', color=NA),
+         panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),
+         legend.background = element_blank(),
+         legend.box.background = element_blank())+
+   guides(col = guide_legend(ncol = 2 
+            , title="Food Resources for people experiencing homelessness in Cambridge"))
+# Adjust the legend
+# Substitute the 'a' with numbers and set the fontsize to 7
+g <- ggplotGrob(myplot)
+lbls <- mydataCamb$Num
+idx <- which(sapply(g$grobs[[15]][[1]][[1]]$grobs,function(i){
+  "label" %in% names(i)}))
+for(i in 1:length(idx)){
+g$grobs[[15]][[1]][[1]]$grobs[[idx[i]]]$label <- lbls[i]
+g$grobs[[15]][[1]][[1]]$grobs[[idx[i]]]$gp$fontsize <- 7
+}
+# Save as pdf, A4 size
+pdf(file.path(myRoot , "Cambridge Food Resources v1.pdf") , width = 11 , height = 8.5)
+grid.draw(g)
+invisible(dev.off())
+
+grid.draw(g)
+```
+
+
+To check the final result, take a look at the generated pdf rather than 
+this document that was adapted to fit an html page 
+The result is not bad but there are a few problems:
+
+- Points tend to overlap
+- Text tend to overlap
+- We need more colors for all the other resources
+
+## Step 4: Plot the whole map
+
+To plot everything we need a new aesthetics for `geom_points`. 
+
+In addition, we want the number labels to not overlap with each other. 
+We can use `ggrepel` for this.
+
+To prepare the data we order by resource and coordinates first, remove resources 
+outside of the boundaries and lock the position of factor variables.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE , fig.width=30 , fig.height=20 , fig.align='left'}
+# Order by coordinates for each resource type 
+mydataCambAll <- mydocParse[ order(mydocParse$Resource 
+                                   , -mydocParse$coords.x2 
+                                   , -mydocParse$coords.x1) , ]
+# Check that coordinates are within the map boundaries
+goodCoo2 <- with(mydataCambAll 
+                , coords.x1 > bound["ll.lon"] & coords.x1 < bound["ur.lon"] & 
+                  coords.x2 > bound["ll.lat"] & coords.x2 < bound["ur.lat"])
+# 5 resources are outside of the city boundaries and won't be considered
+mydataCambAll <- mydataCambAll[ goodCoo2 , ]
+# New numbers that follow the coordinates order
+mydataCambAll$Num <- 1:nrow(mydataCambAll)
+# Transform Resource into a factor
+mydataCambAll$Resource <- factor(mydataCambAll$Resource 
+                            , levels = sort(unique(mydataCambAll$Resource)))
+# Lock Info into a factor that keeps the same order of the dataframe
+mydataCambAll$Info2 <- factor(mydataCambAll$Info2 , levels = mydataCambAll$Info2)
+```
+
+Now let's create the plot. We need a bright 8-color palette, 
+a new *fill* aesthetic and setup an extra legend
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE , fig.width=25 , fig.height=15 , fig.align='left'}
+# Create a custom palette that's visible over the map
+myPalette <- brewer.pal(8, "Set1")
+# Substitute the yellow with a darker hue
+myPalette[6] <- "#CCCC00"
+names(myPalette) <- sort(unique(mydataCambAll$Resource))
+# Draw the map
+myplotAll <- ggmap(myMap , extent = "device") + 
+    # Add a little shading, border black, add fill aesthetic
+    geom_point(data = mydataCambAll 
+             , aes(x = coords.x1 , y = coords.x2 , fill = Resource) 
+             , size = 3.2 , shape = 21 , stroke = 0 , alpha=0.8 , colour = "black")+
+    scale_fill_manual(values = myPalette)+
+    # Overlapping numbers can't be read so we use geom repel with low repulsion
+    geom_text_repel(data = mydataCambAll 
+            , aes(x = coords.x1 , y = coords.x2, label = Num , color = Info2) 
+            , size = 5.2 , force_pull = 10)+
+    # This creates a legend for geom_text that is a series of 'a' 
+    # all black that we have to substitute manually
+    # The color of geom text in the legend will be changed manually
+    scale_color_manual(values=rep("black",nrow(mydataCambAll)))+
+    guides(color = guide_legend(ncol=5
+              , title = "Resources for people experiencing homelessness in Cambridge") 
+           , fill = guide_legend(title="Legend" , nrow = 1) )+
+    theme(
+        legend.key = element_blank(),
+        legend.title = element_text(size = 7 , face = "bold"),
+        legend.margin = margin(0, 0, 0, 0),
+        legend.text = element_text(size = 5),
+        panel.background = element_blank(),
+        plot.background = element_rect(fill='transparent', color=NA),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.background = element_blank(),
+        legend.box.background = element_blank())
+# Adjust the legend
+# Substitute the 'a' with numbers, 
+# change the color and set the fontsize to 7
+gAll <- ggplotGrob(myplotAll)
+lblsAll <- mydataCambAll$Num
+# Now we have two grobs because we added a fill aesthetic
+# The second should be geom text
+idxAll <- which(sapply(gAll$grobs[[15]][[1]][[2]]$grobs,function(i){
+  "label" %in% names(i)}))
+for(i in 1:length(idxAll)){
+gAll$grobs[[15]][[1]][[2]]$grobs[[idxAll[i]]]$label <- lblsAll[i]
+gAll$grobs[[15]][[1]][[2]]$grobs[[idxAll[i]]]$gp$fontsize <- 7
+# Change the color to match the one of the resource type
+resourceType <- mydataCambAll[ mydataCambAll$Num == lblsAll[i] , "Resource"]
+gAll$grobs[[15]][[1]][[2]]$grobs[[idxAll[i]]]$gp$col <- myPalette[resourceType]
+}
+
+# Save as pdf, 2 times an A4
+pdf(file.path(myRoot , "Cambridge Homelessness Resources v1.pdf") 
+    , width = 22 , height = 17)
+grid.draw(gAll)
+invisible(dev.off())
+
+grid.draw(gAll)
+```
+
+## Step 5: Add an Info table
+
+The plot above is readable but not **particularly informative** aside from name and address. 
+
+The description is way too big to fit in the map but we can create a separate table and save it in pdf. To Create the table, we will use `flextable`
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+colsIwant <- c("Num" , "Info" , "Resource" 
+               , "Address" , "City" , "description2")
+myTable <- mydataCambAll[ , colsIwant]
+colnames(myTable) <- c("Number" , "Name" , "Category" 
+                       , "Google Address" , "City" , "Info")
+# Let flextable decide the text justification by removing all new lines
+myTable$Info <- gsub("\n" , " " , myTable$Info)
+myTable$Name <- gsub("\n" , " " , myTable$Name)
+# Turn into a flextable
+# Every time there is a new category value, draw a black line to separate
+flexTab <- flextableize(myTable , lines = "Category" )
+# Add big bold colored numbers
+flexTab <- flextable::color(flexTab
+  	                      , j = "Number"
+  	                      , color = myPalette[myTable$Category]) %>%
+          flextable::fontsize(j = "Number" , size = 10 , part = "body") %>%
+          flextable::bold(j = "Number" , part = "body")
+# Reduce font of the Info field to make smaller pdfs
+flexTab <- flextable::fontsize(flexTab , j = "Info" , size = 4 , part = "body")
+# Reduce also the other columns font
+flexTab <- flextable::fontsize(flexTab 
+                , j = c("Name","Category","Google Address","City") 
+                , size = 5 , part = "body")
+# Reduce column names size
+flexTab <- flextable::fontsize(flexTab 
+                , j = colnames(myTable)
+                , size = 7 , part = "header")
+# Increase the width of the Info Column and Name
+flexTab <- flextable::width(flexTab , j = "Info" , width = 30)
+flexTab <- flextable::width(flexTab , j = "Name" , width = 10)
+# Save as pdf
+invisible(save_as_image(flexTab , zoom = 1 , expand = 100 
+    , file.path(myRoot, "Cambridge Homelessness Resources v1 table.pdf") ))
+# Show the first rows only
+flexTab 
+```
+
+## Step 6: Split the table and Combine in one pdf
+
+The table we created above cannot be printed easily, it's too long.
+
+Let's split it by category and make multiple sheets.
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+for(i in levels(myTable$Category)){
+  myTableCat <- myTable[ myTable$Category == i , ]
+  # Every time there is a new category value, draw a black line to separate
+  flexTab <- flextableize(myTableCat)
+  # Add big bold colored numbers
+  flexTab <- flextable::color(flexTab
+  	           , j = "Number"
+  	           , color = myPalette[myTableCat$Category]) %>%
+              flextable::fontsize(j = "Number" , size = 10 , part = "body") %>%
+              flextable::bold(j = "Number" , part = "body")
+  # Reduce font of the Info field to make smaller pdfs
+  flexTab <- flextable::fontsize(flexTab , j = "Info" , size = 5 , part = "body")
+  # Reduce also the other columns font
+  flexTab <- flextable::fontsize(flexTab 
+                , j = c("Name","Category","Google Address","City") 
+                , size = 6 , part = "body")
+  # Reduce column name size
+  flexTab <- flextable::fontsize(flexTab 
+                , j = colnames(myTableCat)
+                , size = 7 , part = "header")
+  # Increase the width of the Info Column and Name
+  flexTab <- flextable::width(flexTab , j = "Info" , width = 30)
+  flexTab <- flextable::width(flexTab , j = "Name" , width = 10)
+  # Save as pdf
+  save_as_image(flexTab , zoom = 1
+    , file.path(myRoot
+      , paste0("Cambridge Homelessness Resources v1 table " , i , ".pdf")))
+  flextable:::knit_print.flextable(flexTab)
+}
+```
+
+Now let's create a single pdf using package `qpdf` and function `pdf_combine`
+
+```{r , message=FALSE,echo = TRUE,eval=TRUE,warning=FALSE}
+pdfs <- file.path(myRoot 
+          , c("Cambridge Homelessness Resources v1.pdf"
+          , sapply(levels(myTable$Category) , function(i) {
+              paste0("Cambridge Homelessness Resources v1 table " , i , ".pdf")
+            })))
+invisible(pdf_combine(input = pdfs , output = file.path(myRoot , "Cambridge Homelessness Resources.pdf")))
+```
+
+There's definetely room for improvement, for example I would love to be able to export the original symbols of the map or define better boundaries (maybe using OpenMaps?) to enhance visibility, but you can find the final pdf at this [**link**](https://www.dropbox.com/s/ujztx4stlwyduxy/Cambridge%20Homelessness%20Resources.pdf?dl=0)
+
+Take a look, setup the printer to full page, let me know what you think :)
+
+Thank you Eva, from the bottom of my heart.
+
+-- Giorgio
+
+```{r printpdf, echo = FALSE, eval=FALSE,message=FALSE, fig.align='left', out.width='0.75\\linewidth', fig.pos='H'}
+# Failed attempt at exporting the same pdf that we save
+knitr::include_graphics(file.path(myRoot , "Cambridge Homelessness Resources.pdf"))
+```
+
+```{r cemetery, echo=FALSE ,eval=FALSE}
+###### BROKEN CODE THAT MIGHT BE USEFUL IN THE FUTURE
+mylocation <- "9VJG+F4 Cambridge, Massachusetts"
+# Get the map of Cambridge
+# Zoom 13, see details and play around this number
+# Turn off human made locattion labels and points of interest
+myMap2 <- get_googlemap(center = c(lon = -71.1, lat = 42.38) , zoom = 13
+    , style = list( c(feature="landscape",element="labels",visibility="off") , c(feature="poi",element="labels",visibility="off")))
+ggmap(myMap2)
+
+# setwd("/Users/gem37/Dropbox/NonIEO-IIT/gmap")
+# KML file downloaded from My Google Maps
+# Decided to use dropbox
+kml <- "Cambridge Resources for People Experiencing Homelessness.kml"
+
+# Under the hood, ogrinfo uses
+mylayers <- system(paste( "ogrinfo" , shQuote(kml)) , intern = TRUE)
+mylayers <- sub("\\d+: " , "" , sub(" \\(3D Point\\)" , "" , mylayers[3:length(mylayers)]))
+
+# Some KML have images that we can capture, not in this case
+images <- lapply( rm_between(as.character(mydata$Description), '"', '"', extract=TRUE) , function(x) {
+    grep("http" , x , value = TRUE)
+})
+for(i in 1:max(lengths(images))){
+    mydata[ , paste("image." , i)] <- sapply(images , function(z) z[i])
+}
+
+# Create a more compact text
+# Superseed by strwrap
+chunker <- function(z,n) {
+    split(z, ceiling(seq_along(z)/n))
+}
+splitText <- function(x , n){
+    xSplit <- strsplit(x , " ")
+    sapply(xSplit , function(z) {
+        if(length(z)<=n)
+            return(paste(z , collapse = " "))
+        chunked <- chunker(z , n)
+        paste( sapply(chunked , function(k) paste(k , collapse=" ")) , collapse = "\n")
+    })
+}
+mydata$description2 <- splitText(mydata$description , 7)
+
+# Find first match (not good)
+addresses1 <- apply( mydata , 1 , function(x) {
+    out <- revgeocode(location = as.numeric( x[c("coords.x1","coords.x2")]), output = "address")})
+    
+
+
+```

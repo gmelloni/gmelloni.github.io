@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home</title>
+    <link>http://gmelloni.github.io/</link>
+    <description>Recent content on Home</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 10 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://gmelloni.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Static Maps with R</title>
+      <link>http://gmelloni.github.io/post/2021-12-10-cambridgemap/cambridge_homelessness/</link>
+      <pubDate>Fri, 10 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://gmelloni.github.io/post/2021-12-10-cambridgemap/cambridge_homelessness/</guid>
+      <description>Intro In September 2021, Eva started an internship to help people experiencing homelessness in Cambridge, Massachusetts, the town where we live.
+She could have had an easy internship, taking care of a couple of clients in the area waiting to be housed but she decided instead to take it seriously, very very seriously. I was taken away by her enthusiasm to not just help, but in her own words end homelessness.</description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>http://gmelloni.github.io/post/2020-12-01-r-rmarkdown/</link>
+      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      
+      <guid>http://gmelloni.github.io/post/2020-12-01-r-rmarkdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.</description>
+    </item>
+    
+  </channel>
+</rss>

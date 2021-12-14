@@ -1,0 +1,22 @@
+theme: "hugo-casper3"
+baseURL: http://gmelloni.github.io
+languageCode: en-us
+title: Home
+subtitle: Hi I am a data scientist
+googleAnalytics: "UA-102057877-1"
+params:
+  AuthorName: Giorgio Melloni
+  GitHubUser: gmelloni
+markup:
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: false
+    hl_Lines: ""
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: true
+    style: monokai
+    tabWidth: 4
